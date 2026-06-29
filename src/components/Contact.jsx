@@ -20,9 +20,7 @@ function Contact() {
 
         <p className="text-gray-400 text-lg mb-12 leading-8 max-w-3xl mx-auto">
 
-          Focused on delivering reliable, scalable,
-          and quality-driven automation solutions
-          for modern software systems.
+          Interested in QA Automation, SDET, API Testing, and Quality Engineering opportunities. Let's connect and build reliable software together.
 
         </p>
 

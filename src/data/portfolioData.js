@@ -86,134 +86,172 @@ const portfolioData = {
 
   projects: [
 
-    {
-      title:
-        "Banking Website Automation Framework",
+  {
+  title: "Banking Website Automation Framework",
 
-      description:
-        "Designed and developed a scalable Selenium automation framework using Java, TestNG, Maven, and Page Object Model architecture. Automated critical banking workflows including login validation, customer creation, account opening, navigation testing, and transaction validation. Integrated Allure Reports for reporting and built CI/CD-ready framework structure for stable automation execution.",
+  description:
+    "Designed and developed a scalable Selenium automation framework using Java, TestNG, Maven, and Page Object Model architecture. Automated critical banking workflows including login validation, customer creation, account opening, navigation testing, and transaction validation. Integrated Allure Reports for reporting and built CI/CD-ready framework structure for stable automation execution.",
 
-      technologies: [
-        "Java",
-        "Selenium WebDriver",
-        "TestNG",
-        "Maven",
-        "POM",
-        "Allure Reports",
-        "CI/CD"
-      ],
+  technologies: [
+    "Java",
+    "Selenium WebDriver",
+    "TestNG",
+    "Maven",
+    "POM",
+    "Allure Reports",
+    "CI/CD"
+  ],
 
-      github:
-        "https://github.com/architsingh1609/banking-website-automation",
-    },
+  github:
+    "https://github.com/architsingh1609/banking-website-automation",
+
+  },
+
+  {
+  title: "SwagLabs Automation Framework",
+
+  description:
+    "Built enterprise-level automation testing framework for SwagLabs using Selenium WebDriver, TestNG, Jenkins, and Excel-driven test data handling. Automated complete end-to-end workflows including login, product selection, cart validation, checkout process, and order placement. Implemented reusable framework architecture with Jenkins pipeline integration.",
+
+  technologies: [
+    "Java",
+    "Selenium",
+    "TestNG",
+    "Jenkins",
+    "Excel",
+    "Automation Framework",
+    "CI/CD"
+  ],
+
+  github:
+    "https://github.com/architsingh1609/SwagLabs-Automation",
+
+  },
+
+  {
+  title: "REST API Testing Framework",
+
+  description:
+    "Developed API testing collection for Employee Management System using Postman and CRUD operation validation. Performed schema validation, response verification, authentication testing, and automated regression execution using Newman CLI. Validated API status codes, request-response structures, and backend data handling workflows.",
+
+  technologies: [
+    "Postman",
+    "REST API",
+    "Newman CLI",
+    "API Validation",
+    "CRUD Testing",
+    "JSON"
+  ],
+
+  github:
+    "https://github.com/architsingh1609/intern-api-testing",
+  
+
+  },
+
+  {
+  title: "OrangeHRM Automation Framework",
+
+  
+  description:
+    "Developed a Selenium-based automation framework for OrangeHRM application testing. Automated login functionality, employee management workflows, navigation validation, and reusable test execution using Page Object Model architecture.",
+
+  technologies: [
+    "Java",
+    "Selenium WebDriver",
+    "TestNG",
+    "Maven",
+    "POM"
+  ],
+
+  github:
+    "https://github.com/architsingh1609/orangeHrm",
+	
+
+  },
+
+  {
+  title: "HerokuApp Automation Framework",
+
+  
+  description:
+    "Designed and developed a scalable Selenium automation framework for testing the HerokuApp web application using Java, Selenium WebDriver, TestNG, Maven, and Page Object Model architecture. Automated forms, alerts, windows, frames, dropdowns, and navigation workflows.",
+
+  technologies: [
+    "Java",
+    "Selenium WebDriver",
+    "TestNG",
+    "Maven",
+    "Page Object Model",
+    "Automation Framework",
+    "GitHub"
+  ],
+
+  github:
+    "https://github.com/architsingh1609/herokuapp",
+  
+
+  },
+  {
+  title: "ANPR Manual Testing Project",
+
+  description:
+  "Performed end-to-end manual testing of an Automatic Number Plate Recognition (ANPR) web application. Designed and executed test cases, validated reports, user management modules, settings functionality, and documented defects. Prepared detailed test reports and testing artifacts.",
+
+  technologies: [
+  "Manual Testing",
+  "Functional Testing",
+  "Regression Testing",
+  "Test Case Design",
+  "Bug Reporting",
+  "QA Testing"
+  ],
+
+  github:
+  "https://github.com/architsingh1609/ANPR-Manual-Testing-Report",
+
+  },
+
+  {
+  title: "E-Commerce Automation Framework",
+
+  description:
+  "Developed an automation testing framework for an E-Commerce application using Selenium WebDriver, Java, TestNG, and Maven. Automated login, product search, cart validation, checkout workflows, and order placement scenarios using reusable Page Object Model architecture.",
+
+  technologies: [
+  "Java",
+  "Selenium WebDriver",
+  "TestNG",
+  "Maven",
+  "Automation Testing",
+  "Page Object Model"
+  ],
+
+  github:
+  "https://github.com/architsingh1609/automation__E-commerce",
+
+  },
 
 
+  {
+  title: "NeighborFit Recommendation System",
 
-    {
-      title:
-        "SwagLabs Automation Framework",
+  
+  description:
+    "Developed a Java-based recommendation system that matches users with the most suitable neighborhoods based on lifestyle preferences. Implemented JSON-based data handling and logic-driven filtering considering factors like safety, education quality, transportation, walkability, cost of living, and green spaces.",
 
-      description:
-        "Built enterprise-level automation testing framework for SwagLabs using Selenium WebDriver, TestNG, Jenkins, and Excel-driven test data handling. Automated complete end-to-end workflows including login, product selection, cart validation, checkout process, and order placement. Implemented reusable framework architecture with Jenkins pipeline integration.",
+  technologies: [
+    "Java",
+    "JSON",
+    "Recommendation System",
+    "Logic Building",
+    "Backend Development"
+  ],
 
-      technologies: [
-        "Java",
-        "Selenium",
-        "TestNG",
-        "Jenkins",
-        "Excel",
-        "Automation Framework",
-        "CI/CD"
-      ],
+  github:
+    "https://github.com/architsingh1609/NeighborFit",
 
-      github:
-        "https://github.com/architsingh1609/SwagLabs-Automation",
-    },
-
-
-
-    {
-      title:
-        "REST API Testing Framework",
-
-      description:
-        "Developed API testing collection for Employee Management System using Postman and CRUD operation validation. Performed schema validation, response verification, authentication testing, and automated regression execution using Newman CLI. Validated API status codes, request-response structures, and backend data handling workflows.",
-
-      technologies: [
-        "Postman",
-        "REST API",
-        "Newman CLI",
-        "API Validation",
-        "CRUD Testing",
-        "JSON"
-      ],
-
-      github:
-        "https://github.com/architsingh1609/intern-api-testing",
-    },
-
-
-
-    {
-      title:
-        "NeighborFit Recommendation System",
-
-      description:
-        "Developed a Java-based recommendation system that matches users with the most suitable neighborhoods based on lifestyle preferences. Implemented JSON-based data handling and logic-driven filtering considering factors like safety, education quality, transportation, walkability, cost of living, and green spaces.",
-
-      technologies: [
-        "Java",
-        "JSON",
-        "Recommendation System",
-        "Logic Building",
-        "Backend Development"
-      ],
-
-      github:
-        "https://github.com/architsingh1609/NeighborFit",
-    },
-
-
-
-    {
-      title:
-        "Banking System Application",
-
-      description:
-        "Created a Python-based banking system application supporting account debit, credit, and balance management functionalities with proper input validation and transaction handling. Implemented object-oriented programming concepts and error handling for stable financial operations.",
-
-      technologies: [
-        "Python",
-        "OOPs",
-        "Exception Handling",
-        "Console Application",
-        "Logic Building"
-      ],
-
-      github:
-        "https://github.com/architsingh1609/Banking-system-",
-    },
-
-
-
-    {
-      title:
-        "Contact Book Management System",
-
-      description:
-        "Built a Python-based contact management application supporting add, update, delete, search, and persistent contact storage using JSON files. Implemented structured CRUD operations with file handling and object-oriented programming concepts.",
-
-      technologies: [
-        "Python",
-        "JSON",
-        "CRUD Operations",
-        "File Handling",
-        "OOPs"
-      ],
-
-      github:
-        "https://github.com/architsingh1609/Contact-Book",
-    },
+  }
 
   ],
 
