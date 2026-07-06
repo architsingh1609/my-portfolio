@@ -5,9 +5,11 @@ import profileImage from "../assets/archit.png.jpg";
 
 function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center px-6 pt-32 overflow-hidden">
-
-      {/* Background Glow */}
+    <section
+      id="hero"
+      className="relative min-h-screen flex items-center px-6 pt-32 overflow-hidden"
+    >
+      {/* Animated Background */}
 
       <div className="absolute inset-0 -z-10 overflow-hidden">
 
@@ -68,21 +70,17 @@ function Hero() {
       <div
         className="
           glass-card
-
           max-w-7xl
           mx-auto
-
           p-12
-
           grid
           lg:grid-cols-2
-
           gap-12
           items-center
         "
       >
 
-        {/* Left Side */}
+        {/* Left */}
 
         <motion.div
           initial={{
@@ -100,15 +98,9 @@ function Hero() {
         >
 
           <motion.h1
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-            transition={{
-              delay: .2,
-            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: .2 }}
             className="text-5xl md:text-7xl font-extrabold leading-tight"
           >
 
@@ -162,11 +154,8 @@ function Hero() {
             }}
             className="
               mt-8
-
               text-2xl
-
               text-gray-300
-
               leading-relaxed
             "
           >
@@ -181,15 +170,9 @@ function Hero() {
           </motion.p>
 
           <motion.p
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-            transition={{
-              delay: 1.6,
-            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.6 }}
             className="mt-5 text-lg text-gray-300"
           >
 
@@ -203,40 +186,26 @@ function Hero() {
           </motion.p>
 
           <motion.div
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-            transition={{
-              delay: 2,
-            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2 }}
             className="
               mt-8
-
               flex
               flex-wrap
-
               gap-4
-
               justify-center
               lg:justify-start
             "
           >
 
             <motion.span
-              whileHover={{
-                scale: 1.06,
-              }}
+              whileHover={{ scale: 1.06 }}
               className="
                 glass-button
-
                 px-5
                 py-2
-
                 rounded-full
-
                 hover:shadow-[0_0_30px_rgba(34,211,238,.35)]
               "
             >
@@ -257,10 +226,8 @@ function Hero() {
               }}
               className="
                 glass-button
-
                 px-5
                 py-2
-
                 rounded-full
               "
             >
@@ -268,12 +235,15 @@ function Hero() {
             </motion.span>
 
           </motion.div>
+		    {/* CTA Buttons */}
+
 		    <motion.div
 		      initial={{ opacity: 0 }}
 		      animate={{ opacity: 1 }}
 		      transition={{ delay: 2.5 }}
 		      className="mt-10 flex flex-wrap gap-5 justify-center lg:justify-start"
 		    >
+
 		      <motion.a
 		        whileHover={{
 		          scale: 1.08,
@@ -363,6 +333,7 @@ function Hero() {
 		      >
 		        Contact
 		      </motion.a>
+
 		    </motion.div>
 
 		    {/* Social Icons */}
@@ -373,12 +344,14 @@ function Hero() {
 		      transition={{ delay: 3 }}
 		      className="flex gap-8 mt-12 justify-center lg:justify-start"
 		    >
+
 		      <motion.a
 		        whileHover={{
 		          scale: 1.25,
 		          rotate: -8,
 		          y: -6,
 		        }}
+		        whileTap={{ scale: 0.95 }}
 		        href="https://github.com/architsingh1609"
 		        target="_blank"
 		        rel="noreferrer"
@@ -401,6 +374,7 @@ function Hero() {
 		          rotate: 8,
 		          y: -6,
 		        }}
+		        whileTap={{ scale: 0.95 }}
 		        href="https://linkedin.com/in/qa1503"
 		        target="_blank"
 		        rel="noreferrer"
@@ -416,227 +390,285 @@ function Hero() {
 		      >
 		        <FaLinkedin />
 		      </motion.a>
+
 		    </motion.div>
 
 		  </motion.div>
 
 		  {/* Right Side */}
-		          <motion.div
-		            initial={{
-		              opacity: 0,
-		              scale: 0.75,
-		            }}
-		            animate={{
-		              opacity: 1,
-		              scale: 1,
-		              y: [0, -12, 0],
-		            }}
-		            transition={{
-		              opacity: { duration: 1 },
-		              scale: { duration: 1 },
-		              y: {
-		                duration: 5,
-		                repeat: Infinity,
-		                ease: "easeInOut",
-		              },
-		            }}
-		            className="flex justify-center"
-		          >
-		            <div className="relative flex justify-center items-center">
 
-		              {/* Main Glow */}
+		  <motion.div
+		    initial={{
+		      opacity: 0,
+		      scale: 0.75,
+		    }}
+		    animate={{
+		      opacity: 1,
+		      scale: 1,
+		      y: [0, -12, 0],
+		    }}
+		    transition={{
+		      opacity: {
+		        duration: 1,
+		      },
+		      scale: {
+		        duration: 1,
+		      },
+		      y: {
+		        duration: 5,
+		        repeat: Infinity,
+		        ease: "easeInOut",
+		      },
+		    }}
+		    className="flex justify-center"
+		  >
 
-		              <motion.div
-		                animate={{
-		                  rotate: 360,
-		                  scale: [1, 1.08, 1],
-		                }}
-		                transition={{
-		                  duration: 20,
-		                  repeat: Infinity,
-		                  ease: "linear",
-		                }}
-		                className="
-		                  absolute
+		    <div className="relative flex justify-center items-center">
 
-		                  w-[470px]
-		                  h-[470px]
+		      {/* Main Glow */}
 
-		                  rounded-full
+		      <motion.div
+		        animate={{
+		          rotate: 360,
+		          scale: [1, 1.08, 1],
+		        }}
+		        transition={{
+		          duration: 20,
+		          repeat: Infinity,
+		          ease: "linear",
+		        }}
+		        className="
+		          absolute
 
-		                  bg-gradient-to-r
-		                  from-cyan-400/30
-		                  via-sky-500/20
-		                  to-purple-500/30
+		          w-[320px]
+		          h-[320px]
 
-		                  blur-[90px]
-		                "
-		              />
+		          sm:w-[380px]
+		          sm:h-[380px]
 
-		              {/* Outer Ring */}
+		          md:w-[470px]
+		          md:h-[470px]
 
-		              <motion.div
-		                animate={{
-		                  rotate: 360,
-		                }}
-		                transition={{
-		                  duration: 30,
-		                  repeat: Infinity,
-		                  ease: "linear",
-		                }}
-		                className="
-		                  absolute
+		          rounded-full
 
-		                  w-[455px]
-		                  h-[455px]
+		          bg-gradient-to-r
+		          from-cyan-400/30
+		          via-sky-500/20
+		          to-purple-500/30
 
-		                  rounded-full
+		          blur-[90px]
+		        "
+		      />
 
-		                  border
-		                  border-cyan-400/20
-		                "
-		              />
+		      {/* Outer Ring */}
 
-		              {/* Inner Ring */}
+		      <motion.div
+		        animate={{
+		          rotate: 360,
+		        }}
+		        transition={{
+		          duration: 30,
+		          repeat: Infinity,
+		          ease: "linear",
+		        }}
+		        className="
+		          absolute
 
-		              <motion.div
-		                animate={{
-		                  rotate: -360,
-		                }}
-		                transition={{
-		                  duration: 18,
-		                  repeat: Infinity,
-		                  ease: "linear",
-		                }}
-		                className="
-		                  absolute
+		          w-[300px]
+		          h-[300px]
 
-		                  w-[425px]
-		                  h-[425px]
+		          sm:w-[360px]
+		          sm:h-[360px]
 
-		                  rounded-full
+		          md:w-[455px]
+		          md:h-[455px]
 
-		                  border
-		                  border-white/10
-		                "
-		              />
+		          rounded-full
 
-		              {/* Floating Particles */}
+		          border
+		          border-cyan-400/20
+		        "
+		      />
+			              {/* Inner Ring */}
 
-		              <motion.div
-		                animate={{
-		                  y: [0, -15, 0],
-		                  opacity: [0.4, 1, 0.4],
-		                }}
-		                transition={{
-		                  duration: 3,
-		                  repeat: Infinity,
-		                }}
-		                className="
-		                  absolute
-		                  -top-6
-		                  right-10
+			              <motion.div
+			                animate={{
+			                  rotate: -360,
+			                }}
+			                transition={{
+			                  duration: 18,
+			                  repeat: Infinity,
+			                  ease: "linear",
+			                }}
+			                className="
+			                  absolute
 
-		                  w-3
-		                  h-3
+			                  w-[280px]
+			                  h-[280px]
 
-		                  rounded-full
+			                  sm:w-[340px]
+			                  sm:h-[340px]
 
-		                  bg-cyan-400
+			                  md:w-[425px]
+			                  md:h-[425px]
 
-		                  shadow-[0_0_25px_rgba(34,211,238,.8)]
-		                "
-		              />
+			                  rounded-full
 
-		              <motion.div
-		                animate={{
-		                  y: [0, 18, 0],
-		                  opacity: [1, .4, 1],
-		                }}
-		                transition={{
-		                  duration: 4,
-		                  repeat: Infinity,
-		                }}
-		                className="
-		                  absolute
-		                  bottom-8
-		                  left-5
+			                  border
+			                  border-white/10
+			                "
+			              />
 
-		                  w-2
-		                  h-2
+			              {/* Floating Particle 1 */}
 
-		                  rounded-full
+			              <motion.div
+			                animate={{
+			                  y: [0, -15, 0],
+			                  opacity: [0.4, 1, 0.4],
+			                }}
+			                transition={{
+			                  duration: 3,
+			                  repeat: Infinity,
+			                }}
+			                className="
+			                  absolute
+			                  -top-6
+			                  right-10
 
-		                  bg-sky-300
+			                  w-3
+			                  h-3
 
-		                  shadow-[0_0_20px_rgba(34,211,238,.8)]
-		                "
-		              />
+			                  rounded-full
 
-		              {/* Glass Reflection */}
+			                  bg-cyan-400
 
-		              <div
-		                className="
-		                  absolute
-		                  z-20
+			                  shadow-[0_0_25px_rgba(34,211,238,.8)]
+			                "
+			              />
 
-		                  top-8
-		                  left-10
+			              {/* Floating Particle 2 */}
 
-		                  w-24
-		                  h-24
+			              <motion.div
+			                animate={{
+			                  y: [0, 18, 0],
+			                  opacity: [1, .4, 1],
+			                }}
+			                transition={{
+			                  duration: 4,
+			                  repeat: Infinity,
+			                }}
+			                className="
+			                  absolute
+			                  bottom-8
+			                  left-5
 
-		                  rounded-full
+			                  w-2
+			                  h-2
 
-		                  bg-white/10
+			                  rounded-full
 
-		                  blur-xl
-		                "
-		              />
+			                  bg-sky-300
 
-		              {/* Profile Image */}
+			                  shadow-[0_0_20px_rgba(34,211,238,.8)]
+			                "
+			              />
 
-		              <motion.img
-		                src={profileImage}
-		                alt="Archit Singh"
+			              {/* Floating Particle 3 */}
 
-		                whileHover={{
-		                  scale: 1.08,
-		                  rotateY: 12,
-		                  rotateX: -8,
-		                }}
+			              <motion.div
+			                animate={{
+			                  x: [-10, 10, -10],
+			                  opacity: [0.5, 1, 0.5],
+			                }}
+			                transition={{
+			                  duration: 5,
+			                  repeat: Infinity,
+			                }}
+			                className="
+			                  absolute
+			                  top-20
+			                  -left-5
 
-		                transition={{
-		                  duration: .35,
-		                }}
+			                  w-4
+			                  h-4
 
-		                className="
-		                  relative
-		                  z-30
+			                  rounded-full
 
-		                  w-96
-		                  h-96
+			                  bg-purple-400
 
-		                  md:w-[430px]
-		                  md:h-[430px]
+			                  shadow-[0_0_25px_rgba(168,85,247,.8)]
+			                "
+			              />
 
-		                  rounded-full
+			              {/* Glass Reflection */}
 
-		                  object-cover
+			              <div
+			                className="
+			                  absolute
+			                  z-20
 
-		                  border-[3px]
-		                  border-cyan-400/30
+			                  top-8
+			                  left-10
 
-		                  shadow-[0_0_130px_rgba(34,211,238,.45)]
-		                "
-		              />
+			                  w-24
+			                  h-24
 
-		            </div>
-		          </motion.div>
+			                  rounded-full
 
-		        </div>
-		      </section>
-		    );
-		  }
+			                  bg-white/10
 
-		  export default Hero;
+			                  blur-xl
+			                "
+			              />
+
+			              {/* Profile Image */}
+
+			              <motion.img
+			                src={profileImage}
+			                alt="Archit Singh"
+
+			                whileHover={{
+			                  scale: 1.08,
+			                  rotateY: 10,
+			                  rotateX: -5,
+			                }}
+
+			                transition={{
+			                  duration: 0.35,
+			                }}
+
+			                className="
+			                  relative
+			                  z-30
+
+			                  w-[280px]
+			                  h-[280px]
+
+			                  sm:w-[340px]
+			                  sm:h-[340px]
+
+			                  md:w-[430px]
+			                  md:h-[430px]
+
+			                  rounded-full
+
+			                  object-cover
+
+			                  border-[3px]
+			                  border-cyan-400/30
+
+			                  shadow-[0_0_130px_rgba(34,211,238,.45)]
+			                "
+			              />
+
+			            </div>
+
+			          </motion.div>
+
+			        </div>
+
+			      </section>
+			    );
+			  }
+
+			  export default Hero;
