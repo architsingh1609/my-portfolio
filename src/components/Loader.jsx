@@ -73,7 +73,8 @@ function Loader() {
             }}
             className="mt-5 text-center tracking-[0.35em] text-cyan-300"
           >
-          Automation • Manual • API Testing • CI/CD • SDET          </motion.p>
+          Automation • Manual • API Testing • CI/CD • SDET
+		            </motion.p>
 
           <motion.div
             initial={{ width: 0 }}
