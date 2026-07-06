@@ -1,14 +1,104 @@
+@import "./styles/theme.css";
+@import "./styles/glass.css";
+@import "./styles/animations.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html {
-  scroll-behavior: smooth;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
-body {
-  margin: 0;
-  background: #0f172a;
-  color: white;
-  font-family: sans-serif;
+html{
+scroll-behavior:smooth;
+}
+
+body{
+
+font-family:Inter,sans-serif;
+
+background:
+radial-gradient(circle at top left,#182848 0%,transparent 40%),
+radial-gradient(circle at bottom right,#312E81 0%,transparent 40%),
+#050816;
+
+color:white;
+
+overflow-x:hidden;
+
+min-height:100vh;
+
+}
+
+/* Animated background */
+
+body::before{
+
+content:"";
+
+position:fixed;
+
+width:600px;
+height:600px;
+
+background:#00F5FF22;
+
+filter:blur(180px);
+
+top:-200px;
+left:-150px;
+
+animation:blob1 14s infinite alternate;
+
+z-index:-1;
+
+}
+
+body::after{
+
+content:"";
+
+position:fixed;
+
+width:500px;
+height:500px;
+
+background:#8B5CF633;
+
+filter:blur(180px);
+
+bottom:-150px;
+right:-150px;
+
+animation:blob2 16s infinite alternate;
+
+z-index:-1;
+
+}
+
+@keyframes blob1{
+
+from{
+transform:translate(0,0);
+}
+
+to{
+transform:translate(150px,120px);
+}
+
+}
+
+@keyframes blob2{
+
+from{
+transform:translate(0,0);
+}
+
+to{
+transform:translate(-180px,-120px);
+}
+
 }

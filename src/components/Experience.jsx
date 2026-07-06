@@ -1,5 +1,6 @@
-function Experience() {
+import { motion } from "framer-motion";
 
+function Experience() {
   const experiences = [
     {
       company: "Metaphi Innovations Pvt. Ltd.",
@@ -14,7 +15,6 @@ function Experience() {
         "Work with Selenium WebDriver, TestNG, GitHub and CI/CD workflows."
       ]
     },
-
     {
       company: "BharatSkillz (QA Division)",
       role: "Quality Assurance Specialist",
@@ -31,11 +31,15 @@ function Experience() {
   ];
 
   return (
-    <section
+    <motion.section
       id="experience"
-      className="py-24 px-6 bg-slate-950"
+      className="py-24 px-6"
+      initial={{ opacity: 0, y: 60 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.25 }}
+      transition={{ duration: 0.8 }}
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="glass-card max-w-6xl mx-auto p-12">
 
         <h2 className="text-4xl md:text-5xl font-bold text-cyan-400 mb-14">
           Experience
@@ -45,41 +49,52 @@ function Experience() {
 
           {experiences.map((exp, index) => (
 
-			<div
-			  key={index}
-			  className="
-			  relative
-			  ml-10
-			  mb-10
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.2, duration: 0.6 }}
+              className="
+                glass-card
+                group
+                relative
+                ml-10
+                mb-10
+                p-8
+                rounded-3xl
 
-			  bg-slate-900
-			  border border-slate-800
-			  rounded-3xl
-			  p-8
+                hover:-translate-y-2
+                hover:scale-[1.02]
+                hover:shadow-[0_20px_60px_rgba(0,245,255,.20)]
 
-			  hover:border-cyan-400
-			  hover:bg-slate-800
+                transition-all
+                duration-500
+              "
+            >
 
-			  transition-all
-			  duration-300
-			  "
-			>
-			<div
-			  className="
-			  absolute
-			  -left-14
-			  top-10
+              <div
+                className="
+                  absolute
+                  -left-14
+                  top-10
 
-			  w-6
-			  h-6
+                  w-6
+                  h-6
 
-			  bg-cyan-400
-			  rounded-full
-			  border-4
-			  border-slate-950
-			  "
-			></div>
-			
+                  rounded-full
+                  bg-cyan-400
+
+                  border-4
+                  border-[#050816]
+
+                  group-hover:scale-125
+
+                  transition-all
+                  duration-300
+                "
+              />
+
               <h3 className="text-2xl font-bold text-cyan-400">
                 {exp.role}
               </h3>
@@ -92,22 +107,26 @@ function Experience() {
                 {exp.duration} | {exp.location}
               </p>
 
-              <ul className="mt-5 space-y-3 text-gray-300">
+              <ul className="mt-6 space-y-3 text-gray-300">
 
                 {exp.points.map((point, i) => (
-                  <li key={i}>• {point}</li>
+
+                  <li key={i} className="leading-7">
+                    • {point}
+                  </li>
+
                 ))}
 
               </ul>
 
-            </div>
+            </motion.div>
 
           ))}
 
         </div>
 
       </div>
-    </section>
+    </motion.section>
   );
 }
 

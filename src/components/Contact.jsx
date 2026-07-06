@@ -1,122 +1,92 @@
 import portfolioData from "../data/portfolioData";
 
 function Contact() {
-
   return (
-
     <section
       id="contact"
-      className="py-24 px-6 bg-slate-950"
+      className="py-24 px-6"
     >
-
-      <div className="max-w-5xl mx-auto text-center">
+      <div className="glass-card max-w-5xl mx-auto p-12 text-center">
 
         <h2 className="text-4xl md:text-5xl font-bold text-cyan-400 mb-8">
-
           Contact Me
-
         </h2>
 
-
         <p className="text-gray-400 text-lg mb-12 leading-8 max-w-3xl mx-auto">
-
-          Interested in QA Automation, SDET, API Testing, and Quality Engineering opportunities. Let's connect and build reliable software together.
-
+          Interested in QA Automation, SDET, API Testing, and Quality Engineering
+          opportunities. Let's connect and build reliable software together.
         </p>
-
 
         <div className="flex flex-col md:flex-row justify-center gap-6">
 
           <a
             href={`mailto:${portfolioData.email}`}
             className="
-            bg-cyan-500
-            hover:bg-cyan-400
-            hover:scale-105
-            hover:-translate-y-1
-            hover:shadow-[0_0_30px_rgba(34,211,238,0.25)]
+              glass-button
+              px-8
+              py-4
+              rounded-2xl
+              font-semibold
+              text-white
 
-            text-black
-            px-8
-            py-4
-            rounded-2xl
-            font-semibold
+              hover:scale-105
+              hover:-translate-y-1
 
-            transition-all
-            duration-300
+              transition-all
+              duration-300
             "
           >
-
             Email Me
-
           </a>
-
-
 
           <a
             href={portfolioData.github}
             target="_blank"
             rel="noreferrer"
             className="
-            border border-cyan-400
-            text-cyan-400
+              glass-button
+              px-8
+              py-4
+              rounded-2xl
+              font-semibold
+              text-white
 
-            hover:bg-cyan-400
-            hover:text-black
-            hover:scale-105
-            hover:-translate-y-1
-            hover:shadow-[0_0_30px_rgba(34,211,238,0.25)]
+              hover:scale-105
+              hover:-translate-y-1
 
-            px-8
-            py-4
-            rounded-2xl
-            font-semibold
-
-            transition-all
-            duration-300
+              transition-all
+              duration-300
             "
           >
-
             GitHub
-
           </a>
-
-
 
           <a
             href={portfolioData.linkedin}
             target="_blank"
             rel="noreferrer"
             className="
-            border border-cyan-400
-            text-cyan-400
+              glass-button
+              px-8
+              py-4
+              rounded-2xl
+              font-semibold
+              text-white
 
-            hover:bg-cyan-400
-            hover:text-black
-            hover:scale-105
-            hover:-translate-y-1
-            hover:shadow-[0_0_30px_rgba(34,211,238,0.25)]
+              hover:scale-105
+              hover:-translate-y-1
 
-            px-8
-            py-4
-            rounded-2xl
-            font-semibold
-
-            transition-all
-            duration-300
+              transition-all
+              duration-300
             "
           >
-
             LinkedIn
-
           </a>
 
         </div>
 
       </div>
-
     </section>
-
   );
 }
 
