@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Loader from "./components/Loader";
-import Background from "./components/Background";
 
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -16,11 +15,13 @@ import FrameworkArchitecture from "./components/FrameworkArchitecture";
 import Footer from "./components/Footer";
 import Experience from "./components/Experience";
 import Stats from "./components/Stats";
-
+import CustomCursor from "./components/CustomCursor";
+import ScrollProgress from "./components/ScrollProgress";
 
 function App() {
   const [loading, setLoading] = useState(true);
 
+  // Loader
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -29,15 +30,19 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // ✅ Show ONLY the loader while loading
+  
+
   if (loading) {
     return <Loader />;
   }
 
-  // ✅ Render the portfolio only after loading is complete
   return (
     <>
+      <ScrollProgress />
+      <CustomCursor />
+
       <Navbar />
+
       <Hero />
       <Stats />
       <About />
@@ -50,6 +55,7 @@ function App() {
       <FrameworkArchitecture />
       <FutureGoals />
       <Contact />
+
       <Footer />
     </>
   );

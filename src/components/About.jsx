@@ -6,38 +6,166 @@ function About() {
     <motion.section
       id="about"
       className="py-24 px-6"
-      initial={{ opacity: 0, y: 60 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.25 }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
       transition={{ duration: 0.8 }}
     >
-      <div className="glass-card max-w-6xl mx-auto p-12">
+      <div
+        className="
+          glass-card
+          spotlight-card
 
-        <h2 className="text-4xl md:text-5xl font-bold text-cyan-400 mb-10">
-          About Me
-        </h2>
+          relative
+          overflow-hidden
 
-        <div className="space-y-8">
+          max-w-6xl
+          mx-auto
+          p-12
+        "
+        onMouseMove={(e) => {
+          const rect = e.currentTarget.getBoundingClientRect();
 
-          <p className="text-gray-300 text-lg leading-9">
+          e.currentTarget.style.setProperty(
+            "--x",
+            `${e.clientX - rect.left}px`
+          );
+
+          e.currentTarget.style.setProperty(
+            "--y",
+            `${e.clientY - rect.top}px`
+          );
+        }}
+      >
+        {/* Heading */}
+
+        <motion.div
+          initial={{ y: 35, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-12"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold text-cyan-400">
+            About Me
+          </h2>
+
+          <motion.div
+            initial={{ width: 0 }}
+            whileInView={{ width: "120px" }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+            className="
+              mt-4
+              h-[4px]
+
+              rounded-full
+
+              bg-gradient-to-r
+              from-cyan-400
+              to-blue-500
+            "
+          />
+        </motion.div>
+
+        {/* About Text */}
+
+        <motion.div
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{
+            delay: 0.2,
+            duration: 0.7,
+          }}
+        >
+          <p
+            className="
+              text-gray-300
+
+              text-lg
+              md:text-xl
+
+              leading-9
+
+              tracking-wide
+            "
+          >
             {portfolioData.about}
           </p>
+        </motion.div>
 
-          <div className="border-l-4 border-cyan-400 pl-6">
+        {/* Quote */}
 
-            <p className="text-2xl italic text-cyan-300 font-light leading-relaxed">
-              Quality is engineered into the product —
-              not tested after release.
-            </p>
+        <motion.div
+          initial={{
+            opacity: 0,
+            x: -40,
+          }}
+          whileInView={{
+            opacity: 1,
+            x: 0,
+          }}
+          viewport={{ once: true }}
+          transition={{
+            delay: 0.5,
+            duration: 0.7,
+          }}
+          whileHover={{
+            scale: 1.02,
+            x: 10,
+          }}
+          className="
+            mt-12
 
-          </div>
+            border-l-[5px]
+            border-cyan-400
 
-        </div>
+            pl-7
 
+            relative
+          "
+        >
+          <div
+            className="
+              absolute
+
+              -left-[3px]
+              top-0
+              bottom-0
+
+              w-[5px]
+
+              rounded-full
+
+              bg-cyan-400
+
+              shadow-[0_0_20px_rgba(34,211,238,.7)]
+            "
+          />
+
+          <p
+            className="
+              text-2xl
+              md:text-3xl
+
+              italic
+
+              text-cyan-300
+
+              font-light
+
+              leading-relaxed
+            "
+          >
+            Quality is engineered into the product —
+            <br />
+            not tested after release.
+          </p>
+        </motion.div>
       </div>
     </motion.section>
   );
 }
 
 export default About;
-

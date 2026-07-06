@@ -6,99 +6,142 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-html{
-scroll-behavior:smooth;
+html {
+  scroll-behavior: smooth;
 }
 
-body{
+body {
+  font-family: Inter, sans-serif;
 
-font-family:Inter,sans-serif;
+  background:
+    radial-gradient(circle at top left, #182848 0%, transparent 40%),
+    radial-gradient(circle at bottom right, #312E81 0%, transparent 40%),
+    #050816;
 
-background:
-radial-gradient(circle at top left,#182848 0%,transparent 40%),
-radial-gradient(circle at bottom right,#312E81 0%,transparent 40%),
-#050816;
+  color: white;
+  overflow-x: hidden;
+  min-height: 100vh;
 
-color:white;
-
-overflow-x:hidden;
-
-min-height:100vh;
-
+  cursor: none;
 }
 
-/* Animated background */
+/* ===========================
+   Animated Background
+=========================== */
 
-body::before{
+body::before {
+  content: "";
 
-content:"";
+  position: fixed;
 
-position:fixed;
+  width: 600px;
+  height: 600px;
 
-width:600px;
-height:600px;
+  background: #00F5FF22;
 
-background:#00F5FF22;
+  filter: blur(180px);
 
-filter:blur(180px);
+  top: -200px;
+  left: -150px;
 
-top:-200px;
-left:-150px;
+  animation: blob1 14s infinite alternate;
 
-animation:blob1 14s infinite alternate;
-
-z-index:-1;
-
+  z-index: -1;
 }
 
-body::after{
+body::after {
+  content: "";
 
-content:"";
+  position: fixed;
 
-position:fixed;
+  width: 500px;
+  height: 500px;
 
-width:500px;
-height:500px;
+  background: #8B5CF633;
 
-background:#8B5CF633;
+  filter: blur(180px);
 
-filter:blur(180px);
+  bottom: -150px;
+  right: -150px;
 
-bottom:-150px;
-right:-150px;
+  animation: blob2 16s infinite alternate;
 
-animation:blob2 16s infinite alternate;
-
-z-index:-1;
-
+  z-index: -1;
 }
 
-@keyframes blob1{
+@keyframes blob1 {
+  from {
+    transform: translate(0, 0);
+  }
 
-from{
-transform:translate(0,0);
+  to {
+    transform: translate(150px, 120px);
+  }
 }
 
-to{
-transform:translate(150px,120px);
+@keyframes blob2 {
+  from {
+    transform: translate(0, 0);
+  }
+
+  to {
+    transform: translate(-180px, -120px);
+  }
 }
 
+/* ===========================
+   Hide Default Cursor
+=========================== */
+
+a,
+button,
+input,
+textarea,
+select,
+.glass-button {
+  cursor: none;
 }
 
-@keyframes blob2{
+/* ===========================
+   Spotlight Hover Effect
+=========================== */
 
-from{
-transform:translate(0,0);
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
 }
 
-to{
-transform:translate(-180px,-120px);
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+
+  width: 350px;
+  height: 350px;
+
+  left: var(--x, 50%);
+  top: var(--y, 50%);
+
+  transform: translate(-50%, -50%);
+
+  background: radial-gradient(
+    circle,
+    rgba(34, 211, 238, 0.18),
+    transparent 70%
+  );
+
+  opacity: 0;
+
+  transition: opacity 0.3s ease;
+
+  pointer-events: none;
 }
 
+.spotlight-card:hover::before {
+  opacity: 1;
 }

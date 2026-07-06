@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Tilt from "react-parallax-tilt";
 import portfolioData from "../data/portfolioData";
 
 function Projects() {
@@ -38,6 +39,7 @@ function Projects() {
         </h2>
 
         {/* Filter Buttons */}
+
         <div className="flex flex-wrap gap-4 mb-8">
 
           {categories.map((category) => (
@@ -45,10 +47,10 @@ function Projects() {
             <button
               key={category}
               onClick={() => setFilter(category)}
-              className={`glass-button px-5 py-2 rounded-full font-medium transition-all duration-300 ${
+              className={`px-5 py-2 rounded-full font-medium transition-all duration-300 ${
                 filter === category
-                  ? "bg-cyan-400 text-black"
-                  : "text-white hover:scale-105"
+                  ? "bg-cyan-400 text-black shadow-lg"
+                  : "glass-button text-white hover:scale-105"
               }`}
             >
               {category}
@@ -59,24 +61,28 @@ function Projects() {
         </div>
 
         {/* Search */}
+
         <div className="mb-10">
 
           <input
             type="text"
-            placeholder="Search projects, technologies, frameworks..."
+            placeholder="🔍 Search Projects..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="
               w-full
-              glass-button
               rounded-2xl
+              bg-slate-900/70
+              border
+              border-white/10
               px-5
               py-4
               text-white
-              placeholder-gray-400
+              placeholder:text-gray-400
               focus:outline-none
+              focus:border-cyan-400
               focus:ring-2
-              focus:ring-cyan-400
+              focus:ring-cyan-400/20
               transition-all
               duration-300
             "
@@ -90,106 +96,121 @@ function Projects() {
 
           {filteredProjects.map((project, index) => (
 
-            <div
+            <Tilt
               key={index}
-              className="
-                glass-card
-                group
-                rounded-3xl
-                p-8
-                overflow-hidden
-                cursor-pointer
-
-                transition-all
-                duration-500
-
-                hover:-translate-y-4
-                hover:scale-[1.03]
-                hover:rotate-[0.4deg]
-                hover:shadow-[0_20px_80px_rgba(0,245,255,.25)]
-              "
+              tiltMaxAngleX={12}
+              tiltMaxAngleY={12}
+              perspective={1200}
+              scale={1.03}
+              transitionSpeed={1500}
+              glareEnable={true}
+              glareMaxOpacity={0.12}
+              glareColor="#22d3ee"
+              glarePosition="all"
             >
 
-              <h3 className="text-2xl font-bold mb-5 transition-all duration-300 group-hover:text-cyan-400">
-                {project.title}
-              </h3>
+			<div
+			  className="
+			    glass-card
+			    spotlight-card
+			    rounded-3xl
+			    p-8
+			    h-full
+			    transition-all
+			    duration-500
+			    hover:-translate-y-3
+			    hover:shadow-[0_20px_60px_rgba(34,211,238,0.25)]
+			  "
+			  onMouseMove={(e) => {
+			    const rect = e.currentTarget.getBoundingClientRect();
 
-              <p className="text-gray-300 leading-8 mb-6">
-                {project.description}
-              </p>
+			    e.currentTarget.style.setProperty(
+			      "--x",
+			      `${e.clientX - rect.left}px`
+			    );
 
-              <div className="flex flex-wrap gap-3 mb-8">
+			    e.currentTarget.style.setProperty(
+			      "--y",
+			      `${e.clientY - rect.top}px`
+			    );
+			  }}
+			>
 
-                {project.technologies.map((tech, i) => (
+                <h3 className="text-2xl font-bold text-cyan-400 mb-5">
+                  {project.title}
+                </h3>
 
-                  <span
-                    key={i}
+                <p className="text-gray-300 leading-8 mb-6">
+                  {project.description}
+                </p>
+
+                <div className="flex flex-wrap gap-3 mb-8">
+
+                  {project.technologies.map((tech, i) => (
+
+                    <span
+                      key={i}
+                      className="
+                        glass-button
+                        px-4
+                        py-2
+                        rounded-full
+                        text-sm
+                        transition-all
+                        duration-300
+                        hover:scale-105
+                      "
+                    >
+                      {tech}
+                    </span>
+
+                  ))}
+
+                </div>
+
+                <div className="flex flex-wrap gap-4">
+
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noreferrer"
                     className="
                       glass-button
-                      px-4
-                      py-2
-                      rounded-full
-                      text-sm
-
-                      group-hover:scale-105
+                      px-6
+                      py-3
+                      rounded-xl
+                      font-semibold
+                      hover:scale-105
                       transition-all
                       duration-300
                     "
                   >
-                    {tech}
-                  </span>
+                    View Project
+                  </a>
 
-                ))}
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="
+                      glass-button
+                      px-6
+                      py-3
+                      rounded-xl
+                      font-semibold
+                      hover:scale-105
+                      transition-all
+                      duration-300
+                    "
+                  >
+                    GitHub
+                  </a>
 
-              </div>
-
-              <div className="flex flex-wrap gap-4">
-
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="
-                    glass-button
-                    px-6
-                    py-3
-                    rounded-xl
-                    font-semibold
-
-                    hover:scale-105
-                    hover:-translate-y-1
-
-                    transition-all
-                    duration-300
-                  "
-                >
-                  View Project
-                </a>
-
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="
-                    glass-button
-                    px-6
-                    py-3
-                    rounded-xl
-                    font-semibold
-
-                    hover:scale-105
-                    hover:-translate-y-1
-
-                    transition-all
-                    duration-300
-                  "
-                >
-                  GitHub
-                </a>
+                </div>
 
               </div>
 
-            </div>
+            </Tilt>
 
           ))}
 
@@ -201,4 +222,3 @@ function Projects() {
 }
 
 export default Projects;
-
