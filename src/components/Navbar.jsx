@@ -1,217 +1,601 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
+
+import { AnimatePresence, motion } from "framer-motion";
+
+import PortfolioSearch from "./PortfolioSearch";
+
+import portfolioData from "../data/portfolioData";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
+
+  const [searchOpen, setSearchOpen] = useState(false);
+
   const [activeSection, setActiveSection] = useState("about");
+
   const [scrolled, setScrolled] = useState(false);
 
-  const desktopLinks = [
-    { id: "about", label: "About" },
-    { id: "experience", label: "Experience" },
-    { id: "skills", label: "Skills" },
-    { id: "projects", label: "Projects" },
-    { id: "contact", label: "Contact" },
+  const navItems = [
+    {
+      label: "About",
+      id: "about",
+    },
+    {
+      label: "Experience",
+      id: "experience",
+    },
+    {
+      label: "Skills",
+      id: "skills",
+    },
+    {
+      label: "Projects",
+      id: "projects",
+    },
+    {
+      label: "Contact",
+      id: "contact",
+    },
   ];
 
-  const mobileLinks = [
-    { id: "about", label: "About" },
-    { id: "experience", label: "Experience" },
-    { id: "skills", label: "Skills" },
-    { id: "projects", label: "Projects" },
-    { id: "certifications", label: "Certificates" },
-    { id: "systems", label: "Systems" },
-    { id: "workflow", label: "Workflow" },
-    { id: "goals", label: "Goals" },
-    { id: "contact", label: "Contact" },
+  const mobileNavItems = [
+    {
+      label: "About",
+      id: "about",
+    },
+    {
+      label: "Experience",
+      id: "experience",
+    },
+    {
+      label: "Skills",
+      id: "skills",
+    },
+    {
+      label: "Projects",
+      id: "projects",
+    },
+    {
+      label: "Certifications",
+      id: "certifications",
+    },
+    {
+      label: "Systems",
+      id: "systems",
+    },
+    {
+      label: "Workflow",
+      id: "workflow",
+    },
+    {
+      label: "Goals",
+      id: "goals",
+    },
+    {
+      label: "Contact",
+      id: "contact",
+    },
   ];
+
+  // =========================================
+  // SCROLL EFFECT
+  // =========================================
 
   useEffect(() => {
-    const sections = document.querySelectorAll("section");
-
     const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
+      setScrolled(window.scrollY > 20);
 
-      let current = "about";
+      const sections = [
+        "about",
+        "experience",
+        "skills",
+        "projects",
+        "certifications",
+        "systems",
+        "workflow",
+        "goals",
+        "contact",
+      ];
 
-      sections.forEach((section) => {
-        const top = section.offsetTop;
-        const height = section.clientHeight;
+      let currentSection = "about";
 
-        if (
-          window.scrollY >= top - 150 &&
-          window.scrollY < top + height - 150
-        ) {
-          current = section.getAttribute("id");
+      sections.forEach((sectionId) => {
+        const section = document.getElementById(sectionId);
+
+        if (!section) {
+          return;
+        }
+
+        const rect = section.getBoundingClientRect();
+
+        if (rect.top <= 160) {
+          currentSection = sectionId;
         }
       });
 
-      setActiveSection(current);
+      setActiveSection(currentSection);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
 
     handleScroll();
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
+  // =========================================
+  // KEYBOARD SHORTCUTS
+  // =========================================
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        event.key.toLowerCase() === "k"
+      ) {
+        event.preventDefault();
+
+        setSearchOpen(true);
+        setOpen(false);
+      }
+
+      if (event.key === "Escape" && !searchOpen) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [searchOpen]);
+
+  // =========================================
+  // NAVIGATION
+  // =========================================
+
+  const scrollToSection = (id) => {
+    setOpen(false);
+
+    const section = document.getElementById(id);
+
+    if (!section) {
+      return;
+    }
+
+    const navbarOffset = 90;
+
+    const targetPosition =
+      section.getBoundingClientRect().top +
+      window.scrollY -
+      navbarOffset;
+
+    window.scrollTo({
+      top: targetPosition,
+      behavior: "smooth",
+    });
+  };
+
+  // =========================================
+  // SEARCH OPEN
+  // =========================================
+
+  const handleSearchOpen = () => {
+    setSearchOpen(true);
+    setOpen(false);
+  };
+
+  // =========================================
+  // SEARCH CLOSE
+  // =========================================
+
+  const handleSearchClose = () => {
+    setSearchOpen(false);
+  };
+
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.8 }}
-      className={`fixed left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ${
-        scrolled
-          ? "top-3 w-[90%] max-w-6xl"
-          : "top-6 w-[85%] max-w-5xl"
-      }`}
-    >
-      <div
+    <>
+      {/* =========================================
+          NAVBAR
+      ========================================= */}
+
+      <nav
         className={`
-          bg-slate-900/45
-          backdrop-blur-3xl
-          border
-          border-cyan-400/10
-          rounded-full
-          shadow-[0_20px_60px_rgba(0,245,255,.12)]
+          fixed
+          top-0
+          left-0
+          right-0
+          z-[80]
           transition-all
-          duration-500
-          ${scrolled ? "py-3" : "py-4"}
+          duration-300
+          ${
+            scrolled
+              ? "bg-slate-950/90 backdrop-blur-xl border-b border-cyan-400/10 shadow-lg"
+              : "bg-transparent"
+          }
         `}
       >
-        <div className="grid grid-cols-3 items-center px-8">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="h-20 flex items-center justify-between">
+            {/* =====================================
+                LOGO
+            ===================================== */}
 
-          {/* Logo */}
+            <button
+              type="button"
+              onClick={() =>
+                window.scrollTo({
+                  top: 0,
+                  behavior: "smooth",
+                })
+              }
+              className="
+                text-xl
+                md:text-2xl
+                font-bold
+                text-white
+                hover:text-cyan-400
+                transition
+              "
+              aria-label="Go to top"
+            >
+              Archit<span className="text-cyan-400">.</span>
+            </button>
 
-          <motion.a
-            href="#"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.96 }}
-            className="justify-self-start text-xl font-bold cursor-pointer"
-          >
-            <span className="text-cyan-400">
-              Archit
-            </span>
-            <span className="text-white">
-              .SDET
-            </span>
-          </motion.a>
+            {/* =====================================
+                DESKTOP NAVIGATION
+            ===================================== */}
 
-          {/* Desktop Menu */}
-
-          <div className="hidden lg:flex justify-center items-center gap-10">
-
-            {desktopLinks.map((item) => (
-              <a
-                key={item.id}
-                href={`#${item.id}`}
-                className="relative group text-gray-300 font-medium transition-colors duration-300 hover:text-cyan-400"
-              >
-                <span
-                  className={
-                    activeSection === item.id
-                      ? "text-cyan-400"
-                      : ""
-                  }
+            <div className="hidden lg:flex items-center gap-7">
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => scrollToSection(item.id)}
+                  className={`
+                    relative
+                    text-sm
+                    font-medium
+                    transition
+                    ${
+                      activeSection === item.id
+                        ? "text-cyan-400"
+                        : "text-gray-300 hover:text-cyan-400"
+                    }
+                  `}
                 >
                   {item.label}
+
+                  {activeSection === item.id && (
+                    <motion.span
+                      layoutId="activeNav"
+                      className="
+                        absolute
+                        -bottom-2
+                        left-0
+                        right-0
+                        h-0.5
+                        bg-cyan-400
+                        rounded-full
+                      "
+                    />
+                  )}
+                </button>
+              ))}
+
+              {/* ===================================
+                  DESKTOP SEARCH
+              =================================== */}
+
+              <button
+                type="button"
+                onClick={handleSearchOpen}
+                className="
+                  flex
+                  items-center
+                  gap-2
+                  text-gray-300
+                  hover:text-cyan-400
+                  transition
+                  text-sm
+                  font-medium
+                "
+                aria-label="Open portfolio search"
+              >
+                <span
+                  className="
+                    text-3xl
+                    font-bold
+                    leading-none
+                  "
+                  aria-hidden="true"
+                >
+                  ⌕
                 </span>
 
+                <span>Search</span>
+
                 <span
-                  className={`absolute left-0 -bottom-2 h-[2px] rounded-full bg-cyan-400 transition-all duration-300 ${
-                    activeSection === item.id
-                      ? "w-full"
-                      : "w-0 group-hover:w-full"
-                  }`}
-                />
+                  className="
+                    hidden
+                    xl:inline-flex
+                    items-center
+                    rounded-md
+                    border
+                    border-slate-700
+                    bg-slate-900/70
+                    px-2
+                    py-1
+                    text-[10px]
+                    text-gray-500
+                  "
+                >
+                  Ctrl K
+                </span>
+              </button>
+
+              {/* ===================================
+                  RESUME
+              =================================== */}
+
+              <a
+                href={portfolioData.resume}
+                target="_blank"
+                rel="noreferrer"
+                className="
+                  rounded-full
+                  border
+                  border-cyan-400/40
+                  px-5
+                  py-2
+                  text-sm
+                  font-semibold
+                  text-cyan-400
+                  hover:bg-cyan-400
+                  hover:text-slate-950
+                  transition
+                "
+              >
+                Resume
               </a>
-            ))}
+            </div>
 
+            {/* =====================================
+                MOBILE ACTIONS
+            ===================================== */}
+
+            <div className="lg:hidden flex items-center gap-2">
+              {/* Mobile Search */}
+
+              <button
+                type="button"
+                onClick={handleSearchOpen}
+                className="
+                  flex
+                  items-center
+                  justify-center
+                  w-11
+                  h-11
+                  rounded-xl
+                  text-cyan-400
+                  hover:bg-slate-800
+                  transition
+                "
+                aria-label="Open portfolio search"
+              >
+                <span
+                  className="
+                    text-3xl
+                    font-bold
+                    leading-none
+                  "
+                  aria-hidden="true"
+                >
+                  ⌕
+                </span>
+              </button>
+
+              {/* Mobile Menu */}
+
+              <button
+                type="button"
+                onClick={() => setOpen((value) => !value)}
+                className="
+                  flex
+                  flex-col
+                  items-center
+                  justify-center
+                  gap-1.5
+                  w-11
+                  h-11
+                  rounded-xl
+                  hover:bg-slate-800
+                  transition
+                "
+                aria-label={
+                  open
+                    ? "Close navigation menu"
+                    : "Open navigation menu"
+                }
+                aria-expanded={open}
+              >
+                <span
+                  className={`
+                    block
+                    w-6
+                    h-0.5
+                    bg-gray-300
+                    transition
+                    ${
+                      open
+                        ? "rotate-45 translate-y-2"
+                        : ""
+                    }
+                  `}
+                />
+
+                <span
+                  className={`
+                    block
+                    w-6
+                    h-0.5
+                    bg-gray-300
+                    transition
+                    ${
+                      open
+                        ? "opacity-0"
+                        : "opacity-100"
+                    }
+                  `}
+                />
+
+                <span
+                  className={`
+                    block
+                    w-6
+                    h-0.5
+                    bg-gray-300
+                    transition
+                    ${
+                      open
+                        ? "-rotate-45 -translate-y-2"
+                        : ""
+                    }
+                  `}
+                />
+              </button>
+            </div>
           </div>
-
-          {/* Resume */}
-
-          <motion.a
-            whileHover={{
-              scale: 1.05,
-              y: -2,
-            }}
-            whileTap={{ scale: 0.96 }}
-            href="/resume/Archit_Singh_SDET_QA_Engineer_Resume.pdf"
-            target="_blank"
-            rel="noreferrer"
-            className="
-              hidden
-              lg:flex
-              justify-self-end
-              items-center
-
-              glass-button
-
-              px-5
-              py-2.5
-              rounded-full
-
-              font-semibold
-            "
-          >
-            Resume
-          </motion.a>
-
-          {/* Mobile Button */}
-
-          <button
-            className="lg:hidden justify-self-end text-3xl"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? "✕" : "☰"}
-          </button>
-
         </div>
 
-        {/* Mobile Menu */}
+        {/* =========================================
+            MOBILE MENU
+        ========================================= */}
 
         <AnimatePresence>
-
           {open && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="lg:hidden overflow-hidden"
+              initial={{
+                opacity: 0,
+                height: 0,
+              }}
+              animate={{
+                opacity: 1,
+                height: "auto",
+              }}
+              exit={{
+                opacity: 0,
+                height: 0,
+              }}
+              className="
+                lg:hidden
+                overflow-hidden
+                border-t
+                border-slate-800
+                bg-slate-950/95
+                backdrop-blur-xl
+              "
             >
-              <div className="px-8 pt-5 pb-6 flex flex-col gap-5">
-
-                {mobileLinks.map((item) => (
-                  <a
+              <div className="px-6 py-5 space-y-1">
+                {mobileNavItems.map((item) => (
+                  <button
                     key={item.id}
-                    href={`#${item.id}`}
-                    onClick={() => setOpen(false)}
-                    className="text-gray-300 hover:text-cyan-400 transition"
+                    type="button"
+                    onClick={() => scrollToSection(item.id)}
+                    className={`
+                      w-full
+                      text-left
+                      px-4
+                      py-3
+                      rounded-xl
+                      text-sm
+                      font-medium
+                      transition
+                      ${
+                        activeSection === item.id
+                          ? "bg-cyan-400/10 text-cyan-400"
+                          : "text-gray-300 hover:bg-slate-800 hover:text-cyan-400"
+                      }
+                    `}
                   >
                     {item.label}
-                  </a>
+                  </button>
                 ))}
 
+                {/* Mobile Search */}
+
+                <button
+                  type="button"
+                  onClick={handleSearchOpen}
+                  className="
+                    w-full
+                    flex
+                    items-center
+                    gap-3
+                    text-left
+                    px-4
+                    py-3
+                    rounded-xl
+                    text-sm
+                    font-medium
+                    text-gray-300
+                    hover:bg-slate-800
+                    hover:text-cyan-400
+                    transition
+                  "
+                >
+                  <span className="text-2xl font-bold">
+                    ⌕
+                  </span>
+
+                  Search Portfolio
+                </button>
+
+                {/* Mobile Resume */}
+
                 <a
-                  href="/resume/Archit_Singh_SDET_QA_Engineer_Resume.pdf"
+                  href={portfolioData.resume}
                   target="_blank"
                   rel="noreferrer"
-                  className="glass-button rounded-xl py-3 text-center"
+                  onClick={() => setOpen(false)}
+                  className="
+                    block
+                    mt-2
+                    px-4
+                    py-3
+                    rounded-xl
+                    text-sm
+                    font-semibold
+                    text-cyan-400
+                    border
+                    border-cyan-400/30
+                    hover:bg-cyan-400/10
+                    transition
+                  "
                 >
                   Resume
                 </a>
-
               </div>
             </motion.div>
           )}
-
         </AnimatePresence>
+      </nav>
 
-      </div>
-    </motion.nav>
+      {/* =========================================
+          SEARCH MODAL
+      ========================================= */}
+
+      <AnimatePresence>
+        {searchOpen && (
+          <PortfolioSearch onClose={handleSearchClose} />
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
