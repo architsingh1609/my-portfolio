@@ -197,7 +197,7 @@ const portfolioData = {
 
       role: "SDET Quality Assurance Engineer",
 
-      startDate: "2026-04-01",
+      startDate: "2026-04-27",
 
       endDate: null,
 
@@ -232,17 +232,36 @@ const portfolioData = {
 
       role: "Quality Assurance Specialist",
 
-      startDate: "2025-03-01",
+      startDate: "2025-03-27",
 
-      endDate: "2026-04-01",
+      endDate: "2026-04-26",
 
-      location: "",
+      location: "Gurugram, Haryana, India · On-site",
 
       duration: "auto",
 
-      responsibilities: [],
+      responsibilities: [
+        "Performed manual testing of web applications to ensure functionality and quality.",
+        "Designed, reviewed, and executed test cases based on business requirements.",
+        "Identified, documented, and tracked software defects using bug reporting tools.",
+        "Conducted functional, regression, smoke, and sanity testing across multiple releases.",
+        "Collaborated with developers and stakeholders to resolve issues and improve product quality.",
+        "Participated in requirement analysis, test planning, and test execution activities.",
+        "Verified bug fixes and maintained detailed test documentation.",
+        "Worked in an Agile development environment and contributed to sprint testing activities.",
+      ],
 
-      automation: [],
+      automation: [
+        "Manual Testing",
+        "Functional Testing",
+        "Regression Testing",
+        "Smoke Testing",
+        "Sanity Testing",
+        "Test Case Design",
+        "Defect Management",
+        "Bug Reporting",
+        "Agile Testing",
+      ],
     },
   ],
 
@@ -337,8 +356,7 @@ const portfolioData = {
       objective:
         "Automate critical banking workflows and provide repeatable functional and regression validation using Java, Selenium WebDriver, TestNG, Maven, Page Object Model, Allure Reports, and CI/CD.",
 
-      architecture:
-        "Page Object Model / Reusable Automation Framework",
+      architecture: "Page Object Model / Reusable Automation Framework",
 
       testingScope: [
         "Functional Testing",
@@ -429,7 +447,8 @@ const portfolioData = {
         "Integrate Jenkins for automated execution.",
       ],
 
-      cicd: "Jenkins-based automated execution is included in the project.",
+      cicd:
+        "Jenkins-based automated execution is included in the project.",
 
       reporting:
         "No separate reporting implementation is specified for this project.",
@@ -543,8 +562,7 @@ const portfolioData = {
       objective:
         "Automate important OrangeHRM workflows using reusable Selenium components and Page Object Model architecture.",
 
-      architecture:
-        "Page Object Model based Selenium automation framework.",
+      architecture: "Page Object Model based Selenium automation framework.",
 
       testingScope: [
         "Functional Testing",
@@ -786,7 +804,8 @@ const portfolioData = {
       outcome:
         "A reusable Selenium automation framework covering important end-to-end e-commerce workflows.",
 
-      github: "https://github.com/architsingh1609/automation__E-commerce",
+      github:
+        "https://github.com/architsingh1609/automation__E-commerce",
     },
 
     {
@@ -848,7 +867,8 @@ const portfolioData = {
       outcome:
         "A Java recommendation system demonstrating data handling, filtering logic, and software engineering fundamentals.",
 
-      github: "https://github.com/architsingh1609/NeighborFit",
+      github:
+        "https://github.com/architsingh1609/NeighborFit",
     },
   ],
 
