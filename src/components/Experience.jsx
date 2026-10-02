@@ -1,17 +1,32 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+
 import portfolioData from "../data/portfolioData";
 
-// =========================================
-// DATE HELPERS
-// =========================================
+/* =========================================================
+   DATE HELPERS
+========================================================= */
 
-function formatDate(dateString) {
-  if (!dateString) return "Present";
+function parseDate(dateString) {
+  if (!dateString) {
+    return null;
+  }
 
   const date = new Date(`${dateString}T00:00:00`);
 
-  if (isNaN(date.getTime())) return dateString;
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function formatDate(dateString) {
+  if (!dateString) {
+    return "Present";
+  }
+
+  const date = parseDate(dateString);
+
+  if (!date) {
+    return dateString;
+  }
 
   return date.toLocaleDateString("en-US", {
     month: "short",
@@ -19,15 +34,21 @@ function formatDate(dateString) {
   });
 }
 
-function calculateDuration(startDate, endDate) {
-  if (!startDate) return "";
+function calculateDuration(
+  startDate,
+  endDate,
+  referenceDate = new Date(),
+) {
+  if (!startDate) {
+    return "";
+  }
 
-  const start = new Date(`${startDate}T00:00:00`);
+  const start = parseDate(startDate);
   const end = endDate
-    ? new Date(`${endDate}T00:00:00`)
-    : new Date();
+    ? parseDate(endDate)
+    : referenceDate;
 
-  if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+  if (!start || !end || end < start) {
     return "";
   }
 
@@ -59,22 +80,193 @@ function calculateDuration(startDate, endDate) {
   } month${remainingMonths !== 1 ? "s" : ""}`;
 }
 
-// =========================================
-// EXPERIENCE SECTION
-// =========================================
+/* =========================================================
+   TOTAL EXPERIENCE CALCULATION
+========================================================= */
+
+function calculateTotalExperience(
+  experience,
+  referenceDate = new Date(),
+) {
+  if (!Array.isArray(experience) || experience.length === 0) {
+    return {
+      years: 0,
+      months: 0,
+      label: "0 Months",
+    };
+  }
+
+  const periods = experience
+    .map((job) => {
+      const start = parseDate(job?.startDate);
+      const end = job?.endDate
+        ? parseDate(job.endDate)
+        : referenceDate;
+
+      if (!start || !end || end < start) {
+        return null;
+      }
+
+      return {
+        start,
+        end,
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.start - b.start);
+
+  if (periods.length === 0) {
+    return {
+      years: 0,
+      months: 0,
+      label: "0 Months",
+    };
+  }
+
+  /*
+   * Merge overlapping or directly connected employment
+   * periods so overlapping roles are not double-counted.
+   */
+  const mergedPeriods = [];
+
+  periods.forEach((period) => {
+    const lastPeriod =
+      mergedPeriods[mergedPeriods.length - 1];
+
+    if (!lastPeriod) {
+      mergedPeriods.push({
+        start: period.start,
+        end: period.end,
+      });
+
+      return;
+    }
+
+    const oneDayAfterLastEnd = new Date(lastPeriod.end);
+
+    oneDayAfterLastEnd.setDate(
+      oneDayAfterLastEnd.getDate() + 1,
+    );
+
+    if (period.start <= oneDayAfterLastEnd) {
+      if (period.end > lastPeriod.end) {
+        lastPeriod.end = period.end;
+      }
+    } else {
+      mergedPeriods.push({
+        start: period.start,
+        end: period.end,
+      });
+    }
+  });
+
+  let totalMonths = 0;
+
+  mergedPeriods.forEach((period) => {
+    let months =
+      (period.end.getFullYear() -
+        period.start.getFullYear()) *
+        12 +
+      (period.end.getMonth() -
+        period.start.getMonth());
+
+    if (period.end.getDate() < period.start.getDate()) {
+      months -= 1;
+    }
+
+    totalMonths += Math.max(months, 0);
+  });
+
+  const years = Math.floor(totalMonths / 12);
+  const months = totalMonths % 12;
+
+  let label = "";
+
+  if (years > 0) {
+    label += `${years} Year${
+      years !== 1 ? "s" : ""
+    }`;
+  }
+
+  if (months > 0) {
+    if (label) {
+      label += " ";
+    }
+
+    label += `${months} Month${
+      months !== 1 ? "s" : ""
+    }`;
+  }
+
+  if (!label) {
+    label = "Less than 1 Month";
+  }
+
+  return {
+    years,
+    months,
+    label,
+  };
+}
+
+/* =========================================================
+   EXPERIENCE SECTION
+========================================================= */
 
 function Experience() {
-  const experience = Array.isArray(portfolioData.experience)
-    ? portfolioData.experience
+  const experience = Array.isArray(
+    portfolioData.experience,
+  )
+    ? portfolioData.experience.filter(
+        (job) => job?.startDate,
+      )
     : [];
 
   const [activeIndex, setActiveIndex] = useState(0);
 
+  /*
+   * Refresh current-role duration automatically.
+   * This keeps the displayed experience current without
+   * requiring a page refresh.
+   */
+  const [currentDate, setCurrentDate] = useState(
+    () => new Date(),
+  );
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setCurrentDate(new Date());
+    }, 60 * 1000);
+
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, []);
+
+  const totalExperience = useMemo(
+    () =>
+      calculateTotalExperience(
+        experience,
+        currentDate,
+      ),
+    [experience, currentDate],
+  );
+
   if (experience.length === 0) {
     return (
-      <section id="experience" className="py-24 px-6">
-        <div className="max-w-7xl mx-auto">
-          <p className="text-gray-400">
+      <section
+        id="experience"
+        className="
+          bg-[var(--bg-primary)]
+          px-6
+          py-24
+          text-[var(--text-primary)]
+          transition-colors
+          duration-300
+        "
+      >
+        <div className="mx-auto max-w-7xl">
+          <p className="text-[var(--text-secondary)]">
             Experience information is currently unavailable.
           </p>
         </div>
@@ -82,59 +274,161 @@ function Experience() {
     );
   }
 
-  const activeJob = experience[activeIndex];
+  const safeActiveIndex = Math.min(
+    Math.max(activeIndex, 0),
+    experience.length - 1,
+  );
 
-  const isCurrent = !activeJob.endDate;
+  const activeJob = experience[safeActiveIndex];
+
+  const isCurrent = !activeJob?.endDate;
 
   const duration = calculateDuration(
-    activeJob.startDate,
-    activeJob.endDate
+    activeJob?.startDate,
+    activeJob?.endDate,
+    currentDate,
   );
 
   return (
     <section
       id="experience"
-      className="relative py-24 px-6 overflow-hidden"
+      aria-labelledby="experience-heading"
+      className="
+        relative
+        overflow-hidden
+        bg-[var(--bg-primary)]
+        px-6
+        py-24
+        text-[var(--text-primary)]
+        transition-colors
+        duration-300
+      "
     >
-      {/* =========================================
+      {/* =======================================================
           BACKGROUND
-      ========================================= */}
+      ======================================================== */}
 
-      <div className="absolute -left-40 top-40 w-96 h-96 bg-cyan-400/5 rounded-full blur-3xl pointer-events-none" />
+      <div
+        aria-hidden="true"
+        className="
+          pointer-events-none
+          absolute
+          -left-40
+          top-40
+          h-96
+          w-96
+          rounded-full
+          bg-blue-100/30
+          blur-3xl
+          dark:bg-blue-500/[0.035]
+        "
+      />
 
-      <div className="absolute -right-40 bottom-20 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+      <div
+        aria-hidden="true"
+        className="
+          pointer-events-none
+          absolute
+          -right-40
+          bottom-20
+          h-96
+          w-96
+          rounded-full
+          bg-neutral-200/40
+          blur-3xl
+          dark:bg-blue-950/20
+        "
+      />
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* =========================================
+      <div className="relative z-10 mx-auto max-w-7xl">
+        {/* =====================================================
             HEADER
-        ========================================= */}
+        ====================================================== */}
 
         <motion.div
-          initial={{ opacity: 0, y: 35 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="mb-14"
+          initial={{
+            opacity: 0,
+            y: 35,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+            amount: 0.2,
+          }}
+          transition={{
+            duration: 0.7,
+          }}
+          className="mb-10"
         >
-          <div className="flex items-center gap-4 mb-4">
-            <span className="w-10 h-[2px] bg-cyan-400" />
+          <div className="mb-4 flex items-center gap-4">
+            <span
+              aria-hidden="true"
+              className="h-[2px] w-10 bg-[var(--accent)]"
+            />
 
-            <p className="text-cyan-400 uppercase tracking-[0.3em] text-xs md:text-sm font-semibold">
+            <p
+              className="
+                text-xs
+                font-semibold
+                uppercase
+                tracking-[0.3em]
+                text-[var(--accent)]
+                md:text-sm
+              "
+            >
               Career Architecture
             </p>
           </div>
 
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+          <div
+            className="
+              flex
+              flex-col
+              gap-6
+              lg:flex-row
+              lg:items-end
+              lg:justify-between
+            "
+          >
             <div>
-              <h2 className="text-4xl md:text-6xl font-bold text-white leading-tight">
+              <h2
+                id="experience-heading"
+                className="
+                  text-4xl
+                  font-bold
+                  leading-tight
+                  text-[var(--text-primary)]
+                  transition-colors
+                  duration-300
+                  md:text-6xl
+                "
+              >
                 Experience
-                <span className="text-cyan-400"> / </span>
+                <span className="text-[var(--accent)]">
+                  {" "}
+                  /{" "}
+                </span>
                 Engineering Journey
               </h2>
 
-              <p className="mt-5 text-gray-500 max-w-2xl text-base md:text-lg leading-8">
-                A closer look at the roles, responsibilities, and
-                engineering practices that have shaped my QA career.
+              <p
+                className="
+                  mt-5
+                  max-w-2xl
+                  text-base
+                  leading-8
+                  text-[var(--text-secondary)]
+                  transition-colors
+                  duration-300
+                  md:text-lg
+                "
+              >
+                A closer look at the roles, responsibilities,
+                and engineering practices that have shaped my
+                QA career.
               </p>
             </div>
 
@@ -143,71 +437,211 @@ function Experience() {
             <div
               className="
                 hidden
-                lg:flex
                 items-center
                 gap-3
-                px-4
-                py-3
                 rounded-xl
                 border
-                border-slate-800
-                bg-slate-950/80
+                border-[var(--border-light)]
+                bg-[var(--bg-card-soft)]
+                px-4
+                py-3
                 font-mono
                 text-xs
+                shadow-sm
+                transition-colors
+                duration-300
+                lg:flex
               "
             >
-              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+              <span
+                aria-hidden="true"
+                className="
+                  h-2
+                  w-2
+                  animate-pulse
+                  rounded-full
+                  bg-green-500
+                "
+              />
 
-              <span className="text-gray-500">
+              <span className="text-[var(--text-muted)]">
                 CAREER_STATUS:
               </span>
 
-              <span className="text-cyan-400">
+              <span className="font-semibold text-green-500">
                 ACTIVE
               </span>
             </div>
           </div>
         </motion.div>
 
-        {/* =========================================
+        {/* =====================================================
+            TOTAL WORKING EXPERIENCE
+        ====================================================== */}
+
+        <motion.div
+          initial={{
+            opacity: 0,
+            y: 20,
+          }}
+          whileInView={{
+            opacity: 1,
+            y: 0,
+          }}
+          viewport={{
+            once: true,
+            amount: 0.2,
+          }}
+          transition={{
+            duration: 0.6,
+            delay: 0.1,
+          }}
+          className="
+            mb-8
+            rounded-2xl
+            border
+            border-[var(--border-light)]
+            bg-[var(--bg-card)]
+            px-6
+            py-5
+            shadow-sm
+            transition-colors
+            duration-300
+            md:px-7
+          "
+        >
+          <div
+            className="
+              flex
+              flex-col
+              gap-3
+              sm:flex-row
+              sm:items-center
+              sm:justify-between
+            "
+          >
+            <div>
+              <p
+                className="
+                  font-mono
+                  text-[10px]
+                  font-semibold
+                  uppercase
+                  tracking-[0.22em]
+                  text-[var(--text-muted)]
+                "
+              >
+                Total Working Experience
+              </p>
+
+              <p
+                className="
+                  mt-2
+                  text-sm
+                  leading-6
+                  text-[var(--text-secondary)]
+                "
+              >
+                Automatically calculated from the employment
+                periods in the portfolio.
+              </p>
+            </div>
+
+            <div className="sm:text-right">
+              <p
+                className="
+                  text-2xl
+                  font-bold
+                  tracking-tight
+                  text-[var(--text-primary)]
+                  md:text-3xl
+                "
+              >
+                {totalExperience.label}
+              </p>
+
+              <p
+                className="
+                  mt-1
+                  text-[10px]
+                  uppercase
+                  tracking-wider
+                  text-[var(--text-muted)]
+                "
+              >
+                Years & Months
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* =====================================================
             EXPERIENCE CONSOLE
-        ========================================= */}
+        ====================================================== */}
 
         <div
           className="
             grid
             grid-cols-1
-            lg:grid-cols-[330px_1fr]
+            overflow-hidden
             rounded-3xl
             border
-            border-slate-800
-            bg-slate-950/80
-            overflow-hidden
-            shadow-[0_20px_80px_rgba(0,0,0,0.25)]
+            border-[var(--border-light)]
+            bg-[var(--bg-card)]
+            shadow-sm
+            transition-colors
+            duration-300
+            lg:grid-cols-[330px_1fr]
           "
         >
-          {/* =========================================
+          {/* ===================================================
               LEFT NAVIGATION
-          ========================================= */}
+          ==================================================== */}
 
           <div
             className="
               border-b
+              border-[var(--border-light)]
+              bg-[var(--bg-card-soft)]
+              transition-colors
+              duration-300
               lg:border-b-0
               lg:border-r
-              border-slate-800
-              bg-slate-900/50
             "
           >
             {/* Console Header */}
 
-            <div className="px-6 py-5 border-b border-slate-800">
+            <div
+              className="
+                border-b
+                border-[var(--border-light)]
+                px-6
+                py-5
+                transition-colors
+                duration-300
+              "
+            >
               <div className="flex items-center justify-between">
-                <p className="font-mono text-xs text-gray-500 uppercase tracking-wider">
+                <p
+                  className="
+                    font-mono
+                    text-xs
+                    uppercase
+                    tracking-wider
+                    text-[var(--text-muted)]
+                  "
+                >
                   Professional History
                 </p>
 
-                <span className="font-mono text-xs text-cyan-400">
+                <span
+                  className="
+                    font-mono
+                    text-xs
+                    font-semibold
+                    text-[var(--accent)]
+                  "
+                >
                   {String(experience.length).padStart(2, "0")}
                 </span>
               </div>
@@ -217,44 +651,52 @@ function Experience() {
 
             <div className="p-3">
               {experience.map((job, index) => {
-                const selected = index === activeIndex;
-                const current = !job.endDate;
+                const selected =
+                  index === safeActiveIndex;
+
+                const current = !job?.endDate;
 
                 return (
                   <button
                     key={`${job.company}-${job.role}-${index}`}
                     type="button"
                     onClick={() => setActiveIndex(index)}
+                    aria-pressed={selected}
+                    aria-label={`View ${job.role} at ${job.company}`}
                     className={`
-                      w-full
-                      text-left
-                      rounded-2xl
-                      p-5
+                      relative
                       mb-2
+                      w-full
+                      overflow-hidden
+                      rounded-2xl
                       border
+                      p-5
+                      text-left
                       transition-all
                       duration-300
-                      relative
-                      overflow-hidden
+                      focus:outline-none
+                      focus:ring-2
+                      focus:ring-[var(--accent)]
+                      focus:ring-offset-2
+                      focus:ring-offset-[var(--bg-card-soft)]
                       ${
                         selected
-                          ? "bg-cyan-400/[0.07] border-cyan-400/40"
-                          : "bg-transparent border-transparent hover:bg-slate-800/50 hover:border-slate-700"
+                          ? "border-[var(--border-accent)] bg-[var(--bg-card)] shadow-sm"
+                          : "border-transparent bg-transparent hover:border-[var(--border-light)] hover:bg-[var(--bg-card)]"
                       }
                     `}
                   >
-                    {/* Active Indicator */}
-
                     {selected && (
                       <motion.div
                         layoutId="experience-active"
+                        aria-hidden="true"
                         className="
                           absolute
+                          bottom-0
                           left-0
                           top-0
-                          bottom-0
                           w-1
-                          bg-cyan-400
+                          bg-[var(--accent)]
                         "
                       />
                     )}
@@ -266,8 +708,8 @@ function Experience() {
                           text-xs
                           ${
                             selected
-                              ? "text-cyan-400"
-                              : "text-gray-600"
+                              ? "text-[var(--accent)]"
+                              : "text-[var(--text-muted)]"
                           }
                         `}
                       >
@@ -275,8 +717,28 @@ function Experience() {
                       </span>
 
                       {current && (
-                        <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-cyan-400">
-                          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                        <span
+                          className="
+                            flex
+                            items-center
+                            gap-1.5
+                            text-[10px]
+                            uppercase
+                            tracking-wider
+                            text-green-500
+                          "
+                        >
+                          <span
+                            aria-hidden="true"
+                            className="
+                              h-1.5
+                              w-1.5
+                              animate-pulse
+                              rounded-full
+                              bg-green-500
+                            "
+                          />
+
                           Current
                         </span>
                       )}
@@ -289,21 +751,36 @@ function Experience() {
                         leading-snug
                         ${
                           selected
-                            ? "text-white"
-                            : "text-gray-400"
+                            ? "text-[var(--text-primary)]"
+                            : "text-[var(--text-secondary)]"
                         }
                       `}
                     >
                       {job.role}
                     </h3>
 
-                    <p className="mt-2 text-sm text-gray-600">
+                    <p className="mt-2 text-sm text-[var(--text-secondary)]">
                       {job.company}
                     </p>
 
-                    <p className="mt-3 text-xs text-gray-600">
+                    <p className="mt-3 text-xs text-[var(--text-muted)]">
                       {formatDate(job.startDate)} —{" "}
                       {formatDate(job.endDate)}
+                    </p>
+
+                    <p
+                      className="
+                        mt-2
+                        text-xs
+                        font-medium
+                        text-[var(--accent)]
+                      "
+                    >
+                      {calculateDuration(
+                        job.startDate,
+                        job.endDate,
+                        currentDate,
+                      )}
                     </p>
                   </button>
                 );
@@ -311,27 +788,43 @@ function Experience() {
             </div>
           </div>
 
-          {/* =========================================
+          {/* ===================================================
               RIGHT DETAIL PANEL
-          ========================================= */}
+          ==================================================== */}
 
-          <div className="relative p-7 md:p-10 lg:p-12 min-h-[600px]">
-            {/* Grid Background */}
+          <div
+            className="
+              relative
+              min-h-[600px]
+              bg-[var(--bg-card)]
+              p-7
+              transition-colors
+              duration-300
+              md:p-10
+              lg:p-12
+            "
+          >
+            {/* Subtle Grid Background */}
 
             <div
+              aria-hidden="true"
               className="
+                pointer-events-none
                 absolute
                 inset-0
-                opacity-[0.025]
-                pointer-events-none
-                bg-[linear-gradient(rgba(255,255,255,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.5)_1px,transparent_1px)]
-                bg-[size:40px_40px]
+                opacity-50
+                dark:opacity-[0.28]
               "
+              style={{
+                backgroundImage:
+                  "linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px)",
+                backgroundSize: "40px 40px",
+              }}
             />
 
             <AnimatePresence mode="wait">
               <motion.div
-                key={activeIndex}
+                key={safeActiveIndex}
                 initial={{
                   opacity: 0,
                   x: 25,
@@ -349,28 +842,92 @@ function Experience() {
                 }}
                 className="relative z-10"
               >
-                {/* =========================================
+                {/* =================================================
                     ROLE HEADER
-                ========================================= */}
+                ================================================== */}
 
-                <div className="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-6">
+                <div
+                  className="
+                    flex
+                    flex-col
+                    gap-6
+                    xl:flex-row
+                    xl:items-start
+                    xl:justify-between
+                  "
+                >
                   <div>
                     {isCurrent && (
-                      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/5 text-cyan-400 text-[10px] uppercase tracking-[0.2em] font-semibold mb-5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                      <div
+                        className="
+                          mb-5
+                          inline-flex
+                          items-center
+                          gap-2
+                          rounded-full
+                          border
+                          border-green-200
+                          bg-green-50
+                          px-3
+                          py-1.5
+                          text-[10px]
+                          font-semibold
+                          uppercase
+                          tracking-[0.2em]
+                          text-green-700
+                          dark:border-green-400/20
+                          dark:bg-green-500/[0.08]
+                          dark:text-green-300
+                        "
+                      >
+                        <span
+                          aria-hidden="true"
+                          className="
+                            h-1.5
+                            w-1.5
+                            animate-pulse
+                            rounded-full
+                            bg-green-500
+                          "
+                        />
+
                         Currently Building
                       </div>
                     )}
 
-                    <p className="font-mono text-xs text-gray-600 mb-3">
-                      ROLE_0{activeIndex + 1}
+                    <p
+                      className="
+                        mb-3
+                        font-mono
+                        text-xs
+                        text-[var(--text-muted)]
+                      "
+                    >
+                      ROLE_0{safeActiveIndex + 1}
                     </p>
 
-                    <h3 className="text-3xl md:text-4xl font-bold text-white leading-tight">
+                    <h3
+                      className="
+                        text-3xl
+                        font-bold
+                        leading-tight
+                        text-[var(--text-primary)]
+                        transition-colors
+                        duration-300
+                        md:text-4xl
+                      "
+                    >
                       {activeJob.role}
                     </h3>
 
-                    <p className="mt-3 text-xl text-cyan-400 font-semibold">
+                    <p
+                      className="
+                        mt-3
+                        text-xl
+                        font-semibold
+                        text-[var(--accent)]
+                      "
+                    >
                       {activeJob.company}
                     </p>
                   </div>
@@ -378,28 +935,51 @@ function Experience() {
                   {/* Duration */}
 
                   <div className="xl:text-right">
-                    <p className="font-mono text-xs text-gray-600 uppercase tracking-wider mb-2">
+                    <p
+                      className="
+                        mb-2
+                        font-mono
+                        text-xs
+                        uppercase
+                        tracking-wider
+                        text-[var(--text-muted)]
+                      "
+                    >
                       Duration
                     </p>
 
-                    <p className="text-white font-semibold">
+                    <p className="font-semibold text-[var(--text-primary)]">
                       {duration}
                     </p>
 
-                    <p className="mt-1 text-sm text-gray-500">
+                    <p className="mt-1 text-sm text-[var(--text-secondary)]">
                       {formatDate(activeJob.startDate)} —{" "}
                       {formatDate(activeJob.endDate)}
                     </p>
                   </div>
                 </div>
 
-                {/* =========================================
+                {/* =================================================
                     LOCATION
-                ========================================= */}
+                ================================================== */}
 
                 {activeJob.location && (
-                  <div className="mt-6 flex items-center gap-2 text-sm text-gray-500">
-                    <span className="text-cyan-400">⌖</span>
+                  <div
+                    className="
+                      mt-6
+                      flex
+                      items-center
+                      gap-2
+                      text-sm
+                      text-[var(--text-secondary)]
+                    "
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="text-[var(--accent)]"
+                    >
+                      ⌖
+                    </span>
 
                     <span>{activeJob.location}</span>
                   </div>
@@ -407,30 +987,38 @@ function Experience() {
 
                 {/* Divider */}
 
-                <div className="my-9 h-px bg-slate-800" />
+                <div className="my-9 h-px bg-[var(--border-light)]" />
 
-                {/* =========================================
+                {/* =================================================
                     RESPONSIBILITIES
-                ========================================= */}
+                ================================================== */}
 
                 {Array.isArray(activeJob.responsibilities) &&
                   activeJob.responsibilities.length > 0 && (
                     <div>
-                      <div className="flex items-center gap-3 mb-6">
-                        <span className="font-mono text-xs text-cyan-400">
+                      <div className="mb-6 flex items-center gap-3">
+                        <span className="font-mono text-xs text-[var(--accent)]">
                           01
                         </span>
 
-                        <h4 className="text-sm font-semibold text-white uppercase tracking-[0.2em]">
+                        <h4
+                          className="
+                            text-sm
+                            font-semibold
+                            uppercase
+                            tracking-[0.2em]
+                            text-[var(--text-primary)]
+                          "
+                        >
                           Responsibilities
                         </h4>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         {activeJob.responsibilities.map(
                           (item, index) => (
                             <motion.div
-                              key={index}
+                              key={`${item}-${index}`}
                               initial={{
                                 opacity: 0,
                                 y: 15,
@@ -446,41 +1034,70 @@ function Experience() {
                                 group
                                 rounded-2xl
                                 border
-                                border-slate-800
-                                bg-slate-900/60
+                                border-[var(--border-light)]
+                                bg-[var(--bg-card-soft)]
                                 p-5
-                                hover:border-cyan-400/40
                                 transition-all
                                 duration-300
+                                hover:border-[var(--border-accent)]
+                                hover:bg-[var(--bg-card)]
+                                hover:shadow-sm
                               "
                             >
                               <div className="flex gap-3">
-                                <span className="mt-2 w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0 group-hover:shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
+                                <span
+                                  aria-hidden="true"
+                                  className="
+                                    mt-2
+                                    h-1.5
+                                    w-1.5
+                                    flex-shrink-0
+                                    rounded-full
+                                    bg-[var(--accent)]
+                                    transition-all
+                                    duration-300
+                                    group-hover:scale-125
+                                  "
+                                />
 
-                                <p className="text-sm text-gray-400 leading-7">
+                                <p
+                                  className="
+                                    text-sm
+                                    leading-7
+                                    text-[var(--text-secondary)]
+                                  "
+                                >
                                   {item}
                                 </p>
                               </div>
                             </motion.div>
-                          )
+                          ),
                         )}
                       </div>
                     </div>
                   )}
 
-                {/* =========================================
+                {/* =================================================
                     AUTOMATION
-                ========================================= */}
+                ================================================== */}
 
                 {Array.isArray(activeJob.automation) &&
                   activeJob.automation.length > 0 && (
                     <div className="mt-10">
-                      <div className="flex items-center gap-3 mb-6">
-                        <span className="font-mono text-xs text-cyan-400">
+                      <div className="mb-6 flex items-center gap-3">
+                        <span className="font-mono text-xs text-[var(--accent)]">
                           02
                         </span>
 
-                        <h4 className="text-sm font-semibold text-white uppercase tracking-[0.2em]">
+                        <h4
+                          className="
+                            text-sm
+                            font-semibold
+                            uppercase
+                            tracking-[0.2em]
+                            text-[var(--text-primary)]
+                          "
+                        >
                           Automation & Engineering
                         </h4>
                       </div>
@@ -489,46 +1106,54 @@ function Experience() {
                         {activeJob.automation.map(
                           (item, index) => (
                             <span
-                              key={index}
+                              key={`${item}-${index}`}
                               className="
-                                px-4
-                                py-2.5
                                 rounded-xl
                                 border
-                                border-slate-800
-                                bg-slate-900
-                                text-gray-300
+                                border-[var(--border-light)]
+                                bg-[var(--bg-card-soft)]
+                                px-4
+                                py-2.5
                                 text-sm
-                                hover:border-cyan-400/50
-                                hover:text-cyan-400
-                                hover:bg-cyan-400/[0.03]
+                                text-[var(--text-secondary)]
                                 transition-all
                                 duration-300
+                                hover:border-[var(--border-accent)]
+                                hover:bg-[var(--bg-card)]
+                                hover:text-[var(--accent)]
                               "
                             >
                               {item}
                             </span>
-                          )
+                          ),
                         )}
                       </div>
                     </div>
                   )}
 
-                {/* =========================================
+                {/* =================================================
                     IMPACT
-                ========================================= */}
+                ================================================== */}
 
                 {activeJob.impact &&
                   (Array.isArray(activeJob.impact)
                     ? activeJob.impact.length > 0
                     : true) && (
                     <div className="mt-10">
-                      <div className="flex items-center gap-3 mb-5">
-                        <span className="font-mono text-xs text-cyan-400">
+                      <div className="mb-5 flex items-center gap-3">
+                        <span className="font-mono text-xs text-[var(--accent)]">
                           03
                         </span>
 
-                        <h4 className="text-sm font-semibold text-white uppercase tracking-[0.2em]">
+                        <h4
+                          className="
+                            text-sm
+                            font-semibold
+                            uppercase
+                            tracking-[0.2em]
+                            text-[var(--text-primary)]
+                          "
+                        >
                           Impact
                         </h4>
                       </div>
@@ -538,16 +1163,26 @@ function Experience() {
                           {activeJob.impact.map(
                             (item, index) => (
                               <p
-                                key={index}
-                                className="text-gray-400 text-sm leading-7"
+                                key={`${item}-${index}`}
+                                className="
+                                  text-sm
+                                  leading-7
+                                  text-[var(--text-secondary)]
+                                "
                               >
                                 {item}
                               </p>
-                            )
+                            ),
                           )}
                         </div>
                       ) : (
-                        <p className="text-gray-400 text-sm leading-7">
+                        <p
+                          className="
+                            text-sm
+                            leading-7
+                            text-[var(--text-secondary)]
+                          "
+                        >
                           {activeJob.impact}
                         </p>
                       )}
@@ -558,9 +1193,9 @@ function Experience() {
           </div>
         </div>
 
-        {/* =========================================
+        {/* =======================================================
             CAREER FOOTER
-        ========================================= */}
+        ======================================================== */}
 
         <motion.div
           initial={{
@@ -571,7 +1206,9 @@ function Experience() {
             opacity: 1,
             y: 0,
           }}
-          viewport={{ once: true }}
+          viewport={{
+            once: true,
+          }}
           transition={{
             duration: 0.6,
             delay: 0.2,
@@ -580,18 +1217,18 @@ function Experience() {
             mt-6
             flex
             flex-col
+            gap-4
+            px-2
             sm:flex-row
             sm:items-center
             sm:justify-between
-            gap-4
-            px-2
           "
         >
-          <p className="text-xs text-gray-600 font-mono">
+          <p className="font-mono text-xs text-[var(--text-secondary)]">
             QA → AUTOMATION → SDET → QUALITY ENGINEERING
           </p>
 
-          <p className="text-xs text-gray-700 font-mono">
+          <p className="font-mono text-xs text-[var(--text-muted)]">
             {experience.length} PROFESSIONAL ROLE
             {experience.length !== 1 ? "S" : ""}
           </p>

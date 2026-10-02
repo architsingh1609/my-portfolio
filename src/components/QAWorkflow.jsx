@@ -1,8 +1,6 @@
 import { useState } from "react";
-
 function QAWorkflow() {
   const [activeStep, setActiveStep] = useState(null);
-
   const workflow = [
     {
       title: "1. Understand the Product & Requirements",
@@ -11,7 +9,6 @@ function QAWorkflow() {
       tools:
         "Requirement Analysis • Acceptance Criteria • Risk Identification",
     },
-
     {
       title: "2. Plan Coverage & Design Test Scenarios",
       description:
@@ -19,7 +16,6 @@ function QAWorkflow() {
       tools:
         "Test Planning • Test Case Design • Functional Testing • Risk-Based Testing",
     },
-
     {
       title: "3. Build & Execute Automation",
       description:
@@ -27,7 +23,6 @@ function QAWorkflow() {
       tools:
         "Java • Selenium WebDriver • TestNG • Maven • POM • REST Assured • Postman",
     },
-
     {
       title: "4. Validate Application, APIs & Data",
       description:
@@ -35,7 +30,6 @@ function QAWorkflow() {
       tools:
         "UI Testing • API Testing • SQL • Database Testing • Integration Testing",
     },
-
     {
       title: "5. Investigate Defects & Regression",
       description:
@@ -43,7 +37,6 @@ function QAWorkflow() {
       tools:
         "Bug Reporting • Defect Management • Regression Testing • Smoke Testing • Sanity Testing",
     },
-
     {
       title: "6. Continuous Validation & Release Confidence",
       description:
@@ -52,140 +45,153 @@ function QAWorkflow() {
         "Jenkins • Git • GitHub • CI/CD • Allure Reports • Release Verification",
     },
   ];
-
   return (
-    <section id="workflow" className="py-12 px-0">
-      <div className="glass-card spotlight-card relative overflow-hidden w-full p-6 md:p-8">
-
-        {/* Header */}
-        <div className="text-center mb-10">
-          <p className="text-cyan-400 uppercase tracking-[0.2em] text-xs md:text-sm font-semibold mb-3">
+    <section
+      id="workflow"
+      className="h-full bg-transparent px-0 py-12 text-[var(--text-primary)]"
+    >
+      <div
+        className="
+          relative
+          flex
+          h-full
+          w-full
+          flex-col
+          overflow-hidden
+          rounded-3xl
+          border
+          border-[var(--border-light)]
+          bg-[var(--bg-card)]
+          p-6
+          shadow-[var(--shadow-soft)]
+          transition-colors
+          duration-300
+          md:p-8
+        "
+      >
+        <div className="mb-10 text-center">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)] md:text-sm">
             Quality Engineering
           </p>
+      <h2 className="text-3xl font-bold text-[var(--text-primary)] md:text-4xl">
+        My Quality Engineering Process
+      </h2>
 
-          <h2 className="text-3xl md:text-4xl font-bold text-cyan-400">
-            My Quality Engineering Process
-          </h2>
+      <div className="mx-auto mt-5 h-1 w-20 rounded-full bg-[var(--accent)]" />
 
-          <div className="w-20 h-1 bg-cyan-400 mx-auto mt-5 rounded-full" />
+      <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-[var(--text-secondary)] md:text-base">
+        My approach combines requirement understanding, risk-based
+        testing, automation, API and database validation, defect
+        investigation, continuous testing, and release verification
+        to build confidence in software quality.
+      </p>
+    </div>
 
-          <p className="text-gray-400 max-w-xl mx-auto mt-5 text-sm md:text-base leading-relaxed">
-            My approach combines requirement understanding, risk-based
-            testing, automation, API and database validation, defect
-            investigation, continuous testing, and release verification
-            to build confidence in software quality.
-          </p>
-        </div>
+    <div className="flex flex-1 flex-col items-center">
+      {workflow.map((step, index) => {
+        const isActive = activeStep === index;
 
-        {/* Workflow */}
-        <div className="flex flex-col items-center">
-          {workflow.map((step, index) => {
-            const isActive = activeStep === index;
-
-            return (
-              <div
-                key={index}
-                className="w-full"
-              >
-                {/* Step Card */}
-                <button
-                  type="button"
-                  onClick={() =>
-                    setActiveStep(
-                      isActive ? null : index
-                    )
-                  }
-                  className={`w-full text-left rounded-2xl border p-5 transition-all duration-300 ${
+        return (
+          <div key={index} className="w-full">
+            <button
+              type="button"
+              onClick={() =>
+                setActiveStep(isActive ? null : index)
+              }
+              className={`w-full rounded-2xl border p-5 text-left transition-all duration-300 ${
+                isActive
+                  ? "border-[var(--border-accent)] bg-[var(--bg-card)] shadow-[var(--shadow-medium)]"
+                  : "border-[var(--border-light)] bg-[var(--bg-card-soft)] hover:-translate-y-1 hover:border-[var(--border-accent)] hover:bg-[var(--bg-card)] hover:shadow-[var(--shadow-soft)]"
+              }`}
+              aria-expanded={isActive}
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-sm font-bold transition-all duration-300 ${
                     isActive
-                      ? "bg-slate-800 border-cyan-400 shadow-[0_15px_40px_rgba(34,211,238,0.18)]"
-                      : "bg-slate-900 border-slate-800 hover:bg-slate-800 hover:border-cyan-400 hover:-translate-y-1"
+                      ? "bg-[var(--accent)] text-white"
+                      : "border border-[var(--border-light)] bg-[var(--bg-card)] text-[var(--accent)]"
                   }`}
-                  aria-expanded={isActive}
                 >
-                  {/* Step Header */}
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${
-                        isActive
-                          ? "bg-cyan-400 text-slate-950"
-                          : "bg-slate-800 text-cyan-400 border border-slate-700"
-                      }`}
-                    >
-                      {String(index + 1).padStart(2, "0")}
-                    </div>
+                  {String(index + 1).padStart(2, "0")}
+                </div>
 
-                    <h3
-                      className={`flex-1 text-base md:text-lg font-semibold ${
-                        isActive
-                          ? "text-cyan-400"
-                          : "text-gray-200"
-                      }`}
-                    >
-                      {step.title}
-                    </h3>
+                <h3
+                  className={`flex-1 text-base font-semibold md:text-lg ${
+                    isActive
+                      ? "text-[var(--accent)]"
+                      : "text-[var(--text-primary)]"
+                  }`}
+                >
+                  {step.title}
+                </h3>
 
-                    <div
-                      className={`text-cyan-400 text-2xl transition-transform duration-300 ${
-                        isActive
-                          ? "rotate-45"
-                          : ""
-                      }`}
-                    >
-                      +
-                    </div>
-                  </div>
-
-                  {/* Expanded Description */}
-                  <div
-                    className={`grid transition-all duration-300 ${
-                      isActive
-                        ? "grid-rows-[1fr] opacity-100 mt-5"
-                        : "grid-rows-[0fr] opacity-0"
-                    }`}
-                  >
-                    <div className="overflow-hidden">
-                      <div className="border-t border-slate-700 pt-5">
-
-                        <p className="text-gray-300 leading-7 text-sm md:text-base">
-                          {step.description}
-                        </p>
-
-                        {/* Tools */}
-                        <div className="flex flex-wrap gap-2 mt-5">
-                          {step.tools
-                            .split(" • ")
-                            .map((tool) => (
-                              <span
-                                key={tool}
-                                className="px-3 py-1.5 rounded-full bg-slate-950 border border-slate-700 text-cyan-300 text-xs"
-                              >
-                                {tool}
-                              </span>
-                            ))}
-                        </div>
-
-                      </div>
-                    </div>
-                  </div>
-                </button>
-
-                {/* Connector */}
-                {index !== workflow.length - 1 && (
-                  <div className="flex flex-col items-center py-2">
-                    <div className="w-px h-4 bg-slate-700" />
-
-                    <div className="text-cyan-400 text-lg leading-none">
-                      ↓
-                    </div>
-                  </div>
-                )}
+                <div
+                  className={`text-2xl text-[var(--accent)] transition-transform duration-300 ${
+                    isActive ? "rotate-45" : ""
+                  }`}
+                >
+                  +
+                </div>
               </div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
+
+              <div
+                className={`grid transition-all duration-300 ${
+                  isActive
+                    ? "mt-5 grid-rows-[1fr] opacity-100"
+                    : "grid-rows-[0fr] opacity-0"
+                }`}
+              >
+                <div className="overflow-hidden">
+                  <div className="border-t border-[var(--border-light)] pt-5">
+                    <p className="text-sm leading-7 text-[var(--text-secondary)] md:text-base">
+                      {step.description}
+                    </p>
+
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {step.tools
+                        .split(" • ")
+                        .map((tool) => (
+                          <span
+                            key={tool}
+                            className="
+                              rounded-full
+                              border
+                              border-[var(--border-accent)]
+                              bg-[var(--bg-card)]
+                              px-3
+                              py-1.5
+                              text-xs
+                              text-[var(--accent)]
+                              transition-colors
+                              duration-300
+                            "
+                          >
+                            {tool}
+                          </span>
+                        ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </button>
+
+            {index !== workflow.length - 1 && (
+              <div className="flex flex-col items-center py-2">
+                <div className="h-4 w-px bg-[var(--border-medium)]" />
+
+                <div className="text-lg leading-none text-[var(--accent)]">
+                  ↓
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
   );
 }
-
 export default QAWorkflow;

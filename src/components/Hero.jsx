@@ -1,14 +1,82 @@
 import { motion } from "framer-motion";
-
-import { TypeAnimation } from "react-type-animation";
-
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 import portfolioData from "../data/portfolioData";
-
 import profileImage from "../assets/archit.png.jpg";
 
 function Hero() {
+  // ============================================================
+  // SAFE DATA
+  // ============================================================
+
+  const data = portfolioData ?? {};
+  const hero = data.hero ?? {};
+
+  const description =
+    hero.description ??
+    "Building reliable and maintainable testing solutions across UI automation, API validation, regression testing, and CI/CD workflows.";
+
+  const availability =
+    hero.availability ??
+    "Open to Opportunities";
+
+  const location =
+    data.location ??
+    "Mumbai, India";
+
+  const github =
+    data.github ??
+    "#";
+
+  const linkedin =
+    data.linkedin ??
+    "#";
+
+  const resume =
+    data.resume ??
+    "#";
+
+  // ============================================================
+  // STATIC DATA
+  // ============================================================
+
+  const engineeringHighlights = [
+    {
+      label: "UI AUTOMATION",
+      value: "Selenium + Java",
+    },
+    {
+      label: "API AUTOMATION",
+      value: "REST Assured + Postman",
+    },
+    {
+      label: "TEST FRAMEWORK",
+      value: "TestNG + POM",
+    },
+    {
+      label: "CI / CD",
+      value: "Jenkins + Git",
+    },
+  ];
+
+  const technologies = [
+    "Java",
+    "Selenium",
+    "TestNG",
+    "REST Assured",
+    "Postman",
+    "Jenkins",
+    "Git",
+    "GitHub",
+    "Maven",
+    "SQL",
+    "POM",
+  ];
+
+  // ============================================================
+  // COMPONENT
+  // ============================================================
+
   return (
     <section
       id="hero"
@@ -16,24 +84,30 @@ function Hero() {
         relative
         min-h-screen
         overflow-hidden
-        bg-gradient-to-br
-        from-[#020617]
-        via-[#0b1120]
-        to-[#111827]
+        bg-[var(--bg-primary)]
         px-6
         pt-28
-        pb-12
-        text-white
+        pb-16
+        text-[var(--text-primary)]
+        transition-colors
+        duration-300
       "
     >
+      {/* ========================================================
+          BACKGROUND
+      ========================================================= */}
 
-      {/* =========================================================
-          PROFESSIONAL BACKGROUND
-      ========================================================== */}
+      <div
+        className="
+          pointer-events-none
+          absolute
+          inset-0
+          overflow-hidden
+        "
+        aria-hidden="true"
+      >
+        {/* Top gradient */}
 
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-
-        {/* Soft top gradient */}
         <div
           className="
             absolute
@@ -41,24 +115,16 @@ function Hero() {
             top-0
             h-[420px]
             bg-gradient-to-b
-            from-slate-800/30
-            via-slate-900/10
+            from-[var(--bg-secondary)]
+            via-transparent
             to-transparent
+            opacity-70
           "
         />
 
-        {/* Left Ambient Light */}
-        <motion.div
-          animate={{
-            x: [-60, 60, -60],
-            y: [-20, 30, -20],
-            scale: [1, 1.08, 1],
-          }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+        {/* Left glow */}
+
+        <div
           className="
             absolute
             -left-48
@@ -66,23 +132,15 @@ function Hero() {
             h-[520px]
             w-[520px]
             rounded-full
-            bg-blue-500/[0.045]
+            bg-[var(--accent)]
+            opacity-[0.035]
             blur-[150px]
           "
         />
 
-        {/* Right Ambient Light */}
-        <motion.div
-          animate={{
-            x: [60, -60, 60],
-            y: [30, -30, 30],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+        {/* Right glow */}
+
+        <div
           className="
             absolute
             -right-48
@@ -90,22 +148,15 @@ function Hero() {
             h-[600px]
             w-[600px]
             rounded-full
-            bg-cyan-500/[0.04]
+            bg-[var(--accent-secondary)]
+            opacity-[0.03]
             blur-[170px]
           "
         />
 
-        {/* Bottom Ambient Light */}
-        <motion.div
-          animate={{
-            x: [-50, 50, -50],
-            scale: [1, 1.08, 1],
-          }}
-          transition={{
-            duration: 17,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+        {/* Bottom glow */}
+
+        <div
           className="
             absolute
             bottom-[-280px]
@@ -113,103 +164,189 @@ function Hero() {
             h-[500px]
             w-[500px]
             rounded-full
-            bg-indigo-500/[0.035]
+            bg-[var(--accent)]
+            opacity-[0.025]
             blur-[150px]
           "
         />
 
-        {/* Very subtle center light */}
+        {/* Grid */}
+
         <div
           className="
             absolute
-            left-1/2
-            top-1/2
-            h-[450px]
-            w-[450px]
-            -translate-x-1/2
-            -translate-y-1/2
-            rounded-full
-            bg-slate-400/[0.015]
-            blur-[120px]
+            inset-0
+            opacity-[0.018]
           "
-        />
-
-        {/* Subtle premium grid */}
-        <div
-          className="absolute inset-0 opacity-[0.018]"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(148,163,184,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.5) 1px, transparent 1px)",
+              "linear-gradient(rgba(127,127,127,0.45) 1px, transparent 1px), linear-gradient(90deg, rgba(127,127,127,0.45) 1px, transparent 1px)",
             backgroundSize: "80px 80px",
           }}
         />
 
-        {/* Top highlight line */}
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent" />
+        {/* Top line */}
+
+        <div
+          className="
+            absolute
+            inset-x-0
+            top-0
+            h-px
+            bg-gradient-to-r
+            from-transparent
+            via-[var(--accent)]
+            to-transparent
+            opacity-30
+          "
+        />
 
         {/* Bottom fade */}
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-950 to-transparent" />
 
+        <div
+          className="
+            absolute
+            inset-x-0
+            bottom-0
+            h-40
+            bg-gradient-to-t
+            from-[var(--bg-primary)]
+            to-transparent
+          "
+        />
       </div>
 
-      {/* =========================================================
-          MAIN HERO
-      ========================================================== */}
+      {/* ========================================================
+          MAIN CONTENT
+      ========================================================= */}
 
-      <div className="relative mx-auto flex min-h-[calc(100vh-140px)] max-w-7xl items-center">
-
+      <div
+        className="
+          relative
+          mx-auto
+          flex
+          min-h-[calc(100vh-140px)]
+          max-w-7xl
+          items-center
+        "
+      >
         <div className="w-full">
 
-          {/* =====================================================
-              PROFILE + CONTENT
-          ====================================================== */}
+          {/* ====================================================
+              PROFILE + IDENTITY
+          ==================================================== */}
 
           <motion.div
-            initial={{ opacity: 0, y: 35 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="relative"
+            initial={{
+              opacity: 0,
+              y: 30,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.7,
+              ease: "easeOut",
+            }}
           >
-
-            {/* Top Profile Row */}
-
-            <div className="flex flex-col items-center gap-8 text-center md:flex-row md:items-center md:text-left">
-
-              {/* Profile Image */}
+            <div
+              className="
+                flex
+                flex-col
+                items-center
+                gap-8
+                text-center
+                md:flex-row
+                md:items-center
+                md:text-left
+              "
+            >
+              {/* =================================================
+                  PROFILE IMAGE
+              ================================================== */}
 
               <motion.div
-                initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                initial={{
+                  opacity: 0,
+                  scale: 0.9,
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                }}
                 transition={{
-                  duration: 0.8,
-                  delay: 0.2,
+                  duration: 0.7,
+                  delay: 0.15,
+                  ease: "easeOut",
                 }}
                 whileHover={{
-                  scale: 1.04,
-                  rotate: 2,
+                  scale: 1.03,
                 }}
                 className="relative shrink-0"
               >
-
                 {/* Glow */}
 
-                <div className="absolute -inset-5 rounded-full bg-cyan-400/10 blur-3xl" />
+                <div
+                  className="
+                    absolute
+                    -inset-5
+                    rounded-full
+                    bg-[var(--accent)]
+                    opacity-10
+                    blur-3xl
+                  "
+                />
 
-                {/* Image Frame */}
+                {/* Image */}
 
-                <div className="relative h-36 w-36 overflow-hidden rounded-[2rem] border border-cyan-400/30 bg-slate-900 p-1 shadow-[0_0_50px_rgba(34,211,238,0.15)] sm:h-44 sm:w-44 md:h-48 md:w-48">
-
+                <div
+                  className="
+                    relative
+                    h-36
+                    w-36
+                    overflow-hidden
+                    rounded-[2rem]
+                    border
+                    border-[var(--border-accent)]
+                    bg-[var(--bg-card)]
+                    p-1
+                    shadow-[var(--shadow-medium)]
+                    sm:h-44
+                    sm:w-44
+                    md:h-48
+                    md:w-48
+                    transition-colors
+                    duration-300
+                  "
+                >
                   <img
                     src={profileImage}
                     alt="Archit Singh - QA Automation Engineer and SDET"
-                    className="h-full w-full rounded-[1.7rem] object-cover"
+                    className="
+                      h-full
+                      w-full
+                      rounded-[1.7rem]
+                      object-cover
+                    "
                   />
 
-                  <div className="pointer-events-none absolute inset-1 rounded-[1.7rem] bg-gradient-to-tr from-cyan-400/15 via-transparent to-blue-500/10" />
-
+                  <div
+                    className="
+                      pointer-events-none
+                      absolute
+                      inset-1
+                      rounded-[1.7rem]
+                      bg-gradient-to-tr
+                      from-[var(--accent)]
+                      via-transparent
+                      to-[var(--accent-secondary)]
+                      opacity-10
+                    "
+                  />
                 </div>
 
-                {/* Availability Indicator */}
+                {/* Availability indicator */}
 
                 <motion.div
                   animate={{
@@ -218,63 +355,178 @@ function Hero() {
                   transition={{
                     duration: 2,
                     repeat: Infinity,
+                    ease: "easeInOut",
                   }}
-                  className="absolute -bottom-2 -right-2 flex h-9 w-9 items-center justify-center rounded-full border-4 border-slate-950 bg-emerald-400 shadow-[0_0_20px_rgba(52,211,153,0.6)]"
+                  className="
+                    absolute
+                    -bottom-2
+                    -right-2
+                    flex
+                    h-9
+                    w-9
+                    items-center
+                    justify-center
+                    rounded-full
+                    border-4
+                    border-[var(--bg-primary)]
+                    bg-emerald-400
+                    shadow-[0_0_20px_rgba(52,211,153,0.6)]
+                  "
                 >
-                  <span className="h-2.5 w-2.5 rounded-full bg-slate-950" />
+                  <span
+                    className="
+                      h-2.5
+                      w-2.5
+                      rounded-full
+                      bg-slate-950
+                    "
+                  />
                 </motion.div>
-
               </motion.div>
 
-              {/* Identity */}
+              {/* =================================================
+                  IDENTITY
+              ================================================== */}
 
               <div className="min-w-0 flex-1">
 
-                {/* System Label */}
+                {/* System label */}
 
                 <motion.div
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.25 }}
-                  className="mb-5 inline-flex items-center gap-3 rounded-full border border-cyan-400/20 bg-cyan-400/[0.04] px-4 py-2 backdrop-blur-xl"
+                  initial={{
+                    opacity: 0,
+                    y: 10,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  transition={{
+                    delay: 0.25,
+                    duration: 0.5,
+                  }}
+                  className="
+                    mb-5
+                    inline-flex
+                    items-center
+                    gap-3
+                    rounded-full
+                    border
+                    border-[var(--border-accent)]
+                    bg-[var(--accent)]
+                    bg-opacity-[0.04]
+                    px-4
+                    py-2
+                  "
                 >
+                  <span
+                    className="
+                      relative
+                      flex
+                      h-2.5
+                      w-2.5
+                    "
+                  >
+                    <span
+                      className="
+                        absolute
+                        inline-flex
+                        h-full
+                        w-full
+                        animate-ping
+                        rounded-full
+                        bg-[var(--accent)]
+                        opacity-50
+                      "
+                    />
 
-                  <span className="relative flex h-2.5 w-2.5">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-60" />
-
-                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-cyan-400" />
+                    <span
+                      className="
+                        relative
+                        inline-flex
+                        h-2.5
+                        w-2.5
+                        rounded-full
+                        bg-[var(--accent)]
+                      "
+                    />
                   </span>
 
-                  <span className="font-mono text-xs font-semibold tracking-[0.2em] text-cyan-300">
+                  <span
+                    className="
+                      font-mono
+                      text-xs
+                      font-semibold
+                      tracking-[0.2em]
+                      text-[var(--accent)]
+                    "
+                  >
                     QA_AUTOMATION_ENGINEER
                   </span>
-
                 </motion.div>
 
-                {/* Code Label */}
+                {/* Code label */}
 
                 <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.35 }}
-                  className="mb-3 font-mono text-sm text-gray-500"
+                  initial={{
+                    opacity: 0,
+                  }}
+                  animate={{
+                    opacity: 1,
+                  }}
+                  transition={{
+                    delay: 0.35,
+                    duration: 0.5,
+                  }}
+                  className="
+                    mb-3
+                    font-mono
+                    text-sm
+                    text-[var(--text-muted)]
+                  "
                 >
                   {"// building quality into software"}
                 </motion.p>
 
-                {/* Heading */}
+                {/* Name */}
 
                 <motion.h1
-                  initial={{ opacity: 0, y: 25 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{
+                    opacity: 0,
+                    y: 20,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
                   transition={{
                     delay: 0.4,
-                    duration: 0.8,
+                    duration: 0.7,
+                    ease: "easeOut",
                   }}
-                  className="text-5xl font-black leading-[0.95] tracking-tight sm:text-6xl md:text-7xl xl:text-8xl"
+                  className="
+                    text-5xl
+                    font-black
+                    leading-[0.95]
+                    tracking-tight
+                    text-[var(--text-primary)]
+                    sm:text-6xl
+                    md:text-7xl
+                    xl:text-8xl
+                  "
                 >
                   Archit{" "}
-                  <span className="bg-gradient-to-r from-cyan-300 via-sky-400 to-blue-500 bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(34,211,238,0.25)]">
+
+                  <span
+                    className="
+                      bg-gradient-to-r
+                      from-[var(--accent)]
+                      via-[var(--accent-light)]
+                      to-[var(--accent-secondary)]
+                      bg-clip-text
+                      text-transparent
+                    "
+                  >
                     Singh.
                   </span>
                 </motion.h1>
@@ -282,253 +534,478 @@ function Hero() {
                 {/* Role */}
 
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.65 }}
+                  initial={{
+                    opacity: 0,
+                  }}
+                  animate={{
+                    opacity: 1,
+                  }}
+                  transition={{
+                    delay: 0.6,
+                    duration: 0.5,
+                  }}
                   className="mt-6"
                 >
-
-                  <p className="font-mono text-lg font-semibold text-gray-300 md:text-xl">
+                  <p
+                    className="
+                      font-mono
+                      text-lg
+                      font-semibold
+                      text-[var(--text-secondary)]
+                      md:text-xl
+                    "
+                  >
                     QA Automation Engineer
-                    <span className="mx-2 text-cyan-400">|</span>
+
+                    <span className="mx-2 text-[var(--accent)]">
+                      |
+                    </span>
+
                     SDET
                   </p>
 
-                  <div className="mt-4 h-px w-24 bg-gradient-to-r from-cyan-400 to-transparent md:w-32" />
-
+                  <div
+                    className="
+                      mt-4
+                      h-px
+                      w-24
+                      bg-gradient-to-r
+                      from-[var(--accent)]
+                      to-transparent
+                      md:w-32
+                    "
+                  />
                 </motion.div>
-
               </div>
-
             </div>
 
-            {/* =====================================================
-                MAIN DESCRIPTION
-            ====================================================== */}
+            {/* ====================================================
+                DESCRIPTION
+            ==================================================== */}
 
             <motion.div
-              initial={{ opacity: 0, y: 25 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="mx-auto mt-10 max-w-5xl text-center md:text-left"
+              initial={{
+                opacity: 0,
+                y: 20,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: 0.75,
+                duration: 0.6,
+              }}
+              className="
+                mx-auto
+                mt-10
+                max-w-5xl
+                text-center
+                md:text-left
+              "
             >
-
-              <h2 className="text-2xl font-semibold leading-relaxed text-gray-200 md:text-3xl">
+              <h2
+                className="
+                  text-2xl
+                  font-semibold
+                  leading-relaxed
+                  text-[var(--text-primary)]
+                  md:text-3xl
+                "
+              >
                 Automation With Logic.
-                <br className="sm:hidden" />{" "}
-                <span className="text-cyan-400">
+
+                <br className="sm:hidden" />
+
+                <span className="text-[var(--accent)]">
                   Testing With Purpose.
                 </span>
               </h2>
 
-              <p className="mt-5 max-w-4xl text-base leading-8 text-gray-400 md:text-lg">
-                {portfolioData.hero?.description ||
-                  "Building reliable and maintainable testing solutions across UI automation, API validation, regression testing, and CI/CD workflows."}
+              <p
+                className="
+                  mt-5
+                  max-w-4xl
+                  text-base
+                  leading-8
+                  text-[var(--text-secondary)]
+                  md:text-lg
+                "
+              >
+                {description}
               </p>
-
             </motion.div>
 
-            {/* =====================================================
+            {/* ====================================================
                 ENGINEERING HIGHLIGHTS
-            ====================================================== */}
+            ==================================================== */}
 
             <motion.div
-              initial={{ opacity: 0, y: 25 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1 }}
-              className="mt-9 grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
+              initial={{
+                opacity: 0,
+                y: 20,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: 0.9,
+                duration: 0.6,
+              }}
+              className="
+                mt-9
+                grid
+                gap-3
+                sm:grid-cols-2
+                lg:grid-cols-4
+              "
             >
-
-              {[
-                {
-                  label: "UI AUTOMATION",
-                  value: "Selenium + Java",
-                },
-                {
-                  label: "API AUTOMATION",
-                  value: "REST Assured + Postman",
-                },
-                {
-                  label: "TEST FRAMEWORK",
-                  value: "TestNG + POM",
-                },
-                {
-                  label: "CI / CD",
-                  value: "Jenkins + Git",
-                },
-              ].map((item, index) => (
+              {engineeringHighlights.map((item, index) => (
                 <motion.div
                   key={item.label}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{
+                    opacity: 0,
+                    y: 15,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
                   transition={{
-                    delay: 1.05 + index * 0.08,
+                    delay: 0.95 + index * 0.08,
+                    duration: 0.5,
                   }}
                   whileHover={{
                     y: -4,
                   }}
-                  className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 backdrop-blur-xl transition-all duration-300 hover:border-cyan-400/40 hover:bg-cyan-400/[0.03]"
+                  className="
+                    rounded-2xl
+                    border
+                    border-[var(--border-light)]
+                    bg-[var(--glass-bg-soft)]
+                    p-5
+                    shadow-[var(--shadow-soft)]
+                    backdrop-blur-xl
+                    transition-all
+                    duration-300
+                    hover:border-[var(--border-accent)]
+                  "
                 >
-
-                  <div className="mb-3 flex items-center justify-between">
-
-                    <span className="font-mono text-[9px] tracking-[0.15em] text-gray-600">
+                  <div
+                    className="
+                      mb-3
+                      flex
+                      items-center
+                      justify-between
+                    "
+                  >
+                    <span
+                      className="
+                        font-mono
+                        text-[9px]
+                        tracking-[0.15em]
+                        text-[var(--text-subtle)]
+                      "
+                    >
                       {String(index + 1).padStart(2, "0")}
                     </span>
 
-                    <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
-
+                    <span
+                      className="
+                        h-1.5
+                        w-1.5
+                        rounded-full
+                        bg-[var(--accent)]
+                      "
+                    />
                   </div>
 
-                  <p className="font-mono text-[9px] tracking-wider text-gray-500">
+                  <p
+                    className="
+                      font-mono
+                      text-[9px]
+                      tracking-wider
+                      text-[var(--text-muted)]
+                    "
+                  >
                     {item.label}
                   </p>
 
-                  <p className="mt-2 text-sm font-semibold text-gray-200">
+                  <p
+                    className="
+                      mt-2
+                      text-sm
+                      font-semibold
+                      text-[var(--text-primary)]
+                    "
+                  >
                     {item.value}
                   </p>
-
                 </motion.div>
               ))}
-
             </motion.div>
 
-            {/* =====================================================
+            {/* ====================================================
                 CORE STACK
-            ====================================================== */}
+            ==================================================== */}
 
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.35 }}
-              className="mt-7 flex flex-wrap items-center justify-center gap-2 md:justify-start"
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              transition={{
+                delay: 1.3,
+                duration: 0.6,
+              }}
+              className="
+                mt-7
+                flex
+                flex-wrap
+                items-center
+                justify-center
+                gap-2
+                md:justify-start
+              "
             >
-
-              <span className="mr-2 font-mono text-[10px] tracking-[0.2em] text-cyan-500/60">
+              <span
+                className="
+                  mr-2
+                  font-mono
+                  text-[10px]
+                  tracking-[0.2em]
+                  text-[var(--accent)]
+                  opacity-70
+                "
+              >
                 CORE_STACK
               </span>
 
-              {[
-                "Java",
-                "Selenium",
-                "TestNG",
-                "REST Assured",
-                "Postman",
-                "Jenkins",
-                "Git",
-                "GitHub",
-                "Maven",
-                "SQL",
-                "POM",
-              ].map((technology, index) => (
+              {technologies.map((technology, index) => (
                 <motion.span
                   key={technology}
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  initial={{
+                    opacity: 0,
+                    scale: 0.9,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    scale: 1,
+                  }}
                   transition={{
-                    delay: 1.4 + index * 0.04,
+                    delay: 1.35 + index * 0.035,
+                    duration: 0.4,
                   }}
                   whileHover={{
                     y: -3,
-                    scale: 1.05,
+                    scale: 1.04,
                   }}
-                  className="cursor-default rounded-lg border border-slate-800 bg-slate-900/70 px-3 py-2 font-mono text-[10px] text-gray-400 backdrop-blur-xl transition-all duration-300 hover:border-cyan-400/50 hover:text-cyan-300"
+                  className="
+                    cursor-default
+                    rounded-lg
+                    border
+                    border-[var(--border-light)]
+                    bg-[var(--glass-bg-soft)]
+                    px-3
+                    py-2
+                    font-mono
+                    text-[10px]
+                    text-[var(--text-secondary)]
+                    shadow-[var(--shadow-soft)]
+                    transition-all
+                    duration-300
+                    hover:border-[var(--border-accent)]
+                    hover:text-[var(--accent)]
+                  "
                 >
                   {technology}
                 </motion.span>
               ))}
-
             </motion.div>
 
-            {/* =====================================================
+            {/* ====================================================
                 STATUS
-            ====================================================== */}
+            ==================================================== */}
 
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.55 }}
-              className="mt-7 flex flex-wrap items-center justify-center gap-5 text-sm md:justify-start"
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              transition={{
+                delay: 1.5,
+                duration: 0.6,
+              }}
+              className="
+                mt-7
+                flex
+                flex-wrap
+                items-center
+                justify-center
+                gap-5
+                text-sm
+                md:justify-start
+              "
             >
-
-              <div className="flex items-center gap-2 text-gray-400">
-                <span className="text-cyan-400">⌖</span>
-
-                {portfolioData.location}
-              </div>
-
-              <div className="hidden h-4 w-px bg-slate-700 sm:block" />
-
-              <div className="flex items-center gap-2 text-gray-300">
-
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="absolute h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-
-                  <span className="relative h-2.5 w-2.5 rounded-full bg-emerald-400" />
+              <div
+                className="
+                  flex
+                  items-center
+                  gap-2
+                  text-[var(--text-secondary)]
+                "
+              >
+                <span className="text-[var(--accent)]">
+                  ⌖
                 </span>
 
-                {portfolioData.hero?.availability ||
-                  "Open to Opportunities"}
-
+                {location}
               </div>
 
-              <div className="hidden h-4 w-px bg-slate-700 sm:block" />
+              <div
+                className="
+                  hidden
+                  h-4
+                  w-px
+                  bg-[var(--border-medium)]
+                  sm:block
+                "
+              />
 
-              <div className="font-mono text-xs text-gray-500">
-                TARGET_ROLE:{" "}
-                <span className="text-cyan-400">
+              <div
+                className="
+                  flex
+                  items-center
+                  gap-2
+                  text-[var(--text-secondary)]
+                "
+              >
+                <span
+                  className="
+                    h-2.5
+                    w-2.5
+                    rounded-full
+                    bg-emerald-400
+                  "
+                />
+
+                {availability}
+              </div>
+
+              <div
+                className="
+                  hidden
+                  h-4
+                  w-px
+                  bg-[var(--border-medium)]
+                  sm:block
+                "
+              />
+
+              <div
+                className="
+                  font-mono
+                  text-xs
+                  text-[var(--text-muted)]
+                "
+              >
+                TARGET_ROLE:
+
+                <span className="ml-1 text-[var(--accent)]">
                   SDET / QE
                 </span>
               </div>
-
             </motion.div>
 
-            {/* =====================================================
+            {/* ====================================================
                 CTA
-            ====================================================== */}
+            ==================================================== */}
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.7 }}
-              className="mt-9 flex flex-wrap justify-center gap-3 md:justify-start"
+              initial={{
+                opacity: 0,
+                y: 15,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: 1.65,
+                duration: 0.6,
+              }}
+              className="
+                mt-9
+                flex
+                flex-wrap
+                justify-center
+                gap-3
+                md:justify-start
+              "
             >
-
               {/* Projects */}
 
               <motion.a
                 href="#projects"
                 whileHover={{
-                  y: -4,
-                  scale: 1.03,
+                  y: -3,
+                  scale: 1.02,
                 }}
-                whileTap={{ scale: 0.97 }}
-                className="group relative overflow-hidden rounded-xl bg-cyan-400 px-6 py-3.5 font-semibold text-slate-950 shadow-[0_0_30px_rgba(34,211,238,0.2)] transition-all duration-300 hover:shadow-[0_0_40px_rgba(34,211,238,0.45)]"
+                whileTap={{
+                  scale: 0.98,
+                }}
+                className="
+                  rounded-xl
+                  bg-[var(--accent)]
+                  px-6
+                  py-3.5
+                  font-semibold
+                  text-white
+                  shadow-[var(--shadow-accent)]
+                  transition-all
+                  duration-300
+                  hover:brightness-105
+                "
               >
+                View Projects
 
-                <span className="relative z-10">
-                  View Projects
-
-                  <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1">
-                    →
-                  </span>
+                <span className="ml-2">
+                  →
                 </span>
-
-                <span className="absolute inset-0 -translate-x-full bg-white/30 transition-transform duration-500 group-hover:translate-x-full" />
-
               </motion.a>
 
               {/* Resume */}
 
               <motion.a
-                href={portfolioData.resume}
+                href={resume}
                 download
                 whileHover={{
-                  y: -4,
-                  scale: 1.03,
+                  y: -3,
+                  scale: 1.02,
                 }}
-                whileTap={{ scale: 0.97 }}
-                className="rounded-xl border border-slate-700 bg-slate-900/70 px-6 py-3.5 font-semibold text-gray-200 backdrop-blur-xl transition-all duration-300 hover:border-cyan-400/60 hover:bg-cyan-400/5 hover:text-cyan-300"
+                whileTap={{
+                  scale: 0.98,
+                }}
+                className="
+                  rounded-xl
+                  border
+                  border-[var(--border-medium)]
+                  bg-[var(--glass-bg)]
+                  px-6
+                  py-3.5
+                  font-semibold
+                  text-[var(--text-primary)]
+                  backdrop-blur-xl
+                  transition-all
+                  duration-300
+                  hover:border-[var(--border-accent)]
+                  hover:text-[var(--accent)]
+                "
               >
                 Download Resume
               </motion.a>
@@ -538,133 +1015,154 @@ function Hero() {
               <motion.a
                 href="#contact"
                 whileHover={{
-                  y: -4,
-                  scale: 1.03,
+                  y: -3,
+                  scale: 1.02,
                 }}
-                whileTap={{ scale: 0.97 }}
-                className="rounded-xl border border-slate-700 bg-transparent px-6 py-3.5 font-semibold text-gray-300 transition-all duration-300 hover:border-cyan-400/50 hover:text-cyan-300"
+                whileTap={{
+                  scale: 0.98,
+                }}
+                className="
+                  rounded-xl
+                  border
+                  border-[var(--border-medium)]
+                  bg-transparent
+                  px-6
+                  py-3.5
+                  font-semibold
+                  text-[var(--text-secondary)]
+                  transition-all
+                  duration-300
+                  hover:border-[var(--border-accent)]
+                  hover:text-[var(--accent)]
+                "
               >
                 Contact Me
               </motion.a>
-
             </motion.div>
 
-            {/* =====================================================
-                SOCIAL + TERMINAL
-            ====================================================== */}
+            {/* ====================================================
+                SOCIAL
+            ==================================================== */}
 
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.9 }}
-              className="mt-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between"
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              transition={{
+                delay: 1.8,
+                duration: 0.6,
+              }}
+              className="
+                mt-8
+                flex
+                items-center
+                justify-center
+                gap-5
+                md:justify-start
+              "
             >
+              <span
+                className="
+                  font-mono
+                  text-xs
+                  uppercase
+                  tracking-[0.2em]
+                  text-[var(--text-subtle)]
+                "
+              >
+                Connect
+              </span>
 
-              {/* Social */}
+              <div
+                className="
+                  h-px
+                  w-10
+                  bg-[var(--border-medium)]
+                "
+              />
 
-              <div className="flex items-center justify-center gap-5 md:justify-start">
+              <a
+                href={github}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub profile"
+                className="
+                  text-2xl
+                  text-[var(--text-muted)]
+                  transition-colors
+                  duration-300
+                  hover:text-[var(--accent)]
+                "
+              >
+                <FaGithub />
+              </a>
 
-                <span className="font-mono text-xs uppercase tracking-[0.2em] text-gray-600">
-                  Connect
-                </span>
-
-                <div className="h-px w-10 bg-slate-800" />
-
-                <motion.a
-                  href={portfolioData.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  whileHover={{
-                    y: -4,
-                    scale: 1.15,
-                  }}
-                  className="text-2xl text-gray-500 transition-colors duration-300 hover:text-cyan-400"
-                  aria-label="GitHub profile"
-                  title="GitHub"
-                >
-                  <FaGithub />
-                </motion.a>
-
-                <motion.a
-                  href={portfolioData.linkedin}
-                  target="_blank"
-                  rel="noreferrer"
-                  whileHover={{
-                    y: -4,
-                    scale: 1.15,
-                  }}
-                  className="text-2xl text-gray-500 transition-colors duration-300 hover:text-cyan-400"
-                  aria-label="LinkedIn profile"
-                  title="LinkedIn"
-                >
-                  <FaLinkedin />
-                </motion.a>
-
-              </div>
-
-              {/* Terminal */}
-
-              <div className="mx-auto flex w-full max-w-xl items-center justify-center rounded-xl border border-slate-800 bg-slate-900/60 px-4 py-3 backdrop-blur-xl sm:mx-0 sm:w-auto sm:min-w-[420px] sm:justify-start">
-
-                <div className="flex items-center gap-2 font-mono text-[10px]">
-
-                  <span className="text-cyan-400">
-                    archit@sdet
-                  </span>
-
-                  <span className="text-gray-600">
-                    :
-                  </span>
-
-                  <span className="text-blue-400">
-                    ~/quality
-                  </span>
-
-                  <span className="text-gray-500">
-                    $
-                  </span>
-
-                  <TypeAnimation
-                    sequence={[
-                      " automate --build-quality",
-                      1800,
-                      " test --with-purpose",
-                      1800,
-                      " ship --with-confidence",
-                      1800,
-                    ]}
-                    speed={45}
-                    repeat={Infinity}
-                    cursor
-                    className="text-gray-400"
-                  />
-
-                </div>
-
-              </div>
-
+              <a
+                href={linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn profile"
+                className="
+                  text-2xl
+                  text-[var(--text-muted)]
+                  transition-colors
+                  duration-300
+                  hover:text-[var(--accent)]
+                "
+              >
+                <FaLinkedin />
+              </a>
             </motion.div>
-
           </motion.div>
-
         </div>
-
       </div>
 
-      {/* =========================================================
+      {/* ========================================================
           BOTTOM TECH STRIP
-      ========================================================== */}
+      ========================================================= */}
 
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 2 }}
-        className="relative mx-auto mt-10 max-w-7xl border-t border-slate-800/70 pt-5"
+        initial={{
+          opacity: 0,
+          y: 15,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+        transition={{
+          delay: 1.9,
+          duration: 0.6,
+        }}
+        className="
+          relative
+          mx-auto
+          mt-10
+          max-w-7xl
+          border-t
+          border-[var(--border-light)]
+          pt-5
+        "
       >
-
-        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-[10px] tracking-[0.18em] text-gray-600 md:justify-between">
-
-          <span className="text-cyan-500/60">
+        <div
+          className="
+            flex
+            flex-wrap
+            items-center
+            justify-center
+            gap-x-6
+            gap-y-2
+            font-mono
+            text-[10px]
+            tracking-[0.18em]
+            text-[var(--text-subtle)]
+            md:justify-between
+          "
+        >
+          <span className="text-[var(--accent)] opacity-70">
             QUALITY_ENGINEERING
           </span>
 
@@ -675,38 +1173,53 @@ function Hero() {
           <span>JENKINS</span>
           <span>GIT</span>
           <span>SQL</span>
-
         </div>
-
       </motion.div>
 
-      {/* =========================================================
+      {/* ========================================================
           SCROLL INDICATOR
-      ========================================================== */}
+      ========================================================= */}
 
       <motion.a
         href="#engineering-snapshot"
         animate={{
-          y: [0, 7, 0],
-          opacity: [0.5, 1, 0.5],
+          y: [0, 6, 0],
+          opacity: [0.4, 1, 0.4],
         }}
         transition={{
           duration: 2,
           repeat: Infinity,
+          ease: "easeInOut",
         }}
-        className="absolute bottom-5 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-gray-600 transition-colors hover:text-cyan-400 md:flex"
+        className="
+          absolute
+          bottom-5
+          left-1/2
+          hidden
+          -translate-x-1/2
+          flex-col
+          items-center
+          gap-2
+          text-[var(--text-muted)]
+          transition-colors
+          hover:text-[var(--accent)]
+          md:flex
+        "
       >
-
-        <span className="font-mono text-[9px] tracking-[0.25em]">
+        <span
+          className="
+            font-mono
+            text-[9px]
+            tracking-[0.25em]
+          "
+        >
           EXPLORE
         </span>
 
         <span className="text-lg">
           ↓
         </span>
-
       </motion.a>
-
     </section>
   );
 }

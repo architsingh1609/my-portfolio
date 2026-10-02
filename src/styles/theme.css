@@ -1,0 +1,602 @@
+/* =========================================================
+   THEME SYSTEM
+   Archit Singh — QA Automation Engineer / SDET Portfolio
+   LIGHT: Clean White
+   DARK: Deep Black / Navy / Blue-Cyan Engineering Theme
+========================================================= */
+
+:root {
+  /* =======================================================
+     LIGHT MODE
+  ======================================================= */
+
+  --bg-primary: #ffffff;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-soft: #fafafa;
+
+  --bg-dark: #05070d;
+  --bg-dark-secondary: #080c16;
+  --bg-dark-card: #0d1422;
+
+  /* =======================================================
+     TEXT
+  ======================================================= */
+
+  --text-primary: #111111;
+  --text-secondary: #555555;
+  --text-muted: #777777;
+  --text-subtle: #999999;
+  --text-white: #ffffff;
+
+  /* =======================================================
+     ACCENTS
+  ======================================================= */
+
+  --accent: #2563eb;
+  --accent-light: #3b82f6;
+  --accent-dark: #1d4ed8;
+  --accent-secondary: #7c3aed;
+
+  --success: #16a34a;
+  --warning: #d97706;
+  --error: #dc2626;
+
+  /* =======================================================
+     BORDERS
+  ======================================================= */
+
+  --border-light: #eeeeee;
+  --border-medium: #dddddd;
+  --border-dark: #cccccc;
+
+  --border-accent: rgba(37, 99, 235, 0.25);
+
+  /* =======================================================
+     GLASS
+  ======================================================= */
+
+  --glass-bg: rgba(255, 255, 255, 0.94);
+  --glass-bg-strong: rgba(255, 255, 255, 0.98);
+  --glass-bg-soft: rgba(255, 255, 255, 0.82);
+
+  --glass-border: rgba(0, 0, 0, 0.07);
+  --glass-border-soft: rgba(0, 0, 0, 0.045);
+  --glass-border-strong: rgba(0, 0, 0, 0.11);
+
+  --glass-bg-dark: rgba(17, 17, 17, 0.88);
+  --glass-border-dark: rgba(255, 255, 255, 0.1);
+
+  --glass-blur: 24px;
+  --glass-saturation: 180%;
+
+  /* =======================================================
+     SHADOWS
+  ======================================================= */
+
+  --shadow-soft:
+    0 6px 24px rgba(0, 0, 0, 0.035);
+
+  --shadow-medium:
+    0 12px 35px rgba(0, 0, 0, 0.055);
+
+  --shadow-large:
+    0 20px 55px rgba(0, 0, 0, 0.075);
+
+  --shadow-dark:
+    0 20px 60px rgba(0, 0, 0, 0.1);
+
+  --shadow-accent:
+    0 12px 35px rgba(37, 99, 235, 0.08);
+
+  /* =======================================================
+     RADIUS
+  ======================================================= */
+
+  --radius-xs: 8px;
+  --radius-sm: 10px;
+  --radius: 18px;
+  --radius-lg: 24px;
+  --radius-xl: 30px;
+  --radius-pill: 999px;
+
+  /* =======================================================
+     TRANSITIONS
+  ======================================================= */
+
+  --transition-fast: 180ms ease;
+  --transition-normal: 300ms ease;
+  --transition-slow: 500ms ease;
+
+  --transition-smooth:
+    cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* =======================================================
+     Z-INDEX
+  ======================================================= */
+
+  --z-base: 1;
+  --z-content: 10;
+  --z-header: 100;
+  --z-overlay: 500;
+  --z-loader: 1000;
+  --z-cursor: 2000;
+}
+
+
+/* =========================================================
+   DARK MODE
+   RESTORED ORIGINAL DEEP BLACK / NAVY / BLUE THEME
+========================================================= */
+
+.dark {
+  /* =======================================================
+     BACKGROUNDS
+  ======================================================= */
+
+  --bg-primary: #05070d;
+  --bg-secondary: #080c16;
+  --bg-card: #0d1422;
+  --bg-card-soft: #111b2d;
+
+  --bg-dark: #020307;
+  --bg-dark-secondary: #050914;
+  --bg-dark-card: #0b1220;
+
+  /* =======================================================
+     TEXT
+  ======================================================= */
+
+  --text-primary: #f4f7fb;
+  --text-secondary: #b8c3d4;
+  --text-muted: #718096;
+  --text-subtle: #56657a;
+  --text-white: #ffffff;
+
+  /* =======================================================
+     ACCENTS
+  ======================================================= */
+
+  --accent: #4f8cff;
+  --accent-light: #79a9ff;
+  --accent-dark: #2864c7;
+  --accent-secondary: #8b7cff;
+
+  --success: #45d483;
+  --warning: #f2b84b;
+  --error: #ff6b78;
+
+  /* =======================================================
+     BORDERS
+  ======================================================= */
+
+  --border-light:
+    rgba(91, 132, 194, 0.16);
+
+  --border-medium:
+    rgba(91, 132, 194, 0.24);
+
+  --border-dark:
+    rgba(91, 132, 194, 0.34);
+
+  --border-accent:
+    rgba(79, 140, 255, 0.34);
+
+  /* =======================================================
+     GLASS
+  ======================================================= */
+
+  --glass-bg:
+    rgba(8, 15, 29, 0.9);
+
+  --glass-bg-strong:
+    rgba(9, 17, 32, 0.97);
+
+  --glass-bg-soft:
+    rgba(13, 20, 34, 0.76);
+
+  --glass-border:
+    rgba(88, 128, 190, 0.18);
+
+  --glass-border-soft:
+    rgba(88, 128, 190, 0.09);
+
+  --glass-border-strong:
+    rgba(88, 128, 190, 0.26);
+
+  --glass-bg-dark:
+    rgba(2, 3, 7, 0.98);
+
+  --glass-border-dark:
+    rgba(88, 128, 190, 0.2);
+
+  /* =======================================================
+     SHADOWS
+  ======================================================= */
+
+  --shadow-soft:
+    0 12px 40px rgba(0, 0, 0, 0.42);
+
+  --shadow-medium:
+    0 20px 55px rgba(0, 0, 0, 0.56);
+
+  --shadow-large:
+    0 30px 85px rgba(0, 0, 0, 0.68);
+
+  --shadow-dark:
+    0 25px 70px rgba(0, 0, 0, 0.76);
+
+  --shadow-accent:
+    0 15px 45px rgba(79, 140, 255, 0.1);
+}
+
+
+/* =========================================================
+   GLOBAL THEME FOUNDATION
+========================================================= */
+
+html,
+body,
+#root {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+
+  transition:
+    background-color var(--transition-normal),
+    color var(--transition-normal);
+}
+
+
+/* =========================================================
+   LIGHT MODE — FORCE CLEAN WHITE SURFACES
+========================================================= */
+
+.bg-neutral-50,
+.bg-neutral-100,
+.bg-neutral-200,
+.bg-neutral-300,
+
+.bg-gray-50,
+.bg-gray-100,
+.bg-gray-200,
+.bg-gray-300,
+
+.bg-slate-50,
+.bg-slate-100,
+.bg-slate-200,
+.bg-slate-300 {
+  background-color: #ffffff !important;
+}
+
+
+/* =========================================================
+   LIGHT MODE — HOVER SURFACES
+========================================================= */
+
+.hover\:bg-neutral-50:hover,
+.hover\:bg-neutral-100:hover,
+.hover\:bg-neutral-200:hover,
+.hover\:bg-neutral-300:hover,
+
+.hover\:bg-gray-50:hover,
+.hover\:bg-gray-100:hover,
+.hover\:bg-gray-200:hover,
+.hover\:bg-gray-300:hover,
+
+.hover\:bg-slate-50:hover,
+.hover\:bg-slate-100:hover,
+.hover\:bg-slate-200:hover,
+.hover\:bg-slate-300:hover {
+  background-color: #ffffff !important;
+}
+
+
+/* =========================================================
+   LIGHT MODE — BLUE SURFACES
+========================================================= */
+
+.bg-blue-50,
+.bg-blue-100,
+.bg-blue-200 {
+  background-color: #ffffff !important;
+}
+
+.hover\:bg-blue-50:hover,
+.hover\:bg-blue-100:hover,
+.hover\:bg-blue-200:hover {
+  background-color: #ffffff !important;
+}
+
+
+/* =========================================================
+   LIGHT MODE — TRANSPARENT WHITE
+========================================================= */
+
+.bg-white\/50,
+.bg-white\/60,
+.bg-white\/70,
+.bg-white\/75,
+.bg-white\/80,
+.bg-white\/85,
+.bg-white\/90,
+.bg-white\/95 {
+  background-color: #ffffff !important;
+}
+
+
+/* =========================================================
+   DARK MODE — WHITE SURFACES
+========================================================= */
+
+.dark .bg-white,
+.dark .bg-white\/50,
+.dark .bg-white\/60,
+.dark .bg-white\/70,
+.dark .bg-white\/75,
+.dark .bg-white\/80,
+.dark .bg-white\/85,
+.dark .bg-white\/90,
+.dark .bg-white\/95 {
+  background-color: var(--bg-card) !important;
+}
+
+
+/* =========================================================
+   DARK MODE — NEUTRAL SURFACES
+========================================================= */
+
+.dark .bg-neutral-50,
+.dark .bg-neutral-100,
+.dark .bg-neutral-200,
+.dark .bg-neutral-300 {
+  background-color: var(--bg-card-soft) !important;
+}
+
+
+/* =========================================================
+   DARK MODE — GRAY SURFACES
+========================================================= */
+
+.dark .bg-gray-50,
+.dark .bg-gray-100,
+.dark .bg-gray-200,
+.dark .bg-gray-300 {
+  background-color: var(--bg-card-soft) !important;
+}
+
+
+/* =========================================================
+   DARK MODE — SLATE SURFACES
+========================================================= */
+
+.dark .bg-slate-50,
+.dark .bg-slate-100,
+.dark .bg-slate-200,
+.dark .bg-slate-300 {
+  background-color: var(--bg-card-soft) !important;
+}
+
+
+/* Keep the original dark slate hierarchy */
+
+.dark .bg-slate-800 {
+  background-color: var(--bg-card-soft) !important;
+}
+
+.dark .bg-slate-900 {
+  background-color: var(--bg-dark-secondary) !important;
+}
+
+.dark .bg-slate-950 {
+  background-color: var(--bg-dark) !important;
+}
+
+
+/* =========================================================
+   DARK MODE — BLUE SURFACES
+========================================================= */
+
+.dark .bg-blue-50,
+.dark .bg-blue-100,
+.dark .bg-blue-200 {
+  background-color: var(--bg-card-soft) !important;
+}
+
+
+/* =========================================================
+   DARK MODE — HOVER SURFACES
+========================================================= */
+
+.dark .hover\:bg-neutral-50:hover,
+.dark .hover\:bg-neutral-100:hover,
+.dark .hover\:bg-neutral-200:hover,
+.dark .hover\:bg-neutral-300:hover,
+
+.dark .hover\:bg-gray-50:hover,
+.dark .hover\:bg-gray-100:hover,
+.dark .hover\:bg-gray-200:hover,
+.dark .hover\:bg-gray-300:hover,
+
+.dark .hover\:bg-slate-50:hover,
+.dark .hover\:bg-slate-100:hover,
+.dark .hover\:bg-slate-200:hover,
+.dark .hover\:bg-slate-300:hover {
+  background-color: var(--bg-card-soft) !important;
+}
+
+
+/* =========================================================
+   DARK MODE — TEXT COMPATIBILITY
+========================================================= */
+
+.dark .text-neutral-950,
+.dark .text-neutral-900,
+.dark .text-gray-950,
+.dark .text-gray-900,
+.dark .text-slate-950,
+.dark .text-slate-900 {
+  color: var(--text-primary) !important;
+}
+
+.dark .text-neutral-800,
+.dark .text-neutral-700,
+.dark .text-gray-800,
+.dark .text-gray-700,
+.dark .text-slate-800,
+.dark .text-slate-700 {
+  color: var(--text-secondary) !important;
+}
+
+.dark .text-neutral-600,
+.dark .text-neutral-500,
+.dark .text-gray-600,
+.dark .text-gray-500,
+.dark .text-gray-400,
+.dark .text-slate-600,
+.dark .text-slate-500 {
+  color: var(--text-secondary) !important;
+}
+
+
+/* =========================================================
+   DARK MODE — BORDERS
+========================================================= */
+
+.dark .border-neutral-200,
+.dark .border-neutral-300,
+.dark .border-gray-200,
+.dark .border-gray-300,
+.dark .border-slate-200,
+.dark .border-slate-300,
+.dark .border-slate-700,
+.dark .border-slate-800 {
+  border-color: var(--border-light) !important;
+}
+
+
+/* =========================================================
+   APPLE STYLE GLASS
+========================================================= */
+
+.apple-glass {
+  background: var(--glass-bg);
+
+  border:
+    1px solid var(--glass-border);
+
+  backdrop-filter:
+    blur(var(--glass-blur))
+    saturate(var(--glass-saturation));
+
+  -webkit-backdrop-filter:
+    blur(var(--glass-blur))
+    saturate(var(--glass-saturation));
+
+  box-shadow:
+    var(--shadow-soft);
+
+  transition:
+    background-color var(--transition-normal),
+    border-color var(--transition-normal),
+    box-shadow var(--transition-normal),
+    transform var(--transition-smooth);
+}
+
+
+.apple-glass:hover {
+  box-shadow:
+    var(--shadow-medium);
+}
+
+
+/* =========================================================
+   TEXT / ACCENT UTILITIES
+========================================================= */
+
+.text-accent {
+  color: var(--accent);
+}
+
+.bg-accent {
+  background-color: var(--accent);
+}
+
+.border-accent {
+  border-color: var(--border-accent);
+}
+
+
+/* =========================================================
+   ACCENT GRADIENT
+========================================================= */
+
+.accent-gradient {
+  background:
+    linear-gradient(
+      135deg,
+      var(--accent-light) 0%,
+      var(--accent) 100%
+    );
+}
+
+
+/* =========================================================
+   ACCENT TEXT GRADIENT
+========================================================= */
+
+.accent-text-gradient {
+  background:
+    linear-gradient(
+      135deg,
+      var(--accent-light) 0%,
+      var(--accent) 100%
+    );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+}
+
+
+/* =========================================================
+   SELECTION
+========================================================= */
+
+::selection {
+  background:
+    rgba(37, 99, 235, 0.15);
+
+  color:
+    var(--text-primary);
+}
+
+.dark ::selection {
+  background:
+    rgba(79, 140, 255, 0.25);
+
+  color:
+    var(--text-primary);
+}
+
+
+/* =========================================================
+   ACCESSIBILITY — REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+
+    animation-duration:
+      0.01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      0.01ms !important;
+  }
+}

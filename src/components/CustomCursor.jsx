@@ -5,68 +5,326 @@ function CustomCursor() {
   const ringRef = useRef(null);
 
   useEffect(() => {
-    let mouseX = 0;
-    let mouseY = 0;
+    const finePointer = window.matchMedia(
+      "(hover: hover) and (pointer: fine)"
+    );
 
-    let ringX = 0;
-    let ringY = 0;
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    );
 
-    const moveMouse = (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+    /*
+     * Custom cursor only runs when:
+     * - Device has a precise pointer
+     * - User has not requested reduced motion
+     */
+
+    if (!finePointer.matches || reducedMotion.matches) {
+      return undefined;
+    }
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+
+    let ringX = mouseX;
+    let ringY = mouseY;
+
+    let animationFrame = null;
+    let isActive = true;
+    let hasMoved = false;
+
+    /* =========================================================
+       CURSOR POSITION
+    ========================================================= */
+
+    const setCursorPosition = (element, x, y) => {
+      if (!element) {
+        return;
+      }
+
+      element.style.transform = `
+        translate3d(${x}px, ${y}px, 0)
+        translate(-50%, -50%)
+      `;
+    };
+
+    /* =========================================================
+       MOUSE MOVE
+    ========================================================= */
+
+    const moveMouse = (event) => {
+      mouseX = event.clientX;
+      mouseY = event.clientY;
+
+      hasMoved = true;
 
       if (dotRef.current) {
-        dotRef.current.style.left = `${mouseX}px`;
-        dotRef.current.style.top = `${mouseY}px`;
+        setCursorPosition(
+          dotRef.current,
+          mouseX,
+          mouseY
+        );
+
+        dotRef.current.style.opacity = "1";
       }
-    };
-
-    window.addEventListener("mousemove", moveMouse);
-
-    const animate = () => {
-      ringX += (mouseX - ringX) * 0.18;
-      ringY += (mouseY - ringY) * 0.18;
 
       if (ringRef.current) {
-        ringRef.current.style.left = `${ringX}px`;
-        ringRef.current.style.top = `${ringY}px`;
+        ringRef.current.style.opacity = "1";
       }
-
-      requestAnimationFrame(animate);
     };
 
-    animate();
+    /* =========================================================
+       MOUSE LEAVE
+    ========================================================= */
+
+    const handleMouseLeave = () => {
+      if (dotRef.current) {
+        dotRef.current.style.opacity = "0";
+      }
+
+      if (ringRef.current) {
+        ringRef.current.style.opacity = "0";
+      }
+    };
+
+    /* =========================================================
+       MOUSE ENTER
+    ========================================================= */
+
+    const handleMouseEnter = () => {
+      if (!hasMoved) {
+        return;
+      }
+
+      if (dotRef.current) {
+        dotRef.current.style.opacity = "1";
+      }
+
+      if (ringRef.current) {
+        ringRef.current.style.opacity = "1";
+      }
+    };
+
+    /* =========================================================
+       INTERACTIVE ELEMENT ENTER
+    ========================================================= */
+
+    const handleInteractiveEnter = () => {
+      if (!ringRef.current) {
+        return;
+      }
+
+      ringRef.current.style.width = "46px";
+      ringRef.current.style.height = "46px";
+      ringRef.current.style.borderColor =
+        "var(--accent)";
+      ringRef.current.style.opacity = "0.9";
+    };
+
+    /* =========================================================
+       INTERACTIVE ELEMENT LEAVE
+    ========================================================= */
+
+    const handleInteractiveLeave = () => {
+      if (!ringRef.current) {
+        return;
+      }
+
+      ringRef.current.style.width = "40px";
+      ringRef.current.style.height = "40px";
+      ringRef.current.style.borderColor =
+        "var(--border-medium, currentColor)";
+      ringRef.current.style.opacity = "1";
+    };
+
+    /* =========================================================
+       ADD INTERACTIVE LISTENERS
+    ========================================================= */
+
+    const addInteractiveListeners = () => {
+      const interactiveElements =
+        document.querySelectorAll(
+          "a, button, input, textarea, select, [role='button']"
+        );
+
+      interactiveElements.forEach((element) => {
+        element.addEventListener(
+          "mouseenter",
+          handleInteractiveEnter
+        );
+
+        element.addEventListener(
+          "mouseleave",
+          handleInteractiveLeave
+        );
+      });
+
+      return interactiveElements;
+    };
+
+    /* =========================================================
+       CURSOR ANIMATION
+    ========================================================= */
+
+    const animate = () => {
+      if (!isActive) {
+        return;
+      }
+
+      ringX +=
+        (mouseX - ringX) * 0.18;
+
+      ringY +=
+        (mouseY - ringY) * 0.18;
+
+      if (ringRef.current) {
+        setCursorPosition(
+          ringRef.current,
+          ringX,
+          ringY
+        );
+      }
+
+      animationFrame =
+        requestAnimationFrame(animate);
+    };
+
+    /* =========================================================
+       INITIALIZE
+    ========================================================= */
+
+    const interactiveElements =
+      addInteractiveListeners();
+
+    window.addEventListener(
+      "mousemove",
+      moveMouse
+    );
+
+    window.addEventListener(
+      "mouseleave",
+      handleMouseLeave
+    );
+
+    window.addEventListener(
+      "mouseenter",
+      handleMouseEnter
+    );
+
+    animationFrame =
+      requestAnimationFrame(animate);
+
+    /* =========================================================
+       CLEANUP
+    ========================================================= */
 
     return () => {
-      window.removeEventListener("mousemove", moveMouse);
+      isActive = false;
+
+      window.removeEventListener(
+        "mousemove",
+        moveMouse
+      );
+
+      window.removeEventListener(
+        "mouseleave",
+        handleMouseLeave
+      );
+
+      window.removeEventListener(
+        "mouseenter",
+        handleMouseEnter
+      );
+
+      interactiveElements.forEach((element) => {
+        element.removeEventListener(
+          "mouseenter",
+          handleInteractiveEnter
+        );
+
+        element.removeEventListener(
+          "mouseleave",
+          handleInteractiveLeave
+        );
+      });
+
+      if (animationFrame !== null) {
+        cancelAnimationFrame(
+          animationFrame
+        );
+      }
     };
   }, []);
 
+  /* =========================================================
+     RENDER
+  ========================================================= */
+
   return (
     <>
-      {/* Dot */}
+      {/* =====================================================
+          CUSTOM CURSOR DOT
+      ====================================================== */}
 
       <div
         ref={dotRef}
-        className="fixed w-3 h-3 bg-cyan-400 rounded-full pointer-events-none z-[99999]"
+        aria-hidden="true"
+        className="
+          pointer-events-none
+          fixed
+          left-0
+          top-0
+          z-[99999]
+          h-2.5
+          w-2.5
+          rounded-full
+          bg-[var(--accent)]
+          opacity-0
+          transition-opacity
+          duration-150
+        "
         style={{
-          transform: "translate(-50%, -50%)",
-          boxShadow: "0 0 25px rgba(34,211,238,.8)",
+          boxShadow:
+            "0 2px 10px rgba(37, 99, 235, 0.22)",
+          willChange:
+            "transform, opacity",
         }}
       />
 
-      {/* Ring */}
+      {/* =====================================================
+          CUSTOM CURSOR RING
+      ====================================================== */}
 
       <div
         ref={ringRef}
-        className="fixed w-10 h-10 border border-cyan-400 rounded-full pointer-events-none z-[99998]"
+        aria-hidden="true"
+        className="
+          pointer-events-none
+          fixed
+          left-0
+          top-0
+          z-[99998]
+          h-10
+          w-10
+          rounded-full
+          border
+          border-[var(--border-medium)]
+          opacity-0
+          transition-[width,height,border-color,opacity]
+          duration-200
+          ease-out
+        "
         style={{
-          transform: "translate(-50%, -50%)",
-          transition: "border .25s ease",
+          willChange:
+            "transform, width, height, border-color, opacity",
         }}
       />
     </>
   );
 }
+
+/* =========================================================
+   DEFAULT EXPORT
+========================================================= */
 
 export default CustomCursor;

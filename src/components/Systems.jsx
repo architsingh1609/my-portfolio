@@ -39,86 +39,44 @@ function Systems() {
   ];
 
   return (
-    <section id="systems" className="py-24 px-6">
-      <div className="glass-card max-w-7xl mx-auto p-8 md:p-12">
-        {/* Heading */}
+    <section
+      id="systems"
+      className="bg-[var(--bg-primary)] px-6 py-24 text-[var(--text-primary)] transition-colors duration-300"
+    >
+      <div className="mx-auto max-w-7xl rounded-3xl border border-[var(--border-light)] bg-[var(--bg-card)] p-8 shadow-[var(--shadow-soft)] transition-colors duration-300 md:p-12">
         <div className="mb-14">
-          <p className="text-cyan-400 text-sm font-semibold tracking-[0.25em] uppercase mb-4">
+          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.25em] text-[var(--accent)]">
             Domain & Engineering Exposure
           </p>
 
-          <h2 className="text-4xl md:text-5xl font-bold text-cyan-400">
+          <h2 className="text-4xl font-bold text-[var(--text-primary)] md:text-5xl">
             Systems I've Worked With
           </h2>
 
-          <div
-            className="
-              mt-4
-              w-32
-              h-1
-              rounded-full
-              bg-gradient-to-r
-              from-cyan-400
-              to-blue-500
-            "
-          />
+          <div className="mt-4 h-1 w-32 rounded-full bg-[var(--accent)]" />
 
-          <p className="mt-6 text-gray-400 text-lg leading-8 max-w-4xl">
+          <p className="mt-6 max-w-4xl text-lg leading-8 text-[var(--text-secondary)]">
             Experience testing different business applications and technology
             layers, including banking websites, ERP, CRM, HRMS, e-commerce
             applications, REST APIs, and backend services.
           </p>
         </div>
 
-        {/* Systems */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {systems.map((system) => (
             <div
               key={system.title}
-              className="
-                group
-                bg-slate-900
-                border border-slate-800
-                rounded-3xl
-                p-8
-                min-h-[230px]
-                hover:bg-slate-800
-                hover:border-cyan-400
-                hover:-translate-y-2
-                hover:shadow-[0_0_30px_rgba(34,211,238,0.15)]
-                transition-all
-                duration-300
-              "
+              className="group min-h-[230px] rounded-3xl border border-[var(--border-light)] bg-[var(--bg-card-soft)] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[var(--border-accent)] hover:bg-[var(--bg-card)] hover:shadow-[var(--shadow-medium)]"
             >
-              {/* Icon */}
-              <div
-                className="
-                  text-4xl
-                  mb-6
-                  transition-transform
-                  duration-300
-                  group-hover:scale-110
-                "
-              >
+              <div className="mb-6 text-4xl transition-transform duration-300 group-hover:scale-110">
                 {system.icon}
               </div>
 
-              {/* Title */}
-              <h3
-                className="
-                  text-xl
-                  font-bold
-                  text-white
-                  group-hover:text-cyan-400
-                  transition-colors
-                  duration-300
-                "
-              >
+              <h3 className="text-xl font-bold text-[var(--text-primary)] transition-colors duration-300 group-hover:text-[var(--accent)]">
                 {system.title}
               </h3>
 
-              {/* Description */}
-              <p className="mt-4 text-gray-400 leading-7">
+              <p className="mt-4 leading-7 text-[var(--text-secondary)]">
                 {system.description}
               </p>
             </div>

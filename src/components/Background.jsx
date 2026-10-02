@@ -2,9 +2,8 @@ import { motion } from "framer-motion";
 
 function Background() {
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden bg-[#050816]">
-
-      {/* Cyan Glow */}
+    <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-white transition-colors duration-500 dark:bg-[#05070d]">
+      {/* Primary Blue Ambient Light */}
       <motion.div
         animate={{
           x: [0, 120, -80, 0],
@@ -17,17 +16,18 @@ function Background() {
         }}
         className="
           absolute
-          top-20
           left-20
-          w-[500px]
+          top-20
           h-[500px]
+          w-[500px]
           rounded-full
-          bg-cyan-500/20
+          bg-blue-100/20
           blur-[140px]
+          dark:bg-blue-500/[0.035]
         "
       />
 
-      {/* Purple Glow */}
+      {/* Secondary Blue Ambient Light */}
       <motion.div
         animate={{
           x: [0, -150, 80, 0],
@@ -42,15 +42,16 @@ function Background() {
           absolute
           bottom-0
           right-0
-          w-[450px]
           h-[450px]
+          w-[450px]
           rounded-full
-          bg-violet-500/20
+          bg-blue-50/15
           blur-[160px]
+          dark:bg-blue-950/20
         "
       />
 
-      {/* Blue Glow */}
+      {/* Center Blue Ambient Light */}
       <motion.div
         animate={{
           x: [0, 80, -120, 0],
@@ -63,18 +64,18 @@ function Background() {
         }}
         className="
           absolute
-          top-1/2
           left-1/2
+          top-1/2
+          h-[350px]
+          w-[350px]
           -translate-x-1/2
           -translate-y-1/2
-          w-[350px]
-          h-[350px]
           rounded-full
-          bg-sky-400/15
+          bg-blue-50/10
           blur-[120px]
+          dark:bg-blue-900/[0.025]
         "
       />
-
     </div>
   );
 }

@@ -18,6 +18,47 @@ const EMAILJS_PUBLIC_KEY =
 
 /*
 |--------------------------------------------------------------------------
+| Storage Keys
+|--------------------------------------------------------------------------
+*/
+
+const STORAGE_KEYS = {
+  emailSent:
+    "portfolio_profile_view_email_sent",
+
+  applicationContext:
+    "portfolio_application_context",
+
+  originalTrackingUrl:
+    "portfolio_original_tracking_url",
+
+  landingPage:
+    "portfolio_landing_page",
+
+  returningVisitor:
+    "portfolio_returning_visitor",
+
+  visitCount:
+    "portfolio_visit_count",
+
+  sectionsViewed:
+    "portfolio_sections_viewed",
+
+  resumeClicked:
+    "portfolio_resume_clicked",
+
+  linkedinClicked:
+    "portfolio_linkedin_clicked",
+
+  githubClicked:
+    "portfolio_github_clicked",
+
+  contactFormUsed:
+    "portfolio_contact_form_used",
+};
+
+/*
+|--------------------------------------------------------------------------
 | Utility Functions
 |--------------------------------------------------------------------------
 */
@@ -42,6 +83,12 @@ function generateTrackingId() {
 
   return `ARCHIT-${Date.now()}-${randomPart}`;
 }
+
+/*
+|--------------------------------------------------------------------------
+| Browser Detection
+|--------------------------------------------------------------------------
+*/
 
 function getBrowser(userAgent) {
   if (/Edg\//i.test(userAgent)) {
@@ -70,6 +117,12 @@ function getBrowser(userAgent) {
   return "Unknown";
 }
 
+/*
+|--------------------------------------------------------------------------
+| Operating System Detection
+|--------------------------------------------------------------------------
+*/
+
 function getOperatingSystem(userAgent) {
   if (/Windows/i.test(userAgent)) {
     return "Windows";
@@ -94,6 +147,12 @@ function getOperatingSystem(userAgent) {
   return "Unknown";
 }
 
+/*
+|--------------------------------------------------------------------------
+| Device Detection
+|--------------------------------------------------------------------------
+*/
+
 function getDevice() {
   if (window.innerWidth <= 768) {
     return "Mobile";
@@ -110,6 +169,11 @@ function getDevice() {
 |--------------------------------------------------------------------------
 | Application Tracking
 |--------------------------------------------------------------------------
+|
+| Captures application/job information from URL parameters and preserves
+| it inside sessionStorage so the information is not lost when navigation
+| changes the browser URL.
+|--------------------------------------------------------------------------
 */
 
 function getApplicationData() {
@@ -121,12 +185,12 @@ function getApplicationData() {
 
   const existingData =
     sessionStorage.getItem(
-      "portfolio_application_context"
+      STORAGE_KEYS.applicationContext
     );
 
   /*
   |--------------------------------------------------------------------------
-  | First priority: current URL parameters
+  | Current URL Data
   |--------------------------------------------------------------------------
   */
 
@@ -157,7 +221,8 @@ function getApplicationData() {
       "",
 
     jobId:
-      params.get("jobId") || "",
+      params.get("jobId") ||
+      "",
 
     jobPostingUrl:
       params.get("jobPostingUrl") ||
@@ -192,7 +257,7 @@ function getApplicationData() {
 
   /*
   |--------------------------------------------------------------------------
-  | Determine whether this URL actually contains tracking data
+  | Check For Tracking Parameters
   |--------------------------------------------------------------------------
   */
 
@@ -206,105 +271,84 @@ function getApplicationData() {
 
   /*
   |--------------------------------------------------------------------------
-  | If URL contains tracking data:
-  | save it immediately.
+  | Save Current Tracking Data
   |--------------------------------------------------------------------------
   */
 
   if (hasTrackingData) {
     sessionStorage.setItem(
-      "portfolio_application_context",
+      STORAGE_KEYS.applicationContext,
       JSON.stringify(currentData)
     );
 
     sessionStorage.setItem(
-      "portfolio_original_tracking_url",
+      STORAGE_KEYS.originalTrackingUrl,
       window.location.href
     );
 
-    console.log(
-      "Application tracking parameters captured:",
-      currentData
-    );
-
     return {
-      company:
-        getValue(
-          currentData.company
-        ),
+      company: getValue(
+        currentData.company
+      ),
 
-      jobRole:
-        getValue(
-          currentData.jobRole
-        ),
+      jobRole: getValue(
+        currentData.jobRole
+      ),
 
-      department:
-        getValue(
-          currentData.department
-        ),
+      department: getValue(
+        currentData.department
+      ),
 
-      applicationLocation:
-        getValue(
-          currentData.applicationLocation
-        ),
+      applicationLocation: getValue(
+        currentData.applicationLocation
+      ),
 
-      applicationSource:
-        getValue(
-          currentData.applicationSource,
-          "Direct Visit"
-        ),
+      applicationSource: getValue(
+        currentData.applicationSource,
+        "Direct Visit"
+      ),
 
-      applicationDate:
-        getValue(
-          currentData.applicationDate
-        ),
+      applicationDate: getValue(
+        currentData.applicationDate
+      ),
 
-      jobId:
-        getValue(
-          currentData.jobId
-        ),
+      jobId: getValue(
+        currentData.jobId
+      ),
 
-      jobPostingUrl:
-        getValue(
-          currentData.jobPostingUrl
-        ),
+      jobPostingUrl: getValue(
+        currentData.jobPostingUrl
+      ),
 
-      applicationStatus:
-        getValue(
-          currentData.applicationStatus
-        ),
+      applicationStatus: getValue(
+        currentData.applicationStatus
+      ),
 
-      utmSource:
-        getValue(
-          currentData.utmSource
-        ),
+      utmSource: getValue(
+        currentData.utmSource
+      ),
 
-      utmMedium:
-        getValue(
-          currentData.utmMedium
-        ),
+      utmMedium: getValue(
+        currentData.utmMedium
+      ),
 
-      utmCampaign:
-        getValue(
-          currentData.utmCampaign
-        ),
+      utmCampaign: getValue(
+        currentData.utmCampaign
+      ),
 
-      utmTerm:
-        getValue(
-          currentData.utmTerm
-        ),
+      utmTerm: getValue(
+        currentData.utmTerm
+      ),
 
-      utmContent:
-        getValue(
-          currentData.utmContent
-        ),
+      utmContent: getValue(
+        currentData.utmContent
+      ),
     };
   }
 
   /*
   |--------------------------------------------------------------------------
-  | If URL no longer has parameters:
-  | recover previously saved tracking data.
+  | Recover Existing Session Data
   |--------------------------------------------------------------------------
   */
 
@@ -313,94 +357,74 @@ function getApplicationData() {
       const savedData =
         JSON.parse(existingData);
 
-      console.log(
-        "Recovered application tracking data:",
-        savedData
-      );
-
       return {
-        company:
-          getValue(
-            savedData.company
-          ),
+        company: getValue(
+          savedData.company
+        ),
 
-        jobRole:
-          getValue(
-            savedData.jobRole
-          ),
+        jobRole: getValue(
+          savedData.jobRole
+        ),
 
-        department:
-          getValue(
-            savedData.department
-          ),
+        department: getValue(
+          savedData.department
+        ),
 
-        applicationLocation:
-          getValue(
-            savedData.applicationLocation
-          ),
+        applicationLocation: getValue(
+          savedData.applicationLocation
+        ),
 
-        applicationSource:
-          getValue(
-            savedData.applicationSource,
-            "Direct Visit"
-          ),
+        applicationSource: getValue(
+          savedData.applicationSource,
+          "Direct Visit"
+        ),
 
-        applicationDate:
-          getValue(
-            savedData.applicationDate
-          ),
+        applicationDate: getValue(
+          savedData.applicationDate
+        ),
 
-        jobId:
-          getValue(
-            savedData.jobId
-          ),
+        jobId: getValue(
+          savedData.jobId
+        ),
 
-        jobPostingUrl:
-          getValue(
-            savedData.jobPostingUrl
-          ),
+        jobPostingUrl: getValue(
+          savedData.jobPostingUrl
+        ),
 
-        applicationStatus:
-          getValue(
-            savedData.applicationStatus
-          ),
+        applicationStatus: getValue(
+          savedData.applicationStatus
+        ),
 
-        utmSource:
-          getValue(
-            savedData.utmSource
-          ),
+        utmSource: getValue(
+          savedData.utmSource
+        ),
 
-        utmMedium:
-          getValue(
-            savedData.utmMedium
-          ),
+        utmMedium: getValue(
+          savedData.utmMedium
+        ),
 
-        utmCampaign:
-          getValue(
-            savedData.utmCampaign
-          ),
+        utmCampaign: getValue(
+          savedData.utmCampaign
+        ),
 
-        utmTerm:
-          getValue(
-            savedData.utmTerm
-          ),
+        utmTerm: getValue(
+          savedData.utmTerm
+        ),
 
-        utmContent:
-          getValue(
-            savedData.utmContent
-          ),
+        utmContent: getValue(
+          savedData.utmContent
+        ),
       };
-    } catch (error) {
-      console.warn(
-        "Could not recover application tracking data:",
-        error
+    } catch {
+      sessionStorage.removeItem(
+        STORAGE_KEYS.applicationContext
       );
     }
   }
 
   /*
   |--------------------------------------------------------------------------
-  | Normal direct visitor
+  | Direct Visitor
   |--------------------------------------------------------------------------
   */
 
@@ -431,18 +455,18 @@ function getApplicationData() {
 function getVisitorInformation() {
   const previousVisitor =
     localStorage.getItem(
-      "portfolio_returning_visitor"
+      STORAGE_KEYS.returningVisitor
     ) === "true";
 
   localStorage.setItem(
-    "portfolio_returning_visitor",
+    STORAGE_KEYS.returningVisitor,
     "true"
   );
 
   const previousVisits =
     Number(
       localStorage.getItem(
-        "portfolio_visit_count"
+        STORAGE_KEYS.visitCount
       )
     ) || 0;
 
@@ -450,7 +474,7 @@ function getVisitorInformation() {
     previousVisits + 1;
 
   localStorage.setItem(
-    "portfolio_visit_count",
+    STORAGE_KEYS.visitCount,
     String(visitNumber)
   );
 
@@ -465,7 +489,7 @@ function getVisitorInformation() {
 
 /*
 |--------------------------------------------------------------------------
-| Sections
+| Section Tracking
 |--------------------------------------------------------------------------
 */
 
@@ -474,7 +498,7 @@ function getSectionsViewed() {
     const sections =
       JSON.parse(
         sessionStorage.getItem(
-          "portfolio_sections_viewed"
+          STORAGE_KEYS.sectionsViewed
         ) || "[]"
       );
 
@@ -489,10 +513,14 @@ function getSectionsViewed() {
 function saveSectionsViewed(
   sections
 ) {
-  sessionStorage.setItem(
-    "portfolio_sections_viewed",
-    JSON.stringify(sections)
-  );
+  try {
+    sessionStorage.setItem(
+      STORAGE_KEYS.sectionsViewed,
+      JSON.stringify(sections)
+    );
+  } catch {
+    // Ignore storage errors.
+  }
 }
 
 /*
@@ -565,12 +593,7 @@ async function getLocationData() {
         data.org ||
         defaultData.isp,
     };
-  } catch (error) {
-    console.warn(
-      "Visitor location lookup unavailable:",
-      error
-    );
-
+  } catch {
     return defaultData;
   }
 }
@@ -583,25 +606,27 @@ async function getLocationData() {
 
 function ProfileViewTracker() {
   useEffect(() => {
-    const emailSentKey =
-      "portfolio_profile_view_email_sent";
+    let isMounted = true;
+
+    let sectionObserver = null;
+
+    let sendTimer = null;
 
     /*
     |--------------------------------------------------------------------------
-    | React StrictMode Protection
+    | React StrictMode / Session Protection
     |--------------------------------------------------------------------------
     */
+
+    const emailSentKey =
+      STORAGE_KEYS.emailSent;
 
     if (
       sessionStorage.getItem(
         emailSentKey
       ) === "true"
     ) {
-      console.log(
-        "Portfolio visitor notification already sent for this session."
-      );
-
-      return;
+      return undefined;
     }
 
     /*
@@ -613,19 +638,8 @@ function ProfileViewTracker() {
     const trackingId =
       generateTrackingId();
 
-    /*
-    |--------------------------------------------------------------------------
-    | Capture application parameters FIRST
-    |--------------------------------------------------------------------------
-    */
-
     const applicationData =
       getApplicationData();
-
-    console.log(
-      "Final application context:",
-      applicationData
-    );
 
     const visitorInformation =
       getVisitorInformation();
@@ -641,7 +655,7 @@ function ProfileViewTracker() {
 
     const originalTrackingUrl =
       sessionStorage.getItem(
-        "portfolio_original_tracking_url"
+        STORAGE_KEYS.originalTrackingUrl
       ) ||
       window.location.href;
 
@@ -653,7 +667,7 @@ function ProfileViewTracker() {
 
     let landingPage =
       sessionStorage.getItem(
-        "portfolio_landing_page"
+        STORAGE_KEYS.landingPage
       );
 
     if (!landingPage) {
@@ -661,7 +675,7 @@ function ProfileViewTracker() {
         originalTrackingUrl;
 
       sessionStorage.setItem(
-        "portfolio_landing_page",
+        STORAGE_KEYS.landingPage,
         landingPage
       );
     }
@@ -673,18 +687,12 @@ function ProfileViewTracker() {
     */
 
     let resumeClicked = false;
+
     let linkedinClicked = false;
+
     let githubClicked = false;
+
     let contactFormUsed = false;
-
-    /*
-    |--------------------------------------------------------------------------
-    | Visit Start Time
-    |--------------------------------------------------------------------------
-    */
-
-    const visitStartTime =
-      Date.now();
 
     /*
     |--------------------------------------------------------------------------
@@ -699,10 +707,9 @@ function ProfileViewTracker() {
       existingSections
     );
 
-    let sectionObserver = null;
-
     if (
-      "IntersectionObserver" in window
+      "IntersectionObserver" in
+      window
     ) {
       sectionObserver =
         new IntersectionObserver(
@@ -763,11 +770,20 @@ function ProfileViewTracker() {
     |--------------------------------------------------------------------------
     */
 
-    const handleClick = (
-      event
-    ) => {
+    const handleClick = (event) => {
+      const target =
+        event.target;
+
+      if (
+        !target ||
+        typeof target.closest !==
+          "function"
+      ) {
+        return;
+      }
+
       const element =
-        event.target.closest(
+        target.closest(
           "a, button"
         );
 
@@ -808,12 +824,8 @@ function ProfileViewTracker() {
         resumeClicked = true;
 
         sessionStorage.setItem(
-          "portfolio_resume_clicked",
+          STORAGE_KEYS.resumeClicked,
           "true"
-        );
-
-        console.log(
-          "Resume click detected."
         );
       }
 
@@ -834,12 +846,8 @@ function ProfileViewTracker() {
         linkedinClicked = true;
 
         sessionStorage.setItem(
-          "portfolio_linkedin_clicked",
+          STORAGE_KEYS.linkedinClicked,
           "true"
-        );
-
-        console.log(
-          "LinkedIn click detected."
         );
       }
 
@@ -860,12 +868,8 @@ function ProfileViewTracker() {
         githubClicked = true;
 
         sessionStorage.setItem(
-          "portfolio_github_clicked",
+          STORAGE_KEYS.githubClicked,
           "true"
-        );
-
-        console.log(
-          "GitHub click detected."
         );
       }
 
@@ -889,12 +893,8 @@ function ProfileViewTracker() {
         contactFormUsed = true;
 
         sessionStorage.setItem(
-          "portfolio_contact_form_used",
+          STORAGE_KEYS.contactFormUsed,
           "true"
-        );
-
-        console.log(
-          "Contact interaction detected."
         );
       }
     };
@@ -912,19 +912,54 @@ function ProfileViewTracker() {
 
     const collectAndSend =
       async () => {
+        if (!isMounted) {
+          return;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Prevent Duplicate Send
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+          sessionStorage.getItem(
+            emailSentKey
+          ) === "true"
+        ) {
+          return;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | EmailJS Configuration Check
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+          !EMAILJS_SERVICE_ID ||
+          !EMAILJS_TEMPLATE_ID ||
+          !EMAILJS_PUBLIC_KEY
+        ) {
+          return;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Mark As Pending
+        |--------------------------------------------------------------------------
+        |
+        | This prevents another StrictMode/component execution from starting
+        | another notification while the asynchronous request is running.
+        |--------------------------------------------------------------------------
+        */
+
+        sessionStorage.setItem(
+          emailSentKey,
+          "pending"
+        );
+
         try {
-          if (
-            !EMAILJS_SERVICE_ID ||
-            !EMAILJS_TEMPLATE_ID ||
-            !EMAILJS_PUBLIC_KEY
-          ) {
-            console.error(
-              "EmailJS configuration is incomplete."
-            );
-
-            return;
-          }
-
           /*
           |--------------------------------------------------------------------------
           | Location
@@ -933,6 +968,14 @@ function ProfileViewTracker() {
 
           const locationData =
             await getLocationData();
+
+          if (!isMounted) {
+            sessionStorage.removeItem(
+              emailSentKey
+            );
+
+            return;
+          }
 
           /*
           |--------------------------------------------------------------------------
@@ -943,25 +986,25 @@ function ProfileViewTracker() {
           resumeClicked =
             resumeClicked ||
             sessionStorage.getItem(
-              "portfolio_resume_clicked"
+              STORAGE_KEYS.resumeClicked
             ) === "true";
 
           linkedinClicked =
             linkedinClicked ||
             sessionStorage.getItem(
-              "portfolio_linkedin_clicked"
+              STORAGE_KEYS.linkedinClicked
             ) === "true";
 
           githubClicked =
             githubClicked ||
             sessionStorage.getItem(
-              "portfolio_github_clicked"
+              STORAGE_KEYS.githubClicked
             ) === "true";
 
           contactFormUsed =
             contactFormUsed ||
             sessionStorage.getItem(
-              "portfolio_contact_form_used"
+              STORAGE_KEYS.contactFormUsed
             ) === "true";
 
           /*
@@ -988,29 +1031,7 @@ function ProfileViewTracker() {
 
           /*
           |--------------------------------------------------------------------------
-          | Visit Duration
-          |--------------------------------------------------------------------------
-          */
-
-          const visitDurationSeconds =
-            Math.round(
-              (Date.now() -
-                visitStartTime) /
-                1000
-            );
-
-          const formattedVisitDuration =
-            visitDurationSeconds < 60
-              ? `${visitDurationSeconds} seconds`
-              : `${Math.floor(
-                  visitDurationSeconds / 60
-                )}m ${
-                  visitDurationSeconds % 60
-                }s`;
-
-          /*
-          |--------------------------------------------------------------------------
-          | EmailJS Parameters
+          | EmailJS Template Parameters
           |--------------------------------------------------------------------------
           */
 
@@ -1196,7 +1217,7 @@ function ProfileViewTracker() {
                 : "None detected",
 
             visitDuration:
-              formattedVisitDuration,
+              "Active at time of notification",
 
             resumeClicked:
               resumeClicked
@@ -1245,82 +1266,54 @@ function ProfileViewTracker() {
 
           /*
           |--------------------------------------------------------------------------
-          | Debug
+          | Send EmailJS Notification
           |--------------------------------------------------------------------------
           */
 
-          console.log(
-            "Portfolio profile view:",
-            templateParams
+          await emailjs.send(
+            EMAILJS_SERVICE_ID,
+            EMAILJS_TEMPLATE_ID,
+            templateParams,
+            {
+              publicKey:
+                EMAILJS_PUBLIC_KEY,
+            }
           );
 
           /*
           |--------------------------------------------------------------------------
-          | Send Email
+          | Mark Successfully Sent
           |--------------------------------------------------------------------------
           */
-
-          const result =
-            await emailjs.send(
-              EMAILJS_SERVICE_ID,
-              EMAILJS_TEMPLATE_ID,
-              templateParams,
-              {
-                publicKey:
-                  EMAILJS_PUBLIC_KEY,
-              }
-            );
-
-          console.log(
-            "Portfolio visitor notification sent successfully:",
-            result.status,
-            result.text
-          );
 
           sessionStorage.setItem(
             emailSentKey,
             "true"
           );
-        } catch (error) {
-          console.error(
-            "Portfolio profile tracking failed:",
-            error
+        } catch {
+          /*
+          |--------------------------------------------------------------------------
+          | Allow Retry If Sending Failed
+          |--------------------------------------------------------------------------
+          */
+
+          sessionStorage.removeItem(
+            emailSentKey
           );
         }
       };
 
     /*
     |--------------------------------------------------------------------------
-    | Start Tracking
+    | Delayed Notification
+    |--------------------------------------------------------------------------
+    |
+    | Wait 15 seconds so the visitor has time to interact with the portfolio.
     |--------------------------------------------------------------------------
     */
 
-    console.log(
-      "Portfolio visitor tracking started:",
-      {
-        trackingId,
-
-        visitorType:
-          visitorInformation.visitorType,
-
-        visitNumber:
-          visitorInformation.visitNumber,
-
-        originalTrackingUrl,
-
-        applicationData,
-      }
-    );
-
-    /*
-    |--------------------------------------------------------------------------
-    | IMPORTANT:
-    | Wait before sending so visitor interactions can be captured.
-    |--------------------------------------------------------------------------
-    */
-
-    const sendTimer =
-      setTimeout(() => {
+    sendTimer =
+      window.setTimeout(() => {
         collectAndSend();
       }, 15000);
 
@@ -1331,7 +1324,13 @@ function ProfileViewTracker() {
     */
 
     return () => {
-      clearTimeout(sendTimer);
+      isMounted = false;
+
+      if (sendTimer) {
+        window.clearTimeout(
+          sendTimer
+        );
+      }
 
       if (sectionObserver) {
         sectionObserver.disconnect();

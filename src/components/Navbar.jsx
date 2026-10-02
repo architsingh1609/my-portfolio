@@ -1,19 +1,52 @@
 import { useEffect, useState } from "react";
 
-import { AnimatePresence, motion } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+} from "framer-motion";
+
+import {
+  ArrowUp,
+  BriefcaseBusiness,
+  Check,
+  FileText,
+  Moon,
+  Search,
+  Sun,
+  Menu,
+  X,
+} from "lucide-react";
 
 import PortfolioSearch from "./PortfolioSearch";
-
 import portfolioData from "../data/portfolioData";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
-
   const [searchOpen, setSearchOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
+  const [isHome, setIsHome] = useState(true);
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
 
-  const [activeSection, setActiveSection] = useState("about");
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
 
-  const [scrolled, setScrolled] = useState(false);
+    const savedTheme =
+      window.localStorage.getItem("portfolio-theme");
+
+    if (savedTheme === "dark") {
+      return true;
+    }
+
+    if (savedTheme === "light") {
+      return false;
+    }
+
+    return window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+  });
 
   const navItems = [
     {
@@ -25,12 +58,16 @@ function Navbar() {
       id: "experience",
     },
     {
+      label: "Projects",
+      id: "projects",
+    },
+    {
       label: "Skills",
       id: "skills",
     },
     {
-      label: "Projects",
-      id: "projects",
+      label: "Certifications",
+      id: "certifications",
     },
     {
       label: "Contact",
@@ -39,26 +76,7 @@ function Navbar() {
   ];
 
   const mobileNavItems = [
-    {
-      label: "About",
-      id: "about",
-    },
-    {
-      label: "Experience",
-      id: "experience",
-    },
-    {
-      label: "Skills",
-      id: "skills",
-    },
-    {
-      label: "Projects",
-      id: "projects",
-    },
-    {
-      label: "Certifications",
-      id: "certifications",
-    },
+    ...navItems,
     {
       label: "Systems",
       id: "systems",
@@ -71,59 +89,177 @@ function Navbar() {
       label: "Goals",
       id: "goals",
     },
+  ];
+
+  const bottomNavItems = [
+    {
+      label: "About",
+      id: "about",
+      icon: BriefcaseBusiness,
+    },
+    {
+      label: "Experience",
+      id: "experience",
+      icon: FileText,
+    },
+    {
+      label: "Projects",
+      id: "projects",
+      icon: BriefcaseBusiness,
+    },
+    {
+      label: "Skills",
+      id: "skills",
+      icon: Check,
+    },
+    {
+      label: "Certifications",
+      id: "certifications",
+      icon: FileText,
+    },
     {
       label: "Contact",
       id: "contact",
+      icon: FileText,
     },
   ];
 
   // =========================================
-  // SCROLL EFFECT
+  // THEME
   // =========================================
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+    const root = document.documentElement;
 
-      const sections = [
-        "about",
-        "experience",
-        "skills",
-        "projects",
-        "certifications",
-        "systems",
-        "workflow",
-        "goals",
-        "contact",
-      ];
+    root.classList.toggle("dark", darkMode);
+
+    window.localStorage.setItem(
+      "portfolio-theme",
+      darkMode ? "dark" : "light"
+    );
+  }, [darkMode]);
+
+  const toggleTheme = () => {
+    setDarkMode((current) => !current);
+  };
+
+  // =========================================
+  // SCROLL + ACTIVE SECTION
+  // =========================================
+
+  useEffect(() => {
+    let frameId = null;
+
+    const sections = [
+      "about",
+      "experience",
+      "projects",
+      "skills",
+      "certifications",
+      "systems",
+      "workflow",
+      "goals",
+      "contact",
+    ];
+
+    const updateScrollState = () => {
+      frameId = null;
+
+      const homePosition = window.scrollY <= 80;
+
+      setIsHome(homePosition);
+
+      if (homePosition) {
+        setActiveSection("home");
+        return;
+      }
 
       let currentSection = "about";
 
       sections.forEach((sectionId) => {
-        const section = document.getElementById(sectionId);
+        const section =
+          document.getElementById(sectionId);
 
         if (!section) {
           return;
         }
 
-        const rect = section.getBoundingClientRect();
+        const rect =
+          section.getBoundingClientRect();
 
-        if (rect.top <= 160) {
+        if (rect.top <= 180) {
           currentSection = sectionId;
         }
       });
 
-      setActiveSection(currentSection);
+      setActiveSection((current) =>
+        current === currentSection
+          ? current
+          : currentSection
+      );
     };
 
-    window.addEventListener("scroll", handleScroll, {
-      passive: true,
-    });
+    const handleScroll = () => {
+      if (frameId !== null) {
+        return;
+      }
 
-    handleScroll();
+      frameId =
+        window.requestAnimationFrame(
+          updateScrollState
+        );
+    };
+
+    window.addEventListener(
+      "scroll",
+      handleScroll,
+      {
+        passive: true,
+      }
+    );
+
+    updateScrollState();
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener(
+        "scroll",
+        handleScroll
+      );
+
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+      }
+    };
+  }, []);
+
+  // =========================================
+  // FOOTER VISIBILITY
+  // =========================================
+
+  useEffect(() => {
+    const footer =
+      document.querySelector("footer");
+
+    if (!footer) {
+      return undefined;
+    }
+
+    const observer =
+      new IntersectionObserver(
+        ([entry]) => {
+          setIsFooterVisible(
+            entry.isIntersecting
+          );
+        },
+        {
+          threshold: 0.05,
+        }
+      );
+
+    observer.observe(footer);
+
+    return () => {
+      observer.disconnect();
     };
   }, []);
 
@@ -143,15 +279,24 @@ function Navbar() {
         setOpen(false);
       }
 
-      if (event.key === "Escape" && !searchOpen) {
+      if (
+        event.key === "Escape" &&
+        !searchOpen
+      ) {
         setOpen(false);
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener(
+      "keydown",
+      handleKeyDown
+    );
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
     };
   }, [searchOpen]);
 
@@ -162,37 +307,54 @@ function Navbar() {
   const scrollToSection = (id) => {
     setOpen(false);
 
-    const section = document.getElementById(id);
+    if (id === "home") {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+
+      return;
+    }
+
+    const section =
+      document.getElementById(id);
 
     if (!section) {
       return;
     }
 
-    const navbarOffset = 90;
-
     const targetPosition =
       section.getBoundingClientRect().top +
       window.scrollY -
-      navbarOffset;
+      24;
 
     window.scrollTo({
-      top: targetPosition,
+      top: Math.max(targetPosition, 0),
       behavior: "smooth",
     });
   };
 
   // =========================================
-  // SEARCH OPEN
+  // BACK TO TOP
+  // =========================================
+
+  const handleBackToTop = () => {
+    setOpen(false);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  // =========================================
+  // SEARCH
   // =========================================
 
   const handleSearchOpen = () => {
     setSearchOpen(true);
     setOpen(false);
   };
-
-  // =========================================
-  // SEARCH CLOSE
-  // =========================================
 
   const handleSearchClose = () => {
     setSearchOpen(false);
@@ -201,390 +363,878 @@ function Navbar() {
   return (
     <>
       {/* =========================================
-          NAVBAR
+          TOP NAVBAR
       ========================================= */}
 
-      <nav
-        className={`
-          fixed
-          top-0
-          left-0
-          right-0
-          z-[80]
-          transition-all
-          duration-300
-          ${
-            scrolled
-              ? "bg-slate-950/90 backdrop-blur-xl border-b border-cyan-400/10 shadow-lg"
-              : "bg-transparent"
-          }
-        `}
-      >
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="h-20 flex items-center justify-between">
-            {/* =====================================
-                LOGO
-            ===================================== */}
+      <AnimatePresence>
+        {isHome && (
+          <motion.nav
+            initial={{
+              opacity: 0,
+              y: -20,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            exit={{
+              opacity: 0,
+              y: -20,
+            }}
+            transition={{
+              duration: 0.35,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="
+              navbar-enter
+              fixed
+              left-0
+              right-0
+              top-0
+              z-[80]
+              border-b
+              border-transparent
+              bg-transparent
+              text-[var(--text-primary)]
+              transition-colors
+              duration-300
+            "
+            aria-label="Primary navigation"
+          >
+            <div className="mx-auto max-w-7xl px-6">
+              <div className="flex h-20 items-center justify-between">
 
-            <button
-              type="button"
-              onClick={() =>
-                window.scrollTo({
-                  top: 0,
-                  behavior: "smooth",
-                })
-              }
-              className="
-                text-xl
-                md:text-2xl
-                font-bold
-                text-white
-                hover:text-cyan-400
-                transition
-              "
-              aria-label="Go to top"
-            >
-              Archit<span className="text-cyan-400">.</span>
-            </button>
+                {/* LOGO */}
 
-            {/* =====================================
-                DESKTOP NAVIGATION
-            ===================================== */}
-
-            <div className="hidden lg:flex items-center gap-7">
-              {navItems.map((item) => (
                 <button
-                  key={item.id}
                   type="button"
-                  onClick={() => scrollToSection(item.id)}
-                  className={`
-                    relative
-                    text-sm
-                    font-medium
-                    transition
-                    ${
-                      activeSection === item.id
-                        ? "text-cyan-400"
-                        : "text-gray-300 hover:text-cyan-400"
-                    }
-                  `}
+                  onClick={handleBackToTop}
+                  className="
+                    animate-button
+                    text-xl
+                    font-bold
+                    text-[var(--text-primary)]
+                    md:text-2xl
+                  "
+                  aria-label="Go to top"
                 >
-                  {item.label}
-
-                  {activeSection === item.id && (
-                    <motion.span
-                      layoutId="activeNav"
-                      className="
-                        absolute
-                        -bottom-2
-                        left-0
-                        right-0
-                        h-0.5
-                        bg-cyan-400
-                        rounded-full
-                      "
-                    />
-                  )}
+                  Archit
+                  <span className="text-[var(--accent)]">
+                    .
+                  </span>
                 </button>
-              ))}
 
-              {/* ===================================
-                  DESKTOP SEARCH
-              =================================== */}
+                {/* DESKTOP NAVIGATION */}
 
-              <button
-                type="button"
-                onClick={handleSearchOpen}
-                className="
-                  flex
-                  items-center
-                  gap-2
-                  text-gray-300
-                  hover:text-cyan-400
-                  transition
-                  text-sm
-                  font-medium
-                "
-                aria-label="Open portfolio search"
-              >
-                <span
-                  className="
-                    text-3xl
-                    font-bold
-                    leading-none
-                  "
-                  aria-hidden="true"
-                >
-                  ⌕
-                </span>
+                <div className="hidden items-center gap-5 lg:flex">
 
-                <span>Search</span>
+                  {navItems.map((item) => {
+                    const isActive =
+                      activeSection === item.id;
 
-                <span
-                  className="
-                    hidden
-                    xl:inline-flex
-                    items-center
-                    rounded-md
-                    border
-                    border-slate-700
-                    bg-slate-900/70
-                    px-2
-                    py-1
-                    text-[10px]
-                    text-gray-500
-                  "
-                >
-                  Ctrl K
-                </span>
-              </button>
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() =>
+                          scrollToSection(item.id)
+                        }
+                        className={`
+                          animated-link
+                          py-2
+                          text-sm
+                          font-medium
+                          transition-colors
+                          duration-200
+                          ${
+                            isActive
+                              ? "text-[var(--accent)]"
+                              : "text-[var(--text-primary)]"
+                          }
+                        `}
+                        aria-current={
+                          isActive
+                            ? "page"
+                            : undefined
+                        }
+                      >
+                        {item.label}
+                      </button>
+                    );
+                  })}
 
-              {/* ===================================
-                  RESUME
-              =================================== */}
+                  {/* SEARCH */}
 
-              <a
-                href={portfolioData.resume}
-                target="_blank"
-                rel="noreferrer"
-                className="
-                  rounded-full
-                  border
-                  border-cyan-400/40
-                  px-5
-                  py-2
-                  text-sm
-                  font-semibold
-                  text-cyan-400
-                  hover:bg-cyan-400
-                  hover:text-slate-950
-                  transition
-                "
-              >
-                Resume
-              </a>
-            </div>
-
-            {/* =====================================
-                MOBILE ACTIONS
-            ===================================== */}
-
-            <div className="lg:hidden flex items-center gap-2">
-              {/* Mobile Search */}
-
-              <button
-                type="button"
-                onClick={handleSearchOpen}
-                className="
-                  flex
-                  items-center
-                  justify-center
-                  w-11
-                  h-11
-                  rounded-xl
-                  text-cyan-400
-                  hover:bg-slate-800
-                  transition
-                "
-                aria-label="Open portfolio search"
-              >
-                <span
-                  className="
-                    text-3xl
-                    font-bold
-                    leading-none
-                  "
-                  aria-hidden="true"
-                >
-                  ⌕
-                </span>
-              </button>
-
-              {/* Mobile Menu */}
-
-              <button
-                type="button"
-                onClick={() => setOpen((value) => !value)}
-                className="
-                  flex
-                  flex-col
-                  items-center
-                  justify-center
-                  gap-1.5
-                  w-11
-                  h-11
-                  rounded-xl
-                  hover:bg-slate-800
-                  transition
-                "
-                aria-label={
-                  open
-                    ? "Close navigation menu"
-                    : "Open navigation menu"
-                }
-                aria-expanded={open}
-              >
-                <span
-                  className={`
-                    block
-                    w-6
-                    h-0.5
-                    bg-gray-300
-                    transition
-                    ${
-                      open
-                        ? "rotate-45 translate-y-2"
-                        : ""
-                    }
-                  `}
-                />
-
-                <span
-                  className={`
-                    block
-                    w-6
-                    h-0.5
-                    bg-gray-300
-                    transition
-                    ${
-                      open
-                        ? "opacity-0"
-                        : "opacity-100"
-                    }
-                  `}
-                />
-
-                <span
-                  className={`
-                    block
-                    w-6
-                    h-0.5
-                    bg-gray-300
-                    transition
-                    ${
-                      open
-                        ? "-rotate-45 -translate-y-2"
-                        : ""
-                    }
-                  `}
-                />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* =========================================
-            MOBILE MENU
-        ========================================= */}
-
-        <AnimatePresence>
-          {open && (
-            <motion.div
-              initial={{
-                opacity: 0,
-                height: 0,
-              }}
-              animate={{
-                opacity: 1,
-                height: "auto",
-              }}
-              exit={{
-                opacity: 0,
-                height: 0,
-              }}
-              className="
-                lg:hidden
-                overflow-hidden
-                border-t
-                border-slate-800
-                bg-slate-950/95
-                backdrop-blur-xl
-              "
-            >
-              <div className="px-6 py-5 space-y-1">
-                {mobileNavItems.map((item) => (
                   <button
-                    key={item.id}
                     type="button"
-                    onClick={() => scrollToSection(item.id)}
-                    className={`
-                      w-full
-                      text-left
-                      px-4
-                      py-3
-                      rounded-xl
+                    onClick={handleSearchOpen}
+                    className="
+                      animate-button
+                      flex
+                      items-center
+                      gap-2
                       text-sm
                       font-medium
-                      transition
-                      ${
-                        activeSection === item.id
-                          ? "bg-cyan-400/10 text-cyan-400"
-                          : "text-gray-300 hover:bg-slate-800 hover:text-cyan-400"
-                      }
-                    `}
+                      text-[var(--text-primary)]
+                    "
+                    aria-label="Open portfolio search"
                   >
-                    {item.label}
-                  </button>
-                ))}
+                    <Search
+                      className="icon-hover"
+                      size={17}
+                      aria-hidden="true"
+                    />
 
-                {/* Mobile Search */}
+                    <span>Search</span>
+
+                    <span
+                      className="
+                        hidden
+                        rounded-md
+                        border
+                        border-[var(--border-light)]
+                        bg-[var(--bg-card-soft)]
+                        px-2
+                        py-1
+                        text-[10px]
+                        text-[var(--text-muted)]
+                        xl:inline-flex
+                      "
+                    >
+                      Ctrl K
+                    </span>
+                  </button>
+
+                  {/* DARK MODE */}
+
+                  <button
+                    type="button"
+                    onClick={toggleTheme}
+                    className="
+                      animate-button
+                      flex
+                      h-10
+                      w-10
+                      items-center
+                      justify-center
+                      rounded-xl
+                      border
+                      border-[var(--border-medium)]
+                      bg-[var(--bg-card)]
+                      text-[var(--text-primary)]
+                      shadow-sm
+                    "
+                    aria-label={
+                      darkMode
+                        ? "Switch to light mode"
+                        : "Switch to dark mode"
+                    }
+                    title={
+                      darkMode
+                        ? "Switch to light mode"
+                        : "Switch to dark mode"
+                    }
+                  >
+                    <AnimatePresence
+                      mode="wait"
+                      initial={false}
+                    >
+                      {darkMode ? (
+                        <motion.span
+                          key="sun"
+                          initial={{
+                            opacity: 0,
+                            rotate: -90,
+                            scale: 0.7,
+                          }}
+                          animate={{
+                            opacity: 1,
+                            rotate: 0,
+                            scale: 1,
+                          }}
+                          exit={{
+                            opacity: 0,
+                            rotate: 90,
+                            scale: 0.7,
+                          }}
+                          transition={{
+                            duration: 0.22,
+                          }}
+                        >
+                          <Sun
+                            className="icon-hover"
+                            size={18}
+                            aria-hidden="true"
+                          />
+                        </motion.span>
+                      ) : (
+                        <motion.span
+                          key="moon"
+                          initial={{
+                            opacity: 0,
+                            rotate: 90,
+                            scale: 0.7,
+                          }}
+                          animate={{
+                            opacity: 1,
+                            rotate: 0,
+                            scale: 1,
+                          }}
+                          exit={{
+                            opacity: 0,
+                            rotate: -90,
+                            scale: 0.7,
+                          }}
+                          transition={{
+                            duration: 0.22,
+                          }}
+                        >
+                          <Moon
+                            className="icon-hover"
+                            size={18}
+                            aria-hidden="true"
+                          />
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </button>
+
+                  {/* RESUME */}
+
+                  <a
+                    href={portfolioData.resume}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="
+                      animate-button
+                      glass-highlight
+                      rounded-full
+                      border
+                      border-[var(--border-accent)]
+                      bg-[var(--bg-card)]
+                      px-5
+                      py-2
+                      text-sm
+                      font-semibold
+                      text-[var(--accent)]
+                      shadow-sm
+                    "
+                  >
+                    Resume
+                  </a>
+                </div>
+
+                {/* MOBILE ACTIONS */}
+
+                <div className="flex items-center gap-2 lg:hidden">
+
+                  {/* THEME */}
+
+                  <button
+                    type="button"
+                    onClick={toggleTheme}
+                    className="
+                      animate-button
+                      flex
+                      h-11
+                      w-11
+                      items-center
+                      justify-center
+                      rounded-xl
+                      border
+                      border-[var(--border-medium)]
+                      bg-[var(--bg-card)]
+                      text-[var(--text-primary)]
+                    "
+                    aria-label={
+                      darkMode
+                        ? "Switch to light mode"
+                        : "Switch to dark mode"
+                    }
+                  >
+                    <AnimatePresence
+                      mode="wait"
+                      initial={false}
+                    >
+                      <motion.span
+                        key={
+                          darkMode
+                            ? "mobile-sun"
+                            : "mobile-moon"
+                        }
+                        initial={{
+                          opacity: 0,
+                          rotate: -90,
+                          scale: 0.7,
+                        }}
+                        animate={{
+                          opacity: 1,
+                          rotate: 0,
+                          scale: 1,
+                        }}
+                        exit={{
+                          opacity: 0,
+                          rotate: 90,
+                          scale: 0.7,
+                        }}
+                        transition={{
+                          duration: 0.2,
+                        }}
+                      >
+                        {darkMode ? (
+                          <Sun
+                            className="icon-hover"
+                            size={19}
+                          />
+                        ) : (
+                          <Moon
+                            className="icon-hover"
+                            size={19}
+                          />
+                        )}
+                      </motion.span>
+                    </AnimatePresence>
+                  </button>
+
+                  {/* SEARCH */}
+
+                  <button
+                    type="button"
+                    onClick={handleSearchOpen}
+                    className="
+                      animate-button
+                      flex
+                      h-11
+                      w-11
+                      items-center
+                      justify-center
+                      rounded-xl
+                      text-[var(--accent)]
+                    "
+                    aria-label="Open portfolio search"
+                  >
+                    <Search
+                      className="icon-hover"
+                      size={20}
+                    />
+                  </button>
+
+                  {/* MENU */}
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setOpen((value) => !value)
+                    }
+                    className="
+                      animate-button
+                      flex
+                      h-11
+                      w-11
+                      items-center
+                      justify-center
+                      rounded-xl
+                      text-[var(--text-primary)]
+                    "
+                    aria-label={
+                      open
+                        ? "Close navigation menu"
+                        : "Open navigation menu"
+                    }
+                    aria-expanded={open}
+                    aria-controls="mobile-navigation"
+                  >
+                    <AnimatePresence
+                      mode="wait"
+                      initial={false}
+                    >
+                      {open ? (
+                        <motion.span
+                          key="close"
+                          initial={{
+                            opacity: 0,
+                            rotate: -90,
+                            scale: 0.7,
+                          }}
+                          animate={{
+                            opacity: 1,
+                            rotate: 0,
+                            scale: 1,
+                          }}
+                          exit={{
+                            opacity: 0,
+                            rotate: 90,
+                            scale: 0.7,
+                          }}
+                        >
+                          <X size={22} />
+                        </motion.span>
+                      ) : (
+                        <motion.span
+                          key="menu"
+                          initial={{
+                            opacity: 0,
+                            rotate: 90,
+                            scale: 0.7,
+                          }}
+                          animate={{
+                            opacity: 1,
+                            rotate: 0,
+                            scale: 1,
+                          }}
+                          exit={{
+                            opacity: 0,
+                            rotate: -90,
+                            scale: 0.7,
+                          }}
+                        >
+                          <Menu size={22} />
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* =========================================
+                MOBILE MENU
+            ========================================= */}
+
+            <AnimatePresence>
+              {open && (
+                <motion.div
+                  id="mobile-navigation"
+                  initial={{
+                    opacity: 0,
+                    height: 0,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    height: "auto",
+                  }}
+                  exit={{
+                    opacity: 0,
+                    height: 0,
+                  }}
+                  transition={{
+                    duration: 0.3,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  className="
+                    dropdown-enter
+                    overflow-hidden
+                    border-t
+                    border-[var(--border-light)]
+                    bg-[var(--glass-bg-strong)]
+                    text-[var(--text-primary)]
+                    backdrop-blur-xl
+                    lg:hidden
+                  "
+                >
+                  <div className="stagger-children space-y-1 px-6 py-5">
+
+                    {mobileNavItems.map((item) => {
+                      const isActive =
+                        activeSection === item.id;
+
+                      return (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() =>
+                            scrollToSection(item.id)
+                          }
+                          className={`
+                            animate-button
+                            w-full
+                            rounded-xl
+                            border
+                            px-4
+                            py-3
+                            text-left
+                            text-sm
+                            font-medium
+                            transition-colors
+                            duration-200
+                            ${
+                              isActive
+                                ? `
+                                  border-[var(--border-accent)]
+                                  bg-[var(--bg-card-soft)]
+                                  text-[var(--accent)]
+                                `
+                                : `
+                                  border-transparent
+                                  text-[var(--text-primary)]
+                                  hover:bg-[var(--bg-card-soft)]
+                                  hover:text-[var(--accent)]
+                                `
+                            }
+                          `}
+                        >
+                          {item.label}
+                        </button>
+                      );
+                    })}
+
+                    {/* SEARCH */}
+
+                    <button
+                      type="button"
+                      onClick={handleSearchOpen}
+                      className="
+                        animate-button
+                        flex
+                        w-full
+                        items-center
+                        gap-3
+                        rounded-xl
+                        px-4
+                        py-3
+                        text-left
+                        text-sm
+                        font-medium
+                        text-[var(--text-primary)]
+                      "
+                    >
+                      <Search
+                        className="icon-hover"
+                        size={18}
+                      />
+
+                      Search Portfolio
+                    </button>
+
+                    {/* RESUME */}
+
+                    <a
+                      href={portfolioData.resume}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => setOpen(false)}
+                      className="
+                        animate-button
+                        glass-highlight
+                        mt-2
+                        block
+                        rounded-xl
+                        border
+                        border-[var(--border-accent)]
+                        px-4
+                        py-3
+                        text-sm
+                        font-semibold
+                        text-[var(--accent)]
+                      "
+                    >
+                      Resume
+                    </a>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.nav>
+        )}
+      </AnimatePresence>
+
+      {/* =========================================
+          BOTTOM NAVIGATION
+      ========================================= */}
+
+      <AnimatePresence>
+        {!isHome && !isFooterVisible && (
+          <motion.nav
+            initial={{
+              opacity: 0,
+              y: 30,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            exit={{
+              opacity: 0,
+              y: 30,
+            }}
+            transition={{
+              duration: 0.35,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="
+              fixed
+              bottom-4
+              left-1/2
+              z-[70]
+              w-[calc(100%-1.5rem)]
+              max-w-6xl
+              -translate-x-1/2
+            "
+            aria-label="Section navigation"
+          >
+            <div
+              className="
+                glass-highlight
+                overflow-hidden
+                rounded-2xl
+                border
+                border-[var(--glass-border)]
+                bg-[var(--glass-bg-strong)]
+                p-1.5
+                shadow-[var(--shadow-medium)]
+                backdrop-blur-xl
+                transition-colors
+                duration-300
+              "
+            >
+              <div
+                className="
+                  flex
+                  items-center
+                  gap-1
+                  overflow-x-auto
+                  overscroll-x-contain
+                  scrollbar-none
+                "
+              >
+                {/* SECTION BUTTONS */}
+
+                {bottomNavItems.map((item) => {
+                  const Icon = item.icon;
+
+                  const isActive =
+                    activeSection === item.id;
+
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() =>
+                        scrollToSection(item.id)
+                      }
+                      aria-current={
+                        isActive
+                          ? "page"
+                          : undefined
+                      }
+                      className={`
+                        animate-button
+                        flex
+                        min-w-fit
+                        shrink-0
+                        items-center
+                        gap-2
+                        rounded-xl
+                        px-3
+                        py-2.5
+                        text-xs
+                        font-medium
+                        transition-all
+                        duration-200
+                        md:px-4
+                        ${
+                          isActive
+                            ? `
+                              bg-[var(--accent)]
+                              text-white
+                              shadow-sm
+                            `
+                            : `
+                              text-[var(--text-secondary)]
+                              hover:bg-[var(--bg-card-soft)]
+                              hover:text-[var(--text-primary)]
+                            `
+                        }
+                      `}
+                    >
+                      <Icon
+                        className="icon-hover"
+                        size={15}
+                        strokeWidth={2}
+                        aria-hidden="true"
+                      />
+
+                      <span>
+                        {item.label}
+                      </span>
+                    </button>
+                  );
+                })}
+
+                {/* DIVIDER */}
+
+                <span
+                  className="
+                    mx-1
+                    h-6
+                    w-px
+                    shrink-0
+                    bg-[var(--border-light)]
+                  "
+                  aria-hidden="true"
+                />
+
+                {/* SEARCH */}
 
                 <button
                   type="button"
                   onClick={handleSearchOpen}
                   className="
-                    w-full
+                    animate-button
                     flex
+                    h-9
+                    w-9
+                    shrink-0
                     items-center
-                    gap-3
-                    text-left
-                    px-4
-                    py-3
+                    justify-center
                     rounded-xl
-                    text-sm
-                    font-medium
-                    text-gray-300
-                    hover:bg-slate-800
-                    hover:text-cyan-400
-                    transition
+                    text-[var(--text-secondary)]
                   "
+                  aria-label="Open portfolio search"
+                  title="Search"
                 >
-                  <span className="text-2xl font-bold">
-                    ⌕
-                  </span>
-
-                  Search Portfolio
+                  <Search
+                    className="icon-hover"
+                    size={17}
+                  />
                 </button>
 
-                {/* Mobile Resume */}
+                {/* DARK MODE */}
+
+                <button
+                  type="button"
+                  onClick={toggleTheme}
+                  className="
+                    animate-button
+                    flex
+                    h-9
+                    w-9
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-xl
+                    text-[var(--text-secondary)]
+                  "
+                  aria-label={
+                    darkMode
+                      ? "Switch to light mode"
+                      : "Switch to dark mode"
+                  }
+                  title={
+                    darkMode
+                      ? "Switch to light mode"
+                      : "Switch to dark mode"
+                  }
+                >
+                  <AnimatePresence
+                    mode="wait"
+                    initial={false}
+                  >
+                    <motion.span
+                      key={
+                        darkMode
+                          ? "bottom-sun"
+                          : "bottom-moon"
+                      }
+                      initial={{
+                        opacity: 0,
+                        rotate: -90,
+                        scale: 0.7,
+                      }}
+                      animate={{
+                        opacity: 1,
+                        rotate: 0,
+                        scale: 1,
+                      }}
+                      exit={{
+                        opacity: 0,
+                        rotate: 90,
+                        scale: 0.7,
+                      }}
+                      transition={{
+                        duration: 0.2,
+                      }}
+                    >
+                      {darkMode ? (
+                        <Sun size={17} />
+                      ) : (
+                        <Moon size={17} />
+                      )}
+                    </motion.span>
+                  </AnimatePresence>
+                </button>
+
+                {/* RESUME */}
 
                 <a
                   href={portfolioData.resume}
                   target="_blank"
                   rel="noreferrer"
-                  onClick={() => setOpen(false)}
                   className="
-                    block
-                    mt-2
-                    px-4
-                    py-3
+                    animate-button
+                    glass-highlight
+                    flex
+                    min-w-fit
+                    shrink-0
+                    items-center
+                    gap-2
                     rounded-xl
-                    text-sm
-                    font-semibold
-                    text-cyan-400
                     border
-                    border-cyan-400/30
-                    hover:bg-cyan-400/10
-                    transition
+                    border-[var(--border-accent)]
+                    px-3
+                    py-2
+                    text-xs
+                    font-semibold
+                    text-[var(--accent)]
                   "
                 >
-                  Resume
+                  <FileText
+                    className="icon-hover"
+                    size={15}
+                  />
+
+                  <span>
+                    Resume
+                  </span>
                 </a>
+
+                {/* BACK TO TOP */}
+
+                <button
+                  type="button"
+                  onClick={handleBackToTop}
+                  className="
+                    animate-button
+                    flex
+                    min-w-fit
+                    shrink-0
+                    items-center
+                    gap-2
+                    rounded-xl
+                    bg-[var(--text-primary)]
+                    px-3
+                    py-2.5
+                    text-xs
+                    font-semibold
+                    text-[var(--bg-primary)]
+                  "
+                  aria-label="Back to top"
+                  title="Back to top"
+                >
+                  <ArrowUp
+                    className="icon-hover"
+                    size={15}
+                  />
+
+                  <span className="hidden sm:inline">
+                    Top
+                  </span>
+                </button>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </nav>
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
 
       {/* =========================================
           SEARCH MODAL
@@ -592,7 +1242,9 @@ function Navbar() {
 
       <AnimatePresence>
         {searchOpen && (
-          <PortfolioSearch onClose={handleSearchClose} />
+          <PortfolioSearch
+            onClose={handleSearchClose}
+          />
         )}
       </AnimatePresence>
     </>

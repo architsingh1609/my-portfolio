@@ -33,13 +33,77 @@ function FutureGoals() {
   ];
 
   return (
-    <section id="goals" className="py-24 px-6">
-      <div className="glass-card max-w-6xl mx-auto p-8 md:p-12">
-        <h2 className="text-4xl md:text-5xl font-bold text-cyan-400 mb-6">
-          Future SDET Goals
-        </h2>
+    <section
+      id="goals"
+      className="
+        bg-[var(--bg-primary)]
+        px-6
+        py-24
+        text-[var(--text-primary)]
+        transition-colors
+        duration-300
+      "
+    >
+      <div
+        className="
+          mx-auto
+          max-w-6xl
+          rounded-3xl
+          border
+          border-[var(--border-light)]
+          bg-[var(--bg-card)]
+          p-8
+          shadow-[var(--shadow-soft)]
+          transition-all
+          duration-300
+          md:p-12
+        "
+      >
+        <div className="mb-10">
+          <p
+            className="
+              mb-4
+              text-sm
+              font-semibold
+              uppercase
+              tracking-[0.25em]
+              text-[var(--accent)]
+            "
+          >
+            Career Direction
+          </p>
 
-        <p className="text-gray-300 text-lg leading-8 max-w-4xl mb-10">
+          <h2
+            className="
+              text-4xl
+              font-bold
+              text-[var(--text-primary)]
+              md:text-5xl
+            "
+          >
+            Future SDET Goals
+          </h2>
+
+          <div
+            className="
+              mt-4
+              h-1
+              w-32
+              rounded-full
+              bg-[var(--accent)]
+            "
+          />
+        </div>
+
+        <p
+          className="
+            mb-10
+            max-w-4xl
+            text-lg
+            leading-8
+            text-[var(--text-secondary)]
+          "
+        >
           My goal is to evolve from a QA Automation Engineer into a Software
           Development Engineer in Test (SDET) by strengthening expertise in
           automation framework architecture, API automation, cloud testing,
@@ -47,40 +111,87 @@ function FutureGoals() {
           practices.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          className="
+            grid
+            grid-cols-1
+            gap-6
+            md:grid-cols-2
+            lg:grid-cols-3
+          "
+        >
           {goals.map((goal, index) => (
             <div
               key={goal.title}
               className="
-                bg-slate-900
-                border border-slate-800
+                group
                 rounded-3xl
+                border
+                border-[var(--border-light)]
+                bg-[var(--bg-card-soft)]
                 p-7
-                hover:bg-slate-800
-                hover:border-cyan-400
-                hover:-translate-y-2
-                hover:shadow-[0_0_30px_rgba(34,211,238,0.15)]
                 transition-all
                 duration-300
+                hover:-translate-y-2
+                hover:border-[var(--border-accent)]
+                hover:bg-[var(--bg-card)]
+                hover:shadow-[var(--shadow-medium)]
               "
             >
-              <div className="text-cyan-400 text-sm font-semibold mb-4">
-                0{index + 1}
+              <div
+                className="
+                  mb-4
+                  text-sm
+                  font-semibold
+                  text-[var(--accent)]
+                  transition-colors
+                  duration-300
+                "
+              >
+                {String(index + 1).padStart(2, "0")}
               </div>
 
-              <h3 className="text-xl font-bold text-white mb-3">
+              <h3
+                className="
+                  mb-3
+                  text-xl
+                  font-bold
+                  text-[var(--text-primary)]
+                  transition-colors
+                  duration-300
+                  group-hover:text-[var(--accent)]
+                "
+              >
                 {goal.title}
               </h3>
 
-              <p className="text-gray-400 leading-7">
+              <p
+                className="
+                  leading-7
+                  text-[var(--text-secondary)]
+                "
+              >
                 {goal.description}
               </p>
             </div>
           ))}
         </div>
 
-        <div className="mt-10 pt-8 border-t border-slate-800">
-          <p className="text-gray-300 text-lg leading-8">
+        <div
+          className="
+            mt-10
+            border-t
+            border-[var(--border-light)]
+            pt-8
+          "
+        >
+          <p
+            className="
+              text-lg
+              leading-8
+              text-[var(--text-secondary)]
+            "
+          >
             I aim to design scalable quality engineering solutions that
             integrate seamlessly into modern development workflows and
             contribute to building highly reliable software systems.

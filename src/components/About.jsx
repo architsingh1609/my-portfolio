@@ -23,72 +23,165 @@ function About() {
     },
   ];
 
+  const aboutText =
+    typeof portfolioData.about === "string"
+      ? portfolioData.about
+      : "A quality-focused engineering approach built around automation, reliability, risk, and continuous improvement.";
+
+  const name =
+    typeof portfolioData.name === "string"
+      ? portfolioData.name
+      : "Archit Singh";
+
+  const title =
+    typeof portfolioData.title === "string"
+      ? portfolioData.title
+      : "QA Automation Engineer";
+
   return (
-    <section id="about" className="relative py-24 px-6 overflow-hidden">
-      {/* =========================================
+    <section
+      id="about"
+      className="
+        relative
+        overflow-hidden
+        bg-[var(--bg-primary)]
+        px-6
+        py-24
+        text-[var(--text-primary)]
+        transition-colors
+        duration-300
+      "
+    >
+      {/* =========================================================
           BACKGROUND DECORATION
-      ========================================= */}
+      ========================================================== */}
 
-      <div className="absolute top-20 left-0 w-72 h-72 bg-cyan-400/5 rounded-full blur-3xl pointer-events-none" />
+      <div
+        className="
+          pointer-events-none
+          absolute
+          left-0
+          top-20
+          h-72
+          w-72
+          rounded-full
+          bg-blue-100/30
+          blur-3xl
+          dark:bg-blue-500/[0.035]
+        "
+        aria-hidden="true"
+      />
 
-      <div className="absolute bottom-10 right-0 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+      <div
+        className="
+          pointer-events-none
+          absolute
+          bottom-10
+          right-0
+          h-80
+          w-80
+          rounded-full
+          bg-slate-100/70
+          blur-3xl
+          dark:bg-blue-950/20
+        "
+        aria-hidden="true"
+      />
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        {/* =========================================
+      <div className="relative z-10 mx-auto max-w-7xl">
+        {/* =======================================================
             SECTION LABEL
-        ========================================= */}
+        ======================================================== */}
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.6 }}
           className="mb-12"
         >
-          <div className="flex items-center gap-4 mb-4">
-            <span className="w-10 h-[2px] bg-cyan-400" />
+          <div className="mb-4 flex items-center gap-4">
+            <span
+              className="h-[2px] w-10 bg-[var(--accent)]"
+              aria-hidden="true"
+            />
 
-            <p className="text-cyan-400 uppercase tracking-[0.3em] text-xs md:text-sm font-semibold">
+            <p
+              className="
+                text-xs
+                font-semibold
+                uppercase
+                tracking-[0.3em]
+                text-[var(--accent)]
+                md:text-sm
+              "
+            >
               Engineering Profile
             </p>
           </div>
 
-          <h2 className="text-4xl md:text-6xl font-bold text-white leading-tight">
-            How I Think About
-            <span className="text-cyan-400"> Quality</span>
+          <h2
+            className="
+              text-4xl
+              font-bold
+              leading-tight
+              text-[var(--text-primary)]
+              transition-colors
+              duration-300
+              md:text-6xl
+            "
+          >
+            How I Think About{" "}
+            <span className="text-[var(--accent)]">Quality</span>
           </h2>
 
-          <p className="mt-5 text-gray-500 max-w-2xl text-base md:text-lg">
+          <p
+            className="
+              mt-5
+              max-w-2xl
+              text-base
+              text-[var(--text-secondary)]
+              transition-colors
+              duration-300
+              md:text-lg
+            "
+          >
             A quality-focused engineering approach built around automation,
             reliability, risk, and continuous improvement.
           </p>
         </motion.div>
 
-        {/* =========================================
+        {/* =======================================================
             MAIN PROFILE
-        ========================================= */}
+        ======================================================== */}
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_0.8fr] gap-8">
-          {/* =========================================
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.4fr_0.8fr]">
+          {/* =====================================================
               LEFT — ABOUT
-          ========================================= */}
+          ====================================================== */}
 
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.7 }}
             className="
+              group
               relative
+              overflow-hidden
               rounded-3xl
               border
-              border-slate-800
-              bg-slate-900/70
-              backdrop-blur-xl
+              border-[var(--border-light)]
+              bg-[var(--bg-card)]
               p-8
+              shadow-sm
+              backdrop-blur-xl
+              transition-all
+              duration-300
+              hover:border-[var(--border-accent)]
+              hover:bg-[var(--bg-card-soft)]
+              hover:shadow-md
               md:p-12
-              overflow-hidden
-              group
             "
           >
             {/* Top Accent */}
@@ -96,14 +189,15 @@ function About() {
             <div
               className="
                 absolute
-                top-0
                 left-0
-                w-32
+                top-0
                 h-[2px]
+                w-32
                 bg-gradient-to-r
-                from-cyan-400
+                from-[var(--accent)]
                 to-transparent
               "
+              aria-hidden="true"
             />
 
             {/* Corner Accent */}
@@ -111,100 +205,209 @@ function About() {
             <div
               className="
                 absolute
-                top-0
                 right-0
-                w-32
+                top-0
                 h-32
-                bg-cyan-400/5
+                w-32
+                bg-blue-100/40
                 blur-3xl
-                group-hover:bg-cyan-400/10
                 transition-all
                 duration-500
+                group-hover:bg-blue-100/60
+                dark:bg-blue-500/[0.035]
+                dark:group-hover:bg-blue-500/[0.07]
               "
+              aria-hidden="true"
             />
 
             <div className="relative z-10">
-              <p className="text-cyan-400 text-xs uppercase tracking-[0.25em] font-semibold mb-5">
+              <p
+                className="
+                  mb-5
+                  text-xs
+                  font-semibold
+                  uppercase
+                  tracking-[0.25em]
+                  text-[var(--accent)]
+                "
+              >
                 About Me
               </p>
 
-              <h3 className="text-2xl md:text-4xl font-bold text-white leading-tight mb-7">
-                Building confidence through
-                <span className="text-cyan-400"> better testing.</span>
+              <h3
+                className="
+                  mb-7
+                  text-2xl
+                  font-bold
+                  leading-tight
+                  text-[var(--text-primary)]
+                  transition-colors
+                  duration-300
+                  md:text-4xl
+                "
+              >
+                Building confidence through{" "}
+                <span className="text-[var(--accent)]">
+                  better testing.
+                </span>
               </h3>
 
-              <p className="text-gray-300 text-base md:text-lg leading-8 max-w-3xl">
-                {portfolioData.about}
+              <p
+                className="
+                  max-w-3xl
+                  text-base
+                  leading-8
+                  text-[var(--text-secondary)]
+                  transition-colors
+                  duration-300
+                  md:text-lg
+                "
+              >
+                {aboutText}
               </p>
             </div>
 
             {/* Bottom Identity */}
 
-            <div className="relative z-10 mt-10 pt-7 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div
+              className="
+                relative
+                z-10
+                mt-10
+                flex
+                flex-col
+                gap-4
+                border-t
+                border-[var(--border-light)]
+                pt-7
+                transition-colors
+                duration-300
+                sm:flex-row
+                sm:items-center
+                sm:justify-between
+              "
+            >
               <div>
-                <p className="text-white font-semibold">
-                  {portfolioData.name}
+                <p className="font-semibold text-[var(--text-primary)]">
+                  {name}
                 </p>
 
-                <p className="text-gray-500 text-sm mt-1">
-                  {portfolioData.title}
+                <p className="mt-1 text-sm text-[var(--text-muted)]">
+                  {title}
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 text-sm text-gray-500">
-                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+              <div
+                className="
+                  flex
+                  items-center
+                  gap-2
+                  text-sm
+                  text-[var(--text-secondary)]
+                "
+              >
+                <span
+                  className="h-2 w-2 animate-pulse rounded-full bg-emerald-500"
+                  aria-hidden="true"
+                />
 
                 Quality Engineering Mindset
               </div>
             </div>
           </motion.div>
 
-          {/* =========================================
+          {/* =====================================================
               RIGHT — ENGINEERING PROFILE
-          ========================================= */}
+          ====================================================== */}
 
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.7, delay: 0.15 }}
             className="
-              rounded-3xl
-              border
-              border-slate-800
-              bg-slate-950/80
-              p-8
-              md:p-9
               relative
               overflow-hidden
+              rounded-3xl
+              border
+              border-[var(--border-light)]
+              bg-[var(--bg-card-soft)]
+              p-8
+              shadow-sm
+              backdrop-blur-xl
+              transition-all
+              duration-300
+              hover:border-[var(--border-accent)]
+              md:p-9
             "
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/[0.04] via-transparent to-blue-500/[0.04]" />
+            <div
+              className="
+                absolute
+                inset-0
+                bg-gradient-to-br
+                from-blue-50/60
+                via-transparent
+                to-slate-100/50
+                dark:from-blue-500/[0.045]
+                dark:via-transparent
+                dark:to-blue-950/20
+              "
+              aria-hidden="true"
+            />
 
             <div className="relative z-10">
-              <p className="text-cyan-400 text-xs uppercase tracking-[0.25em] font-semibold mb-8">
+              <p
+                className="
+                  mb-8
+                  text-xs
+                  font-semibold
+                  uppercase
+                  tracking-[0.25em]
+                  text-[var(--accent)]
+                "
+              >
                 Engineering Focus
               </p>
 
               <div className="space-y-7">
                 <div>
-                  <p className="text-gray-500 text-xs uppercase tracking-wider mb-2">
+                  <p
+                    className="
+                      mb-2
+                      text-xs
+                      uppercase
+                      tracking-wider
+                      text-[var(--text-muted)]
+                    "
+                  >
                     Primary Role
                   </p>
 
-                  <p className="text-white text-lg font-semibold">
+                  <p className="text-lg font-semibold text-[var(--text-primary)]">
                     QA Automation Engineer
                   </p>
 
-                  <p className="text-cyan-400 text-sm mt-1">
+                  <p className="mt-1 text-sm text-[var(--accent)]">
                     SDET Focus
                   </p>
                 </div>
 
-                <div className="h-px bg-slate-800" />
+                <div
+                  className="h-px bg-[var(--border-light)]"
+                  aria-hidden="true"
+                />
 
                 <div>
-                  <p className="text-gray-500 text-xs uppercase tracking-wider mb-2">
+                  <p
+                    className="
+                      mb-2
+                      text-xs
+                      uppercase
+                      tracking-wider
+                      text-[var(--text-muted)]
+                    "
+                  >
                     Engineering Areas
                   </p>
 
@@ -220,18 +423,20 @@ function About() {
                       <span
                         key={item}
                         className="
+                          rounded-lg
+                          border
+                          border-[var(--border-light)]
+                          bg-[var(--bg-card)]
                           px-3
                           py-2
-                          rounded-lg
-                          bg-slate-900
-                          border
-                          border-slate-800
-                          text-gray-300
                           text-xs
-                          hover:border-cyan-400
-                          hover:text-cyan-400
+                          text-[var(--text-secondary)]
+                          shadow-sm
                           transition-all
                           duration-300
+                          hover:border-[var(--border-accent)]
+                          hover:bg-[var(--bg-card-soft)]
+                          hover:text-[var(--accent)]
                         "
                       >
                         {item}
@@ -240,14 +445,31 @@ function About() {
                   </div>
                 </div>
 
-                <div className="h-px bg-slate-800" />
+                <div
+                  className="h-px bg-[var(--border-light)]"
+                  aria-hidden="true"
+                />
 
                 <div>
-                  <p className="text-gray-500 text-xs uppercase tracking-wider mb-2">
+                  <p
+                    className="
+                      mb-2
+                      text-xs
+                      uppercase
+                      tracking-wider
+                      text-[var(--text-muted)]
+                    "
+                  >
                     Approach
                   </p>
 
-                  <p className="text-gray-300 leading-7 text-sm">
+                  <p
+                    className="
+                      text-sm
+                      leading-7
+                      text-[var(--text-secondary)]
+                    "
+                  >
                     Risk-aware testing, maintainable automation, reliable
                     validation, and continuous improvement.
                   </p>
@@ -257,65 +479,107 @@ function About() {
           </motion.div>
         </div>
 
-        {/* =========================================
+        {/* =======================================================
             QUALITY ENGINEERING PHILOSOPHY
-        ========================================= */}
+        ======================================================== */}
 
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.7, delay: 0.2 }}
           className="
-            mt-8
             relative
+            mt-8
+            overflow-hidden
             rounded-3xl
             border
-            border-cyan-400/20
-            bg-gradient-to-r
-            from-cyan-400/[0.07]
-            via-slate-900
-            to-blue-500/[0.05]
+            border-[var(--border-light)]
+            bg-[var(--bg-card-soft)]
             p-8
+            shadow-sm
+            transition-all
+            duration-300
+            hover:border-[var(--border-accent)]
             md:p-10
-            overflow-hidden
           "
         >
-          <div className="absolute left-0 top-0 bottom-0 w-1 bg-cyan-400" />
+          <div
+            className="
+              absolute
+              bottom-0
+              left-0
+              top-0
+              w-1
+              bg-[var(--accent)]
+            "
+            aria-hidden="true"
+          />
 
           <div className="relative z-10">
-            <p className="text-cyan-400 text-xs uppercase tracking-[0.25em] font-semibold mb-4">
+            <p
+              className="
+                mb-4
+                text-xs
+                font-semibold
+                uppercase
+                tracking-[0.25em]
+                text-[var(--accent)]
+              "
+            >
               Quality Engineering Philosophy
             </p>
 
-            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-              <h3 className="text-2xl md:text-4xl lg:text-5xl font-light italic text-white leading-tight max-w-4xl">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+              <h3
+                className="
+                  max-w-4xl
+                  text-2xl
+                  font-light
+                  italic
+                  leading-tight
+                  text-[var(--text-primary)]
+                  transition-colors
+                  duration-300
+                  md:text-4xl
+                  lg:text-5xl
+                "
+              >
                 “Quality is engineered into the product —
-                <span className="text-cyan-400">
+                <span className="text-[var(--accent)]">
                   {" "}
                   not tested after release.
                 </span>
                 ”
               </h3>
 
-              <span className="text-gray-600 text-5xl md:text-7xl font-serif leading-none">
+              <span
+                className="
+                  font-serif
+                  text-5xl
+                  leading-none
+                  text-[var(--border-dark)]
+                  md:text-7xl
+                "
+                aria-hidden="true"
+              >
                 ”
               </span>
             </div>
           </div>
         </motion.div>
 
-        {/* =========================================
+        {/* =======================================================
             ENGINEERING PRINCIPLES
-        ========================================= */}
+        ======================================================== */}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8">
+        <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3">
           {principles.map((principle, index) => (
             <motion.div
               key={principle.number}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.15 }}
               transition={{
                 duration: 0.5,
                 delay: index * 0.1,
@@ -324,28 +588,60 @@ function About() {
                 group
                 rounded-2xl
                 border
-                border-slate-800
-                bg-slate-900/60
+                border-[var(--border-light)]
+                bg-[var(--bg-card)]
                 p-7
-                hover:border-cyan-400/60
-                hover:-translate-y-1
+                shadow-sm
                 transition-all
                 duration-300
+                hover:-translate-y-1
+                hover:border-[var(--border-accent)]
+                hover:bg-[var(--bg-card-soft)]
+                hover:shadow-md
               "
             >
-              <div className="flex items-center justify-between mb-6">
-                <span className="text-cyan-400 font-mono text-sm">
+              <div className="mb-6 flex items-center justify-between">
+                <span className="font-mono text-sm text-[var(--accent)]">
                   {principle.number}
                 </span>
 
-                <span className="w-8 h-px bg-slate-700 group-hover:w-14 group-hover:bg-cyan-400 transition-all duration-300" />
+                <span
+                  className="
+                    h-px
+                    w-8
+                    bg-[var(--border-medium)]
+                    transition-all
+                    duration-300
+                    group-hover:w-14
+                    group-hover:bg-[var(--accent)]
+                  "
+                  aria-hidden="true"
+                />
               </div>
 
-              <h3 className="text-white text-xl font-bold mb-3 group-hover:text-cyan-400 transition-colors duration-300">
+              <h3
+                className="
+                  mb-3
+                  text-xl
+                  font-bold
+                  text-[var(--text-primary)]
+                  transition-colors
+                  duration-300
+                  group-hover:text-[var(--accent)]
+                "
+              >
                 {principle.title}
               </h3>
 
-              <p className="text-gray-500 text-sm leading-7">
+              <p
+                className="
+                  text-sm
+                  leading-7
+                  text-[var(--text-secondary)]
+                  transition-colors
+                  duration-300
+                "
+              >
                 {principle.description}
               </p>
             </motion.div>

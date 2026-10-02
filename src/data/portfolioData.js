@@ -1,3 +1,121 @@
+const calculateProfessionalExperience = (experienceList = []) => {
+  const today = new Date();
+
+  const parseDate = (dateString) => {
+    if (!dateString) {
+      return null;
+    }
+
+    const date = new Date(`${dateString}T00:00:00`);
+
+    return Number.isNaN(date.getTime()) ? null : date;
+  };
+
+  const intervals = experienceList
+    .map((experience) => {
+      const startDate = parseDate(experience.startDate);
+
+      if (!startDate) {
+        return null;
+      }
+
+      const endDate = experience.endDate
+        ? parseDate(experience.endDate)
+        : today;
+
+      if (!endDate || endDate < startDate) {
+        return null;
+      }
+
+      return {
+        start: startDate,
+        end: endDate,
+      };
+    })
+    .filter(Boolean)
+    .sort(
+      (a, b) =>
+        a.start.getTime() - b.start.getTime()
+    );
+
+  if (intervals.length === 0) {
+    return "Less than 1 Month";
+  }
+
+  // Merge overlapping or continuous employment periods.
+  const mergedIntervals = [];
+
+  intervals.forEach((interval) => {
+    const previous =
+      mergedIntervals[mergedIntervals.length - 1];
+
+    if (!previous) {
+      mergedIntervals.push({
+        start: interval.start,
+        end: interval.end,
+      });
+
+      return;
+    }
+
+    if (
+      interval.start.getTime() <=
+      previous.end.getTime()
+    ) {
+      if (
+        interval.end.getTime() >
+        previous.end.getTime()
+      ) {
+        previous.end = interval.end;
+      }
+
+      return;
+    }
+
+    mergedIntervals.push({
+      start: interval.start,
+      end: interval.end,
+    });
+  });
+
+  let totalMonths = 0;
+
+  mergedIntervals.forEach(({ start, end }) => {
+    let months =
+      (end.getFullYear() - start.getFullYear()) * 12 +
+      (end.getMonth() - start.getMonth());
+
+    if (end.getDate() < start.getDate()) {
+      months -= 1;
+    }
+
+    totalMonths += Math.max(months, 0);
+  });
+
+  if (totalMonths <= 0) {
+    return "Less than 1 Month";
+  }
+
+  const years = Math.floor(totalMonths / 12);
+  const months = totalMonths % 12;
+
+  const result = [];
+
+  if (years > 0) {
+    result.push(
+      `${years} ${years === 1 ? "Year" : "Years"}`
+    );
+  }
+
+  if (months > 0) {
+    result.push(
+      `${months} ${months === 1 ? "Month" : "Months"}`
+    );
+  }
+
+  return result.join(" ");
+};
+
 const portfolioData = {
   // =========================================
   // PERSONAL INFORMATION
@@ -5,17 +123,21 @@ const portfolioData = {
 
   name: "Archit Singh",
 
-  title: "QA Automation Engineer | SDET | Selenium | API Testing",
+  title:
+    "QA Automation Engineer | SDET | Selenium | API Testing",
 
   email: "architsingh1609@gmail.com",
 
-  location: "Mumbai",
+  location: "Mumbai, India",
 
-  github: "https://github.com/architsingh1609",
+  github:
+    "https://github.com/architsingh1609",
 
-  linkedin: "https://linkedin.com/in/qa1503",
+  linkedin:
+    "https://linkedin.com/in/qa1503",
 
-  resume: "/resume/Archit_Singh_SDET_QA_Engineer_Resume.pdf",
+  resume:
+    "/resume/Archit_Singh_SDET_QA_Engineer_Resume.pdf",
 
   // =========================================
   // HERO
@@ -26,7 +148,8 @@ const portfolioData = {
 
     heading: "Hello, I'm Archit Singh",
 
-    tagline: "Automation With Logic. Testing With Purpose.",
+    tagline:
+      "Automation With Logic. Testing With Purpose.",
 
     description:
       "QA Automation Engineer focused on building reliable and maintainable testing solutions across UI automation, API validation, regression testing, and CI/CD workflows.",
@@ -42,11 +165,11 @@ const portfolioData = {
 
     secondaryCta: "Contact Me",
 
-    github: "https://github.com/architsingh1609",
+    github:
+      "https://github.com/architsingh1609",
 
-    linkedin: "https://linkedin.com/in/qa1503",
-
-    image: "/src/assets/archit.png.jpg",
+    linkedin:
+      "https://linkedin.com/in/qa1503",
   },
 
   // =========================================
@@ -62,51 +185,81 @@ const portfolioData = {
     cards: [
       {
         label: "Professional Experience",
+
         value: "auto",
-        description: "QA & Automation Engineering",
+
+        description:
+          "QA & Automation Engineering",
+
         type: "experience",
       },
 
       {
         label: "QA Projects",
+
         value: "8+",
-        description: "Automation, API & Manual Testing",
+
+        description:
+          "Automation, API & Manual Testing",
       },
 
       {
         label: "UI Automation",
-        value: "Selenium + Java + TestNG",
-        description: "Web application automation",
+
+        value:
+          "Selenium + Java + TestNG",
+
+        description:
+          "Web application automation",
       },
 
       {
         label: "API Automation",
-        value: "REST Assured + Postman",
-        description: "API validation & automation",
+
+        value:
+          "REST Assured + Postman",
+
+        description:
+          "API validation & automation",
       },
 
       {
         label: "CI/CD",
-        value: "Jenkins + GitHub",
-        description: "Automated execution workflows",
+
+        value:
+          "Jenkins + GitHub",
+
+        description:
+          "Automated execution workflows",
       },
 
       {
         label: "Database",
+
         value: "SQL",
-        description: "Database testing & validation",
+
+        description:
+          "Database testing & validation",
       },
 
       {
         label: "Testing",
-        value: "Functional • Regression • Integration • API",
-        description: "End-to-end quality validation",
+
+        value:
+          "Functional • Regression • Integration • API",
+
+        description:
+          "End-to-end quality validation",
       },
 
       {
         label: "Target",
-        value: "SDET / Quality Engineering",
-        description: "Automation & engineering-focused QA",
+
+        value:
+          "SDET / Quality Engineering",
+
+        description:
+          "Automation & engineering-focused QA",
       },
     ],
   },
@@ -116,25 +269,31 @@ const portfolioData = {
   // =========================================
 
   engineeringProfile: {
-    title: "How I Think About Quality",
+    title:
+      "How I Think About Quality",
 
     description:
       "A quality-focused engineering approach built around automation, reliability, risk, and continuous improvement.",
 
-    aboutTitle: "Building confidence through better testing.",
+    aboutTitle:
+      "Building confidence through better testing.",
 
     about:
       "I am a QA Automation Engineer focused on building reliable and maintainable testing solutions. I work across UI automation, API validation, test design, regression testing, and CI/CD workflows using Selenium, Java, TestNG, Postman, REST Assured, and related QA tools. My approach goes beyond finding defects — I focus on engineering quality into the software development lifecycle through structured validation, reusable automation, and practical problem solving.",
 
     name: "Archit Singh",
 
-    role: "QA Automation Engineer | SDET | Selenium | API Testing",
+    role:
+      "QA Automation Engineer | SDET | Selenium | API Testing",
 
-    focusTitle: "Engineering Focus",
+    focusTitle:
+      "Engineering Focus",
 
-    primaryRole: "QA Automation Engineer",
+    primaryRole:
+      "QA Automation Engineer",
 
-    sdetFocus: "SDET Focus",
+    sdetFocus:
+      "SDET Focus",
 
     engineeringAreas: [
       "UI Automation",
@@ -154,7 +313,8 @@ const portfolioData = {
   // =========================================
 
   qualityPhilosophy: {
-    title: "Quality Engineering Philosophy",
+    title:
+      "Quality Engineering Philosophy",
 
     quote:
       "Quality is engineered into the product — not tested after release.",
@@ -162,21 +322,30 @@ const portfolioData = {
     principles: [
       {
         number: "01",
-        title: "Quality by Design",
+
+        title:
+          "Quality by Design",
+
         description:
           "Quality should be considered throughout the product lifecycle, not treated as a final-stage activity.",
       },
 
       {
         number: "02",
-        title: "Automation with Purpose",
+
+        title:
+          "Automation with Purpose",
+
         description:
           "Automation should improve coverage, feedback speed, reliability, and maintainability.",
       },
 
       {
         number: "03",
-        title: "Engineering Mindset",
+
+        title:
+          "Engineering Mindset",
+
         description:
           "I approach testing through systems, risks, data, tools, and continuous improvement.",
       },
@@ -189,21 +358,27 @@ const portfolioData = {
 
   experience: [
     {
-      id: "metaphi-innovations",
+      id:
+        "metaphi-innovations",
 
       current: true,
 
-      company: "Metaphi Innovations Pvt. Ltd.",
+      company:
+        "Metaphi Innovations Pvt. Ltd.",
 
-      role: "SDET Quality Assurance Engineer",
+      role:
+        "QA Automation Engineer",
 
-      startDate: "2026-04-27",
+      startDate:
+        "2026-04-26",
 
       endDate: null,
 
-      location: "Mumbai",
+      location:
+        "Mumbai, India",
 
-      duration: "auto",
+      duration:
+        "auto",
 
       responsibilities: [
         "Perform manual and automation testing of web applications.",
@@ -224,21 +399,28 @@ const portfolioData = {
     },
 
     {
-      id: "bharatskillz",
+      id:
+        "bharatskillz",
 
       current: false,
 
-      company: "BharatSkillz (QA Division)",
+      company:
+        "BharatSkillz (QA Division)",
 
-      role: "Quality Assurance Specialist",
+      role:
+        "Quality Assurance Specialist",
 
-      startDate: "2025-03-27",
+      startDate:
+        "2025-03-25",
 
-      endDate: "2026-04-26",
+      endDate:
+        "2026-04-25",
 
-      location: "Gurugram, Haryana, India · On-site",
+      location:
+        "Gurugram, Haryana, India · On-site",
 
-      duration: "auto",
+      duration:
+        "auto",
 
       responsibilities: [
         "Performed manual testing of web applications to ensure functionality and quality.",
@@ -327,428 +509,213 @@ const portfolioData = {
 
   projects: [
     {
-      id: "banking-automation",
+      id:
+        "banking-system",
 
-      title: "Banking Website Automation Framework",
+      title:
+        "Banking System",
 
-      featured: true,
-
-      category: "UI AUTOMATION",
+      category:
+        "Python Application",
 
       description:
-        "Designed and developed a Selenium automation framework using Java, TestNG, Maven, and Page Object Model architecture. Automated critical banking workflows including login validation, customer creation, account opening, navigation testing, and transaction validation. Integrated Allure Reports for reporting and built a CI/CD-ready framework structure for automation execution.",
+        "A Python-based banking application implementing core banking operations with structured validation and data handling.",
 
       technologies: [
-        "Java",
-        "Selenium WebDriver",
-        "TestNG",
-        "Maven",
-        "POM",
-        "Allure Reports",
-        "CI/CD",
+        "Python",
+        "OOP",
+        "File Handling",
+        "Exception Handling",
       ],
 
-      role: "QA Automation Engineer / SDET",
-
-      overview:
-        "A Selenium-based banking application automation framework focused on validating important user workflows through reusable test components and structured test execution.",
-
-      objective:
-        "Automate critical banking workflows and provide repeatable functional and regression validation using Java, Selenium WebDriver, TestNG, Maven, Page Object Model, Allure Reports, and CI/CD.",
-
-      architecture: "Page Object Model / Reusable Automation Framework",
-
-      testingScope: [
-        "Functional Testing",
-        "Regression Testing",
-        "UI Automation",
-        "Navigation Validation",
-        "Transaction Validation",
+      highlights: [
+        "Account creation and management",
+        "Deposit and withdrawal operations",
+        "Balance validation",
+        "Transaction handling",
+        "Exception handling",
       ],
-
-      implementation: [
-        "Identify critical banking workflows including login, customer creation, account opening, navigation, and transaction validation.",
-        "Implement UI automation using Java, Selenium WebDriver, and TestNG.",
-        "Organize reusable page-level components using Page Object Model architecture.",
-        "Manage the automation project with Maven.",
-        "Integrate Allure Reports for automation execution reporting.",
-        "Prepare the framework structure for CI/CD-based automation execution.",
-      ],
-
-      cicd:
-        "The framework is structured for CI/CD automation execution and includes CI/CD in its implemented technology stack.",
-
-      reporting:
-        "Allure Reports is included for automation test execution reporting.",
-
-      challenges: [],
-
-      impact: [],
-
-      learnings: [],
-
-      outcome:
-        "A reusable Selenium-based automation framework for validating important banking workflows.",
 
       github:
-        "https://github.com/architsingh1609/banking-website-automation",
+        "https://github.com/architsingh1609",
     },
 
     {
-      id: "swaglabs-automation",
+      id:
+        "contact-management",
 
-      title: "SwagLabs Automation Framework",
+      title:
+        "Contact Management System",
 
-      featured: true,
-
-      category: "UI AUTOMATION",
+      category:
+        "Python Application",
 
       description:
-        "Built an automation testing framework for SwagLabs using Selenium WebDriver, TestNG, Jenkins, and Excel-driven test data handling. Automated complete end-to-end workflows including login, product selection, cart validation, checkout process, and order placement. Implemented reusable framework architecture with Jenkins pipeline integration.",
+        "A contact management application using Python and JSON for storing, updating, searching, and deleting contact information.",
+
+      technologies: [
+        "Python",
+        "JSON",
+        "File Handling",
+      ],
+
+      highlights: [
+        "Create contacts",
+        "Update contact information",
+        "Search contacts",
+        "Delete contacts",
+        "JSON-based persistence",
+      ],
+
+      github:
+        "https://github.com/architsingh1609",
+    },
+
+    {
+      id:
+        "covid-vaccination-api",
+
+      title:
+        "COVID-19 Vaccination Certificate API Automation",
+
+      category:
+        "API Automation",
+
+      description:
+        "API automation project created to validate COVID-19 vaccination certificate services using Java and REST Assured.",
 
       technologies: [
         "Java",
-        "Selenium WebDriver",
+        "REST Assured",
         "TestNG",
-        "Jenkins",
-        "Excel",
-        "Automation Framework",
-        "CI/CD",
+        "Maven",
+        "Postman",
       ],
 
-      role: "QA Automation Engineer",
-
-      overview:
-        "An end-to-end Selenium automation framework for validating core SwagLabs shopping workflows.",
-
-      objective:
-        "Automate important shopping workflows using reusable automation components, data-driven test handling, and Jenkins-based execution.",
-
-      architecture:
-        "Reusable Selenium Automation Framework with Page Object Model and data-driven test handling.",
-
-      testingScope: [
-        "Functional Testing",
-        "Regression Testing",
-        "UI Automation",
-        "Login Validation",
-        "Product Validation",
-        "Cart Validation",
-        "Checkout Validation",
+      highlights: [
+        "API request validation",
+        "Response status validation",
+        "Response body validation",
+        "JSON response validation",
+        "Negative API testing",
+        "Automated API test execution",
       ],
 
-      implementation: [
-        "Automate login and authentication workflows.",
-        "Automate product selection and product workflow validation.",
-        "Validate cart operations and checkout workflows.",
-        "Validate order placement scenarios.",
-        "Use Excel-driven test data handling.",
-        "Implement reusable automation framework components.",
-        "Integrate Jenkins for automated execution.",
-      ],
-
-      cicd:
-        "Jenkins-based automated execution is included in the project.",
-
-      reporting:
-        "No separate reporting implementation is specified for this project.",
-
-      challenges: [],
-
-      impact: [],
-
-      learnings: [],
-
-      outcome:
-        "An end-to-end Selenium automation framework covering important SwagLabs shopping workflows with Jenkins execution.",
-
-      github: "https://github.com/architsingh1609/SwagLabs-Automation",
+      github:
+        "https://github.com/architsingh1609",
     },
 
     {
-      id: "rest-api-testing",
+      id:
+        "employee-management-api",
 
-      title: "REST API Testing Framework",
+      title:
+        "Employee Management System API Testing",
 
-      featured: true,
-
-      category: "API TESTING",
+      category:
+        "API Testing",
 
       description:
-        "Developed an API testing collection for Employee Management System using Postman and CRUD operation validation. Performed schema validation, response verification, authentication testing, and automated regression execution using Newman CLI. Validated API status codes, request-response structures, and backend data handling workflows.",
+        "API testing project focused on validating employee management endpoints using Postman and JSON-based request and response validation.",
 
       technologies: [
         "Postman",
         "REST API",
-        "Newman CLI",
-        "API Validation",
-        "CRUD",
         "JSON",
-      ],
-
-      role: "QA Engineer",
-
-      overview:
-        "An API testing collection for an Employee Management System covering CRUD operations, authentication, response validation, schema validation, and regression execution.",
-
-      objective:
-        "Validate backend API behavior and service workflows through structured request execution, response validation, CRUD testing, authentication testing, and automated regression execution.",
-
-      architecture:
-        "API validation workflow covering request execution, response validation, and organized regression test execution.",
-
-      testingScope: [
         "API Testing",
-        "CRUD Testing",
-        "Authentication Testing",
-        "Response Validation",
-        "Schema Validation",
-        "Regression Testing",
-        "JSON Validation",
       ],
 
-      implementation: [
-        "Create and organize API requests using Postman.",
-        "Validate CRUD operations for the Employee Management System.",
-        "Validate authentication behavior.",
-        "Verify HTTP status codes and response structures.",
-        "Validate JSON response data and schema-related behavior.",
-        "Execute regression testing through Newman CLI.",
+      highlights: [
+        "GET request validation",
+        "POST request validation",
+        "PUT request validation",
+        "DELETE request validation",
+        "Status code validation",
+        "Response validation",
       ],
 
-      cicd:
-        "Newman CLI is used for command-line automated API regression execution.",
-
-      reporting:
-        "No separate reporting implementation is specified for this project.",
-
-      challenges: [],
-
-      impact: [],
-
-      learnings: [],
-
-      outcome:
-        "A structured API testing collection covering CRUD, authentication, response validation, and Newman-based regression execution.",
-
-      github: "https://github.com/architsingh1609/intern-api-testing",
+      github:
+        "https://github.com/architsingh1609",
     },
 
     {
-      id: "orangehrm",
+      id:
+        "neighborfit",
 
-      title: "OrangeHRM Automation Framework",
+      title:
+        "NeighborFit",
 
-      featured: false,
-
-      category: "UI AUTOMATION",
+      category:
+        "Software Engineering Project",
 
       description:
-        "Developed a Selenium-based automation framework for OrangeHRM application testing. Automated login functionality, employee management workflows, navigation validation, and reusable test execution using Page Object Model architecture.",
+        "A location-based project developed to help users identify neighborhoods based on relevant preferences and requirements.",
 
       technologies: [
-        "Java",
-        "Selenium WebDriver",
-        "TestNG",
-        "Maven",
-        "POM",
+        "React",
+        "JavaScript",
+        "HTML",
+        "CSS",
       ],
 
-      role: "QA Automation Engineer",
-
-      overview:
-        "A Selenium automation framework for validating OrangeHRM application workflows.",
-
-      objective:
-        "Automate important OrangeHRM workflows using reusable Selenium components and Page Object Model architecture.",
-
-      architecture: "Page Object Model based Selenium automation framework.",
-
-      testingScope: [
-        "Functional Testing",
-        "Regression Testing",
-        "UI Automation",
-        "Login Validation",
-        "Employee Management",
-        "Navigation Validation",
+      highlights: [
+        "User preference handling",
+        "Neighborhood matching",
+        "Responsive interface",
+        "Dynamic content",
+        "Component-based development",
       ],
 
-      implementation: [
-        "Automate OrangeHRM login functionality.",
-        "Automate employee management workflows.",
-        "Validate application navigation.",
-        "Create reusable page-level automation components.",
-        "Execute tests using TestNG and Maven.",
-      ],
-
-      cicd: "",
-
-      reporting: "",
-
-      challenges: [],
-
-      impact: [],
-
-      learnings: [],
-
-      outcome:
-        "A reusable Selenium automation framework for validating core OrangeHRM workflows.",
-
-      github: "https://github.com/architsingh1609/orangeHrm",
+      github:
+        "https://github.com/architsingh1609/NeighborFit/tree/main",
     },
 
     {
-      id: "herokuapp",
+      id:
+        "anpr-web-application",
 
-      title: "HerokuApp Automation Framework",
+      title:
+        "ANPR Web Application QA",
 
-      featured: false,
-
-      category: "UI AUTOMATION",
-
-      description:
-        "Designed and developed a Selenium automation framework for testing the HerokuApp web application using Java, Selenium WebDriver, TestNG, Maven, and Page Object Model architecture. Automated forms, alerts, windows, frames, dropdowns, and navigation workflows.",
-
-      technologies: [
-        "Java",
-        "Selenium WebDriver",
-        "TestNG",
-        "Maven",
-        "POM",
-        "UI Automation",
-        "Web Testing",
-      ],
-
-      role: "QA Automation Engineer",
-
-      overview:
-        "A Selenium automation framework focused on validating common web UI components and browser interaction workflows.",
-
-      objective:
-        "Automate common web application components and browser interaction scenarios using Selenium and reusable framework architecture.",
-
-      architecture:
-        "Page Object Model based Selenium automation structure.",
-
-      testingScope: [
-        "UI Automation",
-        "Functional Testing",
-        "Forms Testing",
-        "Alerts Testing",
-        "Windows Testing",
-        "Frames Testing",
-        "Dropdown Testing",
-        "Navigation Testing",
-      ],
-
-      implementation: [
-        "Automate form interactions.",
-        "Validate browser alerts.",
-        "Automate window handling scenarios.",
-        "Automate frame interaction workflows.",
-        "Validate dropdown functionality.",
-        "Automate navigation-related scenarios.",
-        "Organize reusable components using Page Object Model.",
-      ],
-
-      cicd: "",
-
-      reporting: "",
-
-      challenges: [],
-
-      impact: [],
-
-      learnings: [],
-
-      outcome:
-        "A reusable Selenium framework demonstrating automation of common browser and web UI interaction scenarios.",
-
-      github: "https://github.com/architsingh1609/herokuapp",
-    },
-
-    {
-      id: "anpr-manual-testing",
-
-      title: "ANPR Manual Testing Project",
-
-      featured: false,
-
-      category: "MANUAL TESTING",
+      category:
+        "Quality Assurance",
 
       description:
-        "Performed end-to-end manual testing of an Automatic Number Plate Recognition (ANPR) web application. Designed and executed test cases, validated reports, user management modules, settings functionality, and documented defects. Prepared detailed test reports and testing artifacts.",
+        "Quality assurance testing of an Automatic Number Plate Recognition web application including login, reports, settings, and user management workflows.",
 
       technologies: [
         "Manual Testing",
         "Functional Testing",
         "Regression Testing",
+        "Docker",
         "Test Case Design",
-        "Defect Management",
-        "Test Reporting",
       ],
 
-      role: "Quality Assurance Tester",
-
-      overview:
-        "An end-to-end manual testing project focused on validating an ANPR web application and its major functional modules.",
-
-      objective:
-        "Validate application functionality, identify defects, verify reports, and provide structured testing artifacts for the ANPR application.",
-
-      architecture:
-        "Structured manual QA workflow covering test design, execution, defect reporting, regression, and test documentation.",
-
-      testingScope: [
-        "Manual Testing",
-        "Functional Testing",
-        "Regression Testing",
-        "Test Case Design",
-        "User Management Testing",
-        "Settings Validation",
-        "Report Validation",
-        "Defect Reporting",
+      highlights: [
+        "Login testing",
+        "Report module testing",
+        "Settings module testing",
+        "User management testing",
+        "Functional validation",
+        "Defect identification",
       ],
-
-      implementation: [
-        "Understand ANPR application workflows and functional requirements.",
-        "Design and execute test cases.",
-        "Validate user management functionality.",
-        "Validate application settings functionality.",
-        "Validate application reports.",
-        "Document defects and testing observations.",
-        "Prepare detailed test reports and testing artifacts.",
-      ],
-
-      cicd: "",
-
-      reporting:
-        "Detailed test reports and testing artifacts were prepared as part of the manual testing process.",
-
-      challenges: [],
-
-      impact: [],
-
-      learnings: [],
-
-      outcome:
-        "End-to-end manual QA validation with structured test cases, defect documentation, reports, and testing artifacts.",
 
       github:
-        "https://github.com/architsingh1609/ANPR-Manual-Testing-Report",
+        "https://github.com/architsingh1609",
     },
 
     {
-      id: "ecommerce-automation",
+      id:
+        "selenium-automation-framework",
 
-      title: "E-Commerce Automation Framework",
+      title:
+        "Selenium Automation Framework",
 
-      featured: false,
-
-      category: "UI AUTOMATION",
+      category:
+        "UI Automation",
 
       description:
-        "Developed an automation testing framework for an E-Commerce application using Selenium WebDriver, Java, TestNG, and Maven. Automated login, product search, cart validation, checkout workflows, and order placement scenarios using reusable Page Object Model architecture.",
+        "Web automation framework using Selenium WebDriver, Java, TestNG, Maven, and Page Object Model principles.",
 
       technologies: [
         "Java",
@@ -756,283 +723,324 @@ const portfolioData = {
         "TestNG",
         "Maven",
         "POM",
-        "UI Automation",
+        "Git",
       ],
 
-      role: "QA Automation Engineer",
-
-      overview:
-        "A Selenium-based automation framework focused on validating end-to-end e-commerce workflows.",
-
-      objective:
-        "Automate core e-commerce workflows using reusable Page Object Model components and structured test execution.",
-
-      architecture:
-        "Page Object Model based Selenium automation framework.",
-
-      testingScope: [
-        "UI Automation",
-        "Functional Testing",
-        "Regression Testing",
-        "Login Validation",
-        "Product Search",
-        "Cart Validation",
-        "Checkout Testing",
-        "Order Placement",
+      highlights: [
+        "Reusable page objects",
+        "TestNG test execution",
+        "Explicit waits",
+        "Element interaction",
+        "Assertions",
+        "Regression automation",
       ],
-
-      implementation: [
-        "Automate login workflows.",
-        "Automate product search scenarios.",
-        "Validate cart operations.",
-        "Automate checkout workflows.",
-        "Validate order placement scenarios.",
-        "Build reusable Page Object Model components.",
-        "Execute automation using TestNG and Maven.",
-      ],
-
-      cicd: "",
-
-      reporting: "",
-
-      challenges: [],
-
-      impact: [],
-
-      learnings: [],
-
-      outcome:
-        "A reusable Selenium automation framework covering important end-to-end e-commerce workflows.",
 
       github:
-        "https://github.com/architsingh1609/automation__E-commerce",
+        "https://github.com/architsingh1609",
     },
 
     {
-      id: "neighborfit",
+      id:
+        "api-automation-framework",
 
-      title: "NeighborFit Recommendation System",
+      title:
+        "API Automation Framework",
 
-      featured: false,
-
-      category: "JAVA",
+      category:
+        "API Automation",
 
       description:
-        "Developed a Java-based recommendation system that matches users with suitable neighborhoods based on lifestyle preferences. Implemented JSON-based data handling and logic-driven filtering considering factors like safety, education quality, transportation, walkability, cost of living, and green spaces.",
+        "Reusable API automation framework focused on validating REST endpoints, response payloads, status codes, and API workflows.",
 
       technologies: [
         "Java",
+        "REST Assured",
+        "TestNG",
+        "Maven",
         "JSON",
-        "Recommendation System",
-        "Logic Building",
-        "Data Handling",
       ],
 
-      role: "Java Developer / Engineer",
-
-      overview:
-        "A Java-based recommendation system that uses user preferences and neighborhood data to generate suitable recommendations.",
-
-      objective:
-        "Build a logic-driven recommendation system that evaluates neighborhood attributes against user lifestyle preferences.",
-
-      architecture:
-        "Java-based recommendation logic with JSON data handling and preference-based filtering.",
-
-      testingScope: [
-        "Functional Validation",
-        "Data Validation",
-        "Logic Validation",
-        "JSON Data Handling",
+      highlights: [
+        "Reusable API methods",
+        "Request validation",
+        "Response validation",
+        "Status code assertions",
+        "JSON validation",
+        "Automated regression execution",
       ],
-
-      implementation: [
-        "Handle neighborhood data using JSON.",
-        "Process user lifestyle preferences.",
-        "Apply logic-driven filtering.",
-        "Evaluate neighborhood attributes including safety, education, transportation, walkability, cost of living, and green spaces.",
-        "Generate suitable neighborhood recommendations.",
-      ],
-
-      cicd: "",
-
-      reporting: "",
-
-      challenges: [],
-
-      impact: [],
-
-      learnings: [],
-
-      outcome:
-        "A Java recommendation system demonstrating data handling, filtering logic, and software engineering fundamentals.",
 
       github:
-        "https://github.com/architsingh1609/NeighborFit",
+        "https://github.com/architsingh1609",
     },
   ],
 
   // =========================================
-  // SYSTEMS / DOMAIN EXPOSURE
+  // TESTING SYSTEMS
   // =========================================
 
-  systemsWorkedWith: {
-    title: "Systems I've Worked With",
+  systems: {
+    title:
+      "Testing Systems & Automation Architecture",
 
     description:
-      "Experience testing different business applications and technology layers, including banking websites, ERP, CRM, HRMS, e-commerce applications, REST APIs, and backend services.",
+      "The tools, frameworks, and engineering practices I use to build reliable and maintainable QA workflows.",
 
-    systems: [
+    categories: [
       {
-        icon: "🏦",
-        title: "Banking Websites",
+        title:
+          "UI Automation",
+
+        tools: [
+          "Selenium WebDriver",
+          "Java",
+          "TestNG",
+          "Maven",
+          "Page Object Model",
+        ],
+
         description:
-          "Worked with banking web applications covering account creation, customer details, account information, authentication, and transaction-related workflows.",
+          "Automated browser-based testing using reusable and maintainable test architecture.",
       },
 
       {
-        icon: "🏢",
-        title: "ERP Systems",
+        title:
+          "API Automation",
+
+        tools: [
+          "REST Assured",
+          "Postman",
+          "Newman",
+          "JSON",
+        ],
+
         description:
-          "Worked with ERP applications and validated business workflows, data handling, user operations, and functional requirements across different application modules.",
+          "API validation covering functional workflows, response validation, status codes, and data verification.",
       },
 
       {
-        icon: "👥",
-        title: "CRM Systems",
+        title:
+          "CI/CD",
+
+        tools: [
+          "Jenkins",
+          "Git",
+          "GitHub",
+          "Maven",
+        ],
+
         description:
-          "Worked with CRM applications involving customer information, records, business workflows, data validation, and functional testing of user-facing features.",
+          "Continuous test execution integrated into development and deployment workflows.",
       },
 
       {
-        icon: "👨‍💼",
-        title: "HRMS Applications",
+        title:
+          "Database Testing",
+
+        tools: [
+          "SQL",
+          "Data Validation",
+          "CRUD Testing",
+        ],
+
         description:
-          "Worked with HRMS applications covering employee information, employee-related workflows, data validation, and functional and regression testing.",
+          "Backend data validation and database testing to ensure application and database consistency.",
       },
 
       {
-        icon: "🛒",
-        title: "E-Commerce Applications",
+        title:
+          "Test Management",
+
+        tools: [
+          "Test Cases",
+          "Test Scenarios",
+          "Bug Reports",
+          "Regression Suites",
+        ],
+
         description:
-          "Worked with end-to-end e-commerce workflows including product selection, cart operations, checkout, order processing, and functional validation.",
+          "Structured test planning, execution, defect reporting, and regression management.",
       },
 
       {
-        icon: "🔗",
-        title: "REST APIs & Backend Services",
+        title:
+          "Performance & Reliability",
+
+        tools: [
+          "JMeter",
+          "Load Testing",
+          "Response Validation",
+        ],
+
         description:
-          "Validated API endpoints, authentication, CRUD operations, status codes, JSON responses, request and response data, and backend service behavior.",
+          "Basic performance validation and reliability-focused testing workflows.",
       },
     ],
   },
 
   // =========================================
-  // QUALITY ENGINEERING PROCESS
+  // QA PROCESS
   // =========================================
 
-  qualityEngineeringProcess: {
-    title: "My Quality Engineering Process",
+  qaProcess: {
+    title:
+      "Quality Assurance Process",
 
     description:
-      "My approach combines requirement understanding, risk-based testing, automation, API and database validation, defect investigation, continuous testing, and release verification to build confidence in software quality.",
+      "A structured testing lifecycle from requirement analysis through release validation.",
 
-    stages: [
+    steps: [
       {
         number: "01",
-        title: "Understand the Product & Requirements",
+
+        title:
+          "Requirement Analysis",
+
         description:
-          "Understand business requirements, application workflows, user expectations, and quality risks before defining the testing approach.",
+          "Understand business requirements, acceptance criteria, risks, and testable conditions.",
       },
 
       {
         number: "02",
-        title: "Plan Coverage & Design Test Scenarios",
+
+        title:
+          "Test Planning",
+
         description:
-          "Identify important test conditions, positive and negative scenarios, regression areas, integration points, and risk-based coverage.",
+          "Define test scope, scenarios, environments, test data, priorities, and execution strategy.",
       },
 
       {
         number: "03",
-        title: "Build & Execute Automation",
+
+        title:
+          "Test Case Design",
+
         description:
-          "Automate suitable and repeatable scenarios using maintainable automation components and appropriate testing frameworks.",
+          "Create positive, negative, boundary, functional, regression, and integration test cases.",
       },
 
       {
         number: "04",
-        title: "Validate Application, APIs & Data",
+
+        title:
+          "Test Execution",
+
         description:
-          "Validate UI behavior, API responses, application data, and backend behavior using appropriate testing techniques.",
+          "Execute manual and automated tests across supported environments and workflows.",
       },
 
       {
         number: "05",
-        title: "Investigate Defects & Regression",
+
+        title:
+          "Defect Management",
+
         description:
-          "Analyze failures, document defects, verify fixes, and execute regression testing to identify unintended impact.",
+          "Document defects with reproducible steps, expected results, actual results, and evidence.",
       },
 
       {
         number: "06",
-        title: "Continuous Validation & Release Confidence",
+
+        title:
+          "Regression Testing",
+
         description:
-          "Use continuous testing and release verification practices to provide meaningful quality feedback before delivery.",
+          "Validate existing functionality after changes, fixes, and new feature development.",
+      },
+
+      {
+        number: "07",
+
+        title:
+          "Release Validation",
+
+        description:
+          "Perform smoke, sanity, and final verification before release or deployment.",
+      },
+
+      {
+        number: "08",
+
+        title:
+          "Continuous Improvement",
+
+        description:
+          "Analyze failures, improve automation coverage, reduce repetitive work, and strengthen quality processes.",
       },
     ],
   },
 
   // =========================================
-  // END-TO-END AUTOMATION WORKFLOW
+  // AUTOMATION WORKFLOW
   // =========================================
 
   automationWorkflow: {
-    title: "End-to-End QA Automation Workflow",
+    title:
+      "Automation Workflow",
 
     description:
-      "A practical automation flow covering test strategy, framework design, UI and API automation, execution, CI/CD integration, and quality reporting.",
+      "From test design to continuous execution, the automation workflow focuses on fast feedback and maintainability.",
 
     stages: [
       {
         number: "01",
-        title: "Requirements → Test Strategy",
+
+        title:
+          "Identify Candidates",
+
         description:
-          "Understand requirements and define a practical testing strategy based on functionality, risk, and expected coverage.",
+          "Select stable, repetitive, high-value scenarios suitable for automation.",
       },
 
       {
         number: "02",
-        title: "Test Design → Framework Structure",
+
+        title:
+          "Design Framework",
+
         description:
-          "Design test scenarios and organize reusable framework components, test data, page objects, utilities, and execution structure.",
+          "Create reusable page objects, utilities, test data, configuration, and reporting structures.",
       },
 
       {
         number: "03",
-        title: "UI & API Automation",
+
+        title:
+          "Develop Tests",
+
         description:
-          "Automate suitable UI and API scenarios using the implemented automation stack and maintainable test components.",
+          "Implement maintainable automation using Selenium, Java, TestNG, and supporting tools.",
       },
 
       {
         number: "04",
-        title: "Test Execution → Validation",
+
+        title:
+          "Validate Results",
+
         description:
-          "Execute automated tests, validate results, analyze failures, and investigate application behavior.",
+          "Use assertions, logs, reports, and failure analysis to validate test outcomes.",
       },
 
       {
         number: "05",
-        title: "CI/CD → Automated Execution",
+
+        title:
+          "Integrate CI/CD",
+
         description:
-          "Integrate applicable automation suites into CI/CD workflows for repeatable execution and faster quality feedback.",
+          "Execute automated suites through Jenkins and version-controlled GitHub workflows.",
       },
 
       {
         number: "06",
-        title: "Reporting → Quality Feedback",
+
+        title:
+          "Maintain & Improve",
+
         description:
-          "Use test results and reporting information to communicate quality status, failures, and release confidence.",
+          "Update tests with application changes and continuously improve coverage, reliability, and execution speed.",
       },
     ],
   },
@@ -1042,63 +1050,117 @@ const portfolioData = {
   // =========================================
 
   sdetRoadmap: {
-    title: "Future SDET Goals",
+    title:
+      "SDET Engineering Roadmap",
 
     description:
-      "My goal is to evolve from a QA Automation Engineer into a Software Development Engineer in Test (SDET) by strengthening expertise in automation framework architecture, API automation, cloud testing, CI/CD pipelines, performance testing, and software engineering best practices.",
+      "The technical areas I am developing to move from QA Automation toward a stronger Software Development Engineer in Test profile.",
 
-    stages: [
+    phases: [
       {
         number: "01",
-        title: "Automation Architecture",
-        status: "CURRENTLY DEVELOPING",
-        description:
-          "Strengthen expertise in scalable and maintainable automation framework architecture.",
+
+        title:
+          "Core Programming",
+
+        status:
+          "Strong",
+
+        technologies: [
+          "Java",
+          "OOP",
+          "Collections",
+          "Exception Handling",
+          "File Handling",
+        ],
       },
 
       {
         number: "02",
-        title: "API & Service Automation",
-        status: "CURRENTLY DEVELOPING",
-        description:
-          "Expand API automation capabilities and improve validation across application and service layers.",
+
+        title:
+          "Automation Engineering",
+
+        status:
+          "Strong",
+
+        technologies: [
+          "Selenium",
+          "TestNG",
+          "POM",
+          "Maven",
+          "WebDriver",
+        ],
       },
 
       {
         number: "03",
-        title: "Cloud & CI/CD",
-        status: "FUTURE",
-        description:
-          "Build stronger cloud testing and CI/CD capabilities to integrate quality engineering into modern delivery workflows.",
+
+        title:
+          "API Engineering",
+
+        status:
+          "Strong",
+
+        technologies: [
+          "REST Assured",
+          "Postman",
+          "JSON",
+          "Newman",
+        ],
       },
 
       {
         number: "04",
-        title: "Performance Engineering",
-        status: "FUTURE",
-        description:
-          "Develop practical performance testing skills to evaluate application reliability, scalability, and responsiveness.",
+
+        title:
+          "CI/CD Engineering",
+
+        status:
+          "Developing",
+
+        technologies: [
+          "Jenkins",
+          "Git",
+          "GitHub",
+          "Maven",
+        ],
       },
 
       {
         number: "05",
-        title: "Software Engineering",
-        status: "CURRENTLY DEVELOPING",
-        description:
-          "Continue improving programming, design, debugging, and software engineering practices required for an effective SDET role.",
+
+        title:
+          "Advanced Automation",
+
+        status:
+          "Learning",
+
+        technologies: [
+          "Playwright",
+          "Advanced API Automation",
+          "Docker",
+          "Grid",
+        ],
       },
 
       {
         number: "06",
-        title: "Quality Engineering",
-        status: "FUTURE",
-        description:
-          "Design scalable quality engineering solutions that improve reliability and provide meaningful quality feedback throughout the development lifecycle.",
+
+        title:
+          "Quality Engineering",
+
+        status:
+          "Learning",
+
+        technologies: [
+          "Cloud Testing",
+          "Performance Engineering",
+          "Test Architecture",
+          "Observability",
+        ],
       },
     ],
-
-    closing:
-      "I aim to design scalable quality engineering solutions that integrate seamlessly into modern development workflows and contribute to building highly reliable software systems.",
   },
 
   // =========================================
@@ -1107,140 +1169,101 @@ const portfolioData = {
 
   certifications: [
     {
-      id: "selenium-java-cucumber",
+      title:
+        "Web and Mobile Testing with Selenium",
 
-      number: "01",
+      provider:
+        "University of Minnesota",
 
-      title: "Selenium WebDriver with Java & Cucumber BDD",
+      date:
+        "December 2024",
 
-      provider: "Udemy",
-
-      date: "Jan 2026",
-
-      description:
-        "Learned advanced Selenium WebDriver automation, Cucumber BDD framework implementation, reusable automation architecture, test execution strategies, and automation framework development.",
+      category:
+        "Software Testing",
 
       skills: [
-        "Selenium WebDriver",
-        "Cucumber BDD",
-        "Automation Framework",
-        "TestNG",
-        "Page Object Model",
+        "Selenium",
+        "Web Testing",
+        "Mobile Testing",
       ],
     },
 
     {
-      id: "software-testing",
+      title:
+        "Foundations of Software Testing and Validation",
 
-      number: "02",
+      provider:
+        "University of Leeds",
 
-      title: "Software Testing",
+      date:
+        "April 2025",
 
-      provider: "NPTEL",
-
-      date: "Jan 2026",
-
-      description:
-        "Studied software testing fundamentals including testing methodologies, defect lifecycle, white-box testing, black-box testing, regression testing, integration testing, and software quality assurance concepts.",
+      category:
+        "Software Testing",
 
       skills: [
         "Software Testing",
-        "QA Concepts",
-        "Regression Testing",
-        "STLC",
-        "Defect Management",
+        "Validation",
+        "Test Design",
       ],
     },
 
     {
-      id: "automation-framework",
+      title:
+        "Understanding Cloud Fundamentals",
 
-      number: "03",
+      provider:
+        "LinkedIn Learning",
 
-      title: "Automation Framework Development",
+      date:
+        "January 2025",
 
-      provider: "Udemy",
-
-      date: "2025",
-
-      description:
-        "Built understanding of automation framework architecture using Selenium, TestNG, reusable utilities, reporting integration, and CI/CD-ready automation design.",
+      category:
+        "Cloud",
 
       skills: [
-        "Framework Design",
-        "Selenium",
-        "TestNG",
-        "CI/CD",
-        "Automation Architecture",
+        "Cloud Fundamentals",
+        "Cloud Concepts",
       ],
     },
 
     {
-      id: "api-testing",
+      title:
+        "Introduction to Web Design and Development",
 
-      number: "04",
+      provider:
+        "Coursera",
 
-      title: "API Testing & REST Assured Fundamentals",
+      date:
+        "February 2025",
 
-      provider: "Udemy",
-
-      date: "2025",
-
-      description:
-        "Learned API testing concepts including REST API validation, CRUD operations testing, authentication handling, request-response validation, and automated API execution using Postman and REST Assured.",
-
-      skills: [
-        "Postman",
-        "REST Assured",
-        "API Validation",
-        "JSON",
-        "CRUD Testing",
-      ],
-    },
-
-    {
-      id: "web-design",
-
-      number: "05",
-
-      title: "Introduction to Web Design and Development",
-
-      provider: "Coursera",
-
-      date: "Aug 2025",
-
-      description:
-        "Studied frontend web development fundamentals including responsive layouts, HTML, CSS, JavaScript basics, and user-focused web interface design principles.",
+      category:
+        "Web Development",
 
       skills: [
         "HTML",
         "CSS",
         "JavaScript",
-        "Responsive Design",
-        "Frontend Basics",
       ],
     },
 
     {
-      id: "cloud-fundamentals",
+      title:
+        "SQL for Data Science",
 
-      number: "06",
+      provider:
+        "Great Learning Academy",
 
-      title: "Understanding Cloud Fundamentals",
+      date:
+        "January 2025",
 
-      provider: "Coursera",
-
-      date: "May 2025",
-
-      description:
-        "Learned cloud computing fundamentals including virtualization, cloud deployment models, scalability concepts, cloud services, and distributed infrastructure basics.",
+      category:
+        "Database",
 
       skills: [
-        "Cloud Computing",
-        "Scalability",
-        "Virtualization",
-        "Infrastructure",
-        "Cloud Basics",
+        "SQL",
+        "Data Analysis",
+        "Database Concepts",
       ],
     },
   ],
@@ -1250,20 +1273,26 @@ const portfolioData = {
   // =========================================
 
   contact: {
-    title: "Contact Me",
+    title:
+      "Let's Build Better Quality",
 
     description:
-      "Interested in QA Automation, SDET, API Testing, and Quality Engineering opportunities. Let's connect and build reliable software together.",
+      "Interested in QA Automation, SDET opportunities, or testing engineering projects? Let's connect.",
 
-    location: "Mumbai",
+    email:
+      "architsingh1609@gmail.com",
 
-    role: "QA Automation Engineer | SDET",
+    location:
+      "Mumbai, India",
 
-    email: "architsingh1609@gmail.com",
+    github:
+      "https://github.com/architsingh1609",
 
-    github: "https://github.com/architsingh1609",
+    linkedin:
+      "https://linkedin.com/in/qa1503",
 
-    linkedin: "https://linkedin.com/in/qa1503",
+    resume:
+      "/resume/Archit_Singh_SDET_QA_Engineer_Resume.pdf",
   },
 
   // =========================================
@@ -1271,19 +1300,40 @@ const portfolioData = {
   // =========================================
 
   footer: {
-    name: "Archit.SDET",
-
-    title: "QA Automation Engineer • SDET",
-
-    github: "https://github.com/architsingh1609",
-
-    linkedin: "https://linkedin.com/in/qa1503",
-
-    copyright: "© 2026 Archit Singh",
+    copyright:
+      "Archit Singh. All rights reserved.",
 
     builtWith:
-      "Built with React, Tailwind CSS & Passion for Quality Engineering",
+      "React & Tailwind CSS",
+
+    backToTop:
+      "Back to top",
   },
 };
+
+// =========================================
+// CALCULATED DATA
+// =========================================
+
+portfolioData.engineeringSnapshot.cards =
+  portfolioData.engineeringSnapshot.cards.map(
+    (card) => {
+      if (card.type === "experience") {
+        return {
+          ...card,
+          value: calculateProfessionalExperience(
+            portfolioData.experience
+          ),
+        };
+      }
+
+      return card;
+    }
+  );
+
+portfolioData.professionalExperience =
+  calculateProfessionalExperience(
+    portfolioData.experience
+  );
 
 export default portfolioData;

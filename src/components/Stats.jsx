@@ -1,41 +1,61 @@
+import { motion } from "framer-motion";
 import portfolioData from "../data/portfolioData";
 
-// =========================================
-// EXPERIENCE CALCULATOR
-// =========================================
+/* =========================================================
+   EXPERIENCE CALCULATOR
+========================================================= */
 
 function calculateTotalExperience(experience) {
-  if (!experience || experience.length === 0) {
+  if (!Array.isArray(experience) || experience.length === 0) {
     return "0 Months";
   }
 
-  let totalMonths = 0;
+  const validExperience = experience
+    .filter((job) => job?.startDate)
+    .map((job) => {
+      const start = new Date(`${job.startDate}T00:00:00`);
 
-  experience.forEach((job) => {
-    if (!job.startDate) return;
+      const end = job.endDate
+        ? new Date(`${job.endDate}T00:00:00`)
+        : new Date();
 
-    const start = new Date(`${job.startDate}T00:00:00`);
+      return {
+        start,
+        end,
+      };
+    })
+    .filter(
+      ({ start, end }) =>
+        !Number.isNaN(start.getTime()) &&
+        !Number.isNaN(end.getTime()) &&
+        end >= start,
+    );
 
-    const end = job.endDate
-      ? new Date(`${job.endDate}T00:00:00`)
-      : new Date();
+  if (validExperience.length === 0) {
+    return "0 Months";
+  }
 
-    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
-      return;
-    }
+  const earliestStart = new Date(
+    Math.min(...validExperience.map((job) => job.start.getTime())),
+  );
 
-    let months =
-      (end.getFullYear() - start.getFullYear()) * 12 +
-      (end.getMonth() - start.getMonth());
+  const latestEnd = new Date(
+    Math.max(...validExperience.map((job) => job.end.getTime())),
+  );
 
-    // Do not count the current month as complete
-    // until the starting day has been reached.
-    if (end.getDate() < start.getDate()) {
-      months -= 1;
-    }
+  let totalMonths =
+    (latestEnd.getFullYear() - earliestStart.getFullYear()) * 12 +
+    (latestEnd.getMonth() - earliestStart.getMonth());
 
-    totalMonths += Math.max(months, 0);
-  });
+  /*
+   * If the latest end day has not reached the starting
+   * day of the month, the final month is not complete.
+   */
+  if (latestEnd.getDate() < earliestStart.getDate()) {
+    totalMonths -= 1;
+  }
+
+  totalMonths = Math.max(totalMonths, 0);
 
   const years = Math.floor(totalMonths / 12);
   const months = totalMonths % 12;
@@ -53,9 +73,9 @@ function calculateTotalExperience(experience) {
   }`;
 }
 
-// =========================================
-// ENGINEERING SNAPSHOT DATA
-// =========================================
+/* =========================================================
+   ENGINEERING SNAPSHOT DATA
+========================================================= */
 
 function getSnapshotItems(totalExperience) {
   return [
@@ -66,7 +86,7 @@ function getSnapshotItems(totalExperience) {
     },
     {
       label: "QA Projects",
-      value: "8+",
+      value: "6+",
       description: "Automation, API & Manual Testing",
     },
     {
@@ -102,13 +122,13 @@ function getSnapshotItems(totalExperience) {
   ];
 }
 
-// =========================================
-// ENGINEERING SNAPSHOT
-// =========================================
+/* =========================================================
+   ENGINEERING SNAPSHOT
+========================================================= */
 
 function Stats() {
   const totalExperience = calculateTotalExperience(
-    portfolioData.experience
+    portfolioData.experience,
   );
 
   const snapshotItems = getSnapshotItems(totalExperience);
@@ -116,102 +136,259 @@ function Stats() {
   return (
     <section
       id="engineering-snapshot"
-      className="py-20 px-6 bg-slate-950"
+      aria-labelledby="engineering-snapshot-heading"
+      className="
+        relative
+        overflow-hidden
+        bg-[var(--bg-primary)]
+        px-4
+        py-20
+        text-[var(--text-primary)]
+        transition-colors
+        duration-300
+        sm:px-6
+        sm:py-24
+      "
     >
-      <div className="max-w-7xl mx-auto">
-        {/* =========================================
-            SECTION HEADING
-        ========================================= */}
+      {/* =======================================================
+          BACKGROUND DECORATION
+      ======================================================== */}
 
-        <div className="text-center mb-14">
-          <p className="text-cyan-400 uppercase tracking-[0.25em] text-sm font-semibold mb-3">
+      <div
+        aria-hidden="true"
+        className="
+          pointer-events-none
+          absolute
+          -left-24
+          top-20
+          h-72
+          w-72
+          rounded-full
+          bg-blue-100/20
+          blur-3xl
+          dark:bg-blue-500/[0.025]
+        "
+      />
+
+      <div
+        aria-hidden="true"
+        className="
+          pointer-events-none
+          absolute
+          -right-24
+          bottom-20
+          h-80
+          w-80
+          rounded-full
+          bg-slate-100/60
+          blur-3xl
+          dark:bg-blue-950/20
+        "
+      />
+
+      <div className="relative z-10 mx-auto max-w-7xl">
+        {/* =====================================================
+            SECTION HEADING
+        ====================================================== */}
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{
+            duration: 0.7,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="mb-12 text-center sm:mb-14"
+        >
+          <p
+            className="
+              mb-3
+              text-xs
+              font-semibold
+              uppercase
+              tracking-[0.25em]
+              text-[var(--accent)]
+              sm:text-sm
+            "
+          >
             Engineering Snapshot
           </p>
 
-          <h2 className="text-4xl md:text-5xl font-bold text-white">
+          <h2
+            id="engineering-snapshot-heading"
+            className="
+              text-3xl
+              font-bold
+              text-[var(--text-primary)]
+              transition-colors
+              duration-300
+              sm:text-4xl
+              md:text-5xl
+            "
+          >
             QA Automation at a Glance
           </h2>
 
-          <p className="text-gray-400 max-w-2xl mx-auto mt-5 text-base md:text-lg leading-7">
+          <div
+            aria-hidden="true"
+            className="
+              mx-auto
+              mt-4
+              h-1
+              w-24
+              rounded-full
+              bg-[var(--accent)]
+              sm:w-32
+            "
+          />
+
+          <p
+            className="
+              mx-auto
+              mt-5
+              max-w-2xl
+              text-sm
+              leading-7
+              text-[var(--text-secondary)]
+              transition-colors
+              duration-300
+              sm:text-base
+              sm:leading-8
+              md:text-lg
+            "
+          >
             A quick overview of my experience, automation stack, testing
             capabilities, and Quality Engineering focus.
           </p>
-        </div>
+        </motion.div>
 
-        {/* =========================================
+        {/* =====================================================
             SNAPSHOT CARDS
-        ========================================= */}
+        ====================================================== */}
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div
+          className="
+            grid
+            grid-cols-1
+            gap-5
+            sm:grid-cols-2
+            sm:gap-6
+            lg:grid-cols-4
+          "
+        >
           {snapshotItems.map((item, index) => (
-            <div
+            <motion.article
               key={`${item.label}-${index}`}
+              initial={{
+                opacity: 0,
+                y: 30,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
+              viewport={{
+                once: true,
+                amount: 0.15,
+              }}
+              transition={{
+                duration: 0.5,
+                delay: index * 0.06,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               className="
                 group
                 relative
-                bg-slate-900
-                border border-slate-800
-                rounded-3xl
-                p-6
-                min-h-[190px]
                 flex
+                min-h-[190px]
                 flex-col
-                justify-between
                 overflow-hidden
-                hover:border-cyan-400
-                hover:-translate-y-2
-                hover:shadow-[0_0_30px_rgba(34,211,238,0.12)]
+                rounded-3xl
+                border
+                border-[var(--border-light)]
+                bg-[var(--bg-card)]
+                p-6
+                shadow-[var(--shadow-soft)]
                 transition-all
                 duration-300
+                hover:-translate-y-1
+                hover:border-[var(--border-accent)]
+                hover:bg-[var(--bg-card-soft)]
+                hover:shadow-[var(--shadow-medium)]
               "
             >
-              {/* =========================================
-                  CARD GLOW
-              ========================================= */}
+              {/* Card Accent */}
 
               <div
+                aria-hidden="true"
                 className="
+                  pointer-events-none
                   absolute
-                  -top-16
                   -right-16
-                  w-32
+                  -top-16
                   h-32
+                  w-32
                   rounded-full
-                  bg-cyan-400/5
+                  bg-[var(--accent)]
+                  opacity-[0.04]
                   blur-2xl
-                  group-hover:bg-cyan-400/10
                   transition-all
                   duration-300
+                  group-hover:opacity-[0.08]
                 "
               />
 
-              {/* =========================================
-                  CARD CONTENT
-              ========================================= */}
+              {/* Card Content */}
 
               <div className="relative z-10">
-                <p className="text-sm text-cyan-400 font-semibold uppercase tracking-wider mb-3">
+                <p
+                  className="
+                    mb-3
+                    text-xs
+                    font-semibold
+                    uppercase
+                    tracking-[0.15em]
+                    text-[var(--accent)]
+                    sm:text-sm
+                  "
+                >
                   {item.label}
                 </p>
 
                 <h3
                   className="
-                    text-xl
-                    md:text-2xl
-                    font-bold
-                    text-white
-                    leading-snug
                     break-words
+                    text-xl
+                    font-bold
+                    leading-snug
+                    text-[var(--text-primary)]
+                    transition-colors
+                    duration-300
+                    group-hover:text-[var(--accent)]
+                    md:text-2xl
                   "
                 >
                   {item.value}
                 </h3>
               </div>
 
-              <p className="relative z-10 text-gray-400 text-sm mt-5 leading-6">
+              <p
+                className="
+                  relative
+                  z-10
+                  mt-auto
+                  pt-5
+                  text-sm
+                  leading-6
+                  text-[var(--text-secondary)]
+                  transition-colors
+                  duration-300
+                "
+              >
                 {item.description}
               </p>
-            </div>
+            </motion.article>
           ))}
         </div>
       </div>

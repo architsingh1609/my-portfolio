@@ -1,0 +1,2158 @@
+/* =========================================================
+   GLOBAL PORTAL ANIMATIONS
+   Professional White / Black / Ash Grey / Blue Theme
+
+   Goals:
+   - Restrained professional motion
+   - Consistent easing
+   - Accessible interaction states
+   - Mobile-safe hover behavior
+   - Reduced-motion support
+   - Dark/light theme compatibility
+   - Minimal visual noise
+========================================================= */
+
+
+/* =========================================================
+   01. BASE MOTION VARIABLES
+========================================================= */
+
+:root {
+
+  --animation-instant: 100ms;
+  --animation-fast: 180ms;
+  --animation-normal: 300ms;
+  --animation-smooth: 500ms;
+  --animation-slow: 800ms;
+
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.25, 0.8, 0.25, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --motion-distance-xs: 4px;
+  --motion-distance-sm: 8px;
+  --motion-distance-md: 20px;
+  --motion-distance-lg: 32px;
+
+}
+
+
+/* =========================================================
+   02. GLOBAL SMOOTH SCROLL
+========================================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+/* =========================================================
+   03. PAGE FADE-IN
+========================================================= */
+
+body {
+  animation:
+    pageFadeIn
+    700ms
+    var(--ease-standard)
+    both;
+}
+
+@keyframes pageFadeIn {
+
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+
+}
+
+
+/* =========================================================
+   04. FADE UP
+========================================================= */
+
+.animate-fade-up {
+
+  animation:
+    fadeUp
+    700ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes fadeUp {
+
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   05. FADE DOWN
+========================================================= */
+
+.animate-fade-down {
+
+  animation:
+    fadeDown
+    700ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes fadeDown {
+
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   06. FADE LEFT
+========================================================= */
+
+.animate-fade-left {
+
+  animation:
+    fadeLeft
+    700ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes fadeLeft {
+
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+}
+
+
+/* =========================================================
+   07. FADE RIGHT
+========================================================= */
+
+.animate-fade-right {
+
+  animation:
+    fadeRight
+    700ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes fadeRight {
+
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+}
+
+
+/* =========================================================
+   08. SCALE IN
+========================================================= */
+
+.animate-scale-in {
+
+  animation:
+    scaleIn
+    600ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes scaleIn {
+
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+}
+
+
+/* =========================================================
+   09. SOFT ZOOM
+========================================================= */
+
+.animate-soft-zoom {
+
+  animation:
+    softZoom
+    800ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes softZoom {
+
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+}
+
+
+/* =========================================================
+   10. STAGGERED CHILDREN
+========================================================= */
+
+.stagger-children > * {
+
+  opacity: 0;
+
+  animation:
+    staggerReveal
+    650ms
+    var(--ease-standard)
+    forwards;
+
+}
+
+.stagger-children > *:nth-child(1) {
+  animation-delay: 80ms;
+}
+
+.stagger-children > *:nth-child(2) {
+  animation-delay: 140ms;
+}
+
+.stagger-children > *:nth-child(3) {
+  animation-delay: 200ms;
+}
+
+.stagger-children > *:nth-child(4) {
+  animation-delay: 260ms;
+}
+
+.stagger-children > *:nth-child(5) {
+  animation-delay: 320ms;
+}
+
+.stagger-children > *:nth-child(6) {
+  animation-delay: 380ms;
+}
+
+.stagger-children > *:nth-child(7) {
+  animation-delay: 440ms;
+}
+
+.stagger-children > *:nth-child(8) {
+  animation-delay: 500ms;
+}
+
+@keyframes staggerReveal {
+
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   11. CARD HOVER
+========================================================= */
+
+.animate-card-hover {
+
+  transition:
+    transform var(--animation-normal) var(--ease-standard),
+    box-shadow var(--animation-normal) var(--ease-soft),
+    border-color var(--animation-normal) var(--ease-soft);
+
+}
+
+.animate-card-hover:hover {
+  transform: translateY(-6px);
+}
+
+
+/* =========================================================
+   12. PROFESSIONAL CARD LIFT
+========================================================= */
+
+.professional-card {
+
+  transition:
+    transform 350ms var(--ease-standard),
+    box-shadow 350ms var(--ease-soft),
+    border-color 350ms var(--ease-soft);
+
+}
+
+.professional-card:hover {
+
+  transform: translateY(-6px);
+
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.08);
+
+}
+
+
+/* =========================================================
+   13. IMAGE HOVER
+========================================================= */
+
+.image-hover {
+  overflow: hidden;
+}
+
+.image-hover img {
+
+  transition:
+    transform 600ms var(--ease-standard),
+    filter 600ms var(--ease-soft);
+
+}
+
+.image-hover:hover img {
+  transform: scale(1.035);
+}
+
+
+/* =========================================================
+   14. PROFILE FLOAT
+========================================================= */
+
+.animate-profile-float {
+
+  animation:
+    profileFloat
+    5s
+    ease-in-out
+    infinite;
+
+}
+
+@keyframes profileFloat {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+
+}
+
+
+/* =========================================================
+   15. SOFT FLOAT
+========================================================= */
+
+.animate-float {
+
+  animation:
+    softFloat
+    6s
+    ease-in-out
+    infinite;
+
+}
+
+@keyframes softFloat {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+
+}
+
+
+/* =========================================================
+   16. SUBTLE ACCENT PULSE
+========================================================= */
+
+.animate-accent-pulse {
+
+  animation:
+    accentPulse
+    2.8s
+    ease-in-out
+    infinite;
+
+}
+
+@keyframes accentPulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.72;
+  }
+
+}
+
+
+/* =========================================================
+   17. STATUS PULSE
+========================================================= */
+
+.status-pulse {
+  position: relative;
+}
+
+.status-pulse::after {
+
+  content: "";
+
+  position: absolute;
+
+  inset: -4px;
+
+  border:
+    1px solid currentColor;
+
+  border-radius:
+    var(--radius-pill);
+
+  opacity: 0;
+
+  animation:
+    statusPulse
+    2s
+    ease-out
+    infinite;
+
+  pointer-events: none;
+
+}
+
+@keyframes statusPulse {
+
+  0% {
+    transform: scale(0.85);
+    opacity: 0.45;
+  }
+
+  70%,
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+
+}
+
+
+/* =========================================================
+   18. BUTTON MOTION
+========================================================= */
+
+.animate-button {
+
+  transition:
+    transform 220ms var(--ease-standard),
+    box-shadow 220ms var(--ease-soft),
+    background-color 220ms var(--ease-soft),
+    border-color 220ms var(--ease-soft);
+
+}
+
+.animate-button:hover {
+  transform: translateY(-2px);
+}
+
+.animate-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+
+/* =========================================================
+   19. LINK UNDERLINE REVEAL
+========================================================= */
+
+.animated-link {
+
+  position: relative;
+  display: inline-block;
+
+}
+
+.animated-link::after {
+
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  bottom: -4px;
+
+  width: 100%;
+  height: 1.5px;
+
+  background: currentColor;
+
+  transform:
+    scaleX(0);
+
+  transform-origin: right;
+
+  transition:
+    transform 300ms var(--ease-standard);
+
+}
+
+.animated-link:hover::after {
+
+  transform: scaleX(1);
+  transform-origin: left;
+
+}
+
+
+/* =========================================================
+   20. HEADING ACCENT REVEAL
+========================================================= */
+
+.heading-accent {
+
+  position: relative;
+  display: inline-block;
+
+}
+
+.heading-accent::after {
+
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  bottom: -8px;
+
+  width: 52px;
+  height: 3px;
+
+  border-radius:
+    var(--radius-pill);
+
+  background:
+    var(--accent);
+
+  transform:
+    scaleX(0);
+
+  transform-origin:
+    left;
+
+  transition:
+    transform 500ms var(--ease-standard);
+
+}
+
+.heading-accent:hover::after {
+  transform: scaleX(1);
+}
+
+
+/* =========================================================
+   21. GLASS HIGHLIGHT
+========================================================= */
+
+.glass-highlight {
+
+  position: relative;
+  overflow: hidden;
+
+}
+
+.glass-highlight::before {
+
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: -120%;
+
+  width: 70%;
+  height: 100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.42),
+      transparent
+    );
+
+  transform:
+    skewX(-20deg);
+
+  transition:
+    left 700ms var(--ease-standard);
+
+  pointer-events: none;
+
+}
+
+.glass-highlight:hover::before {
+  left: 140%;
+}
+
+
+/* =========================================================
+   22. SPOTLIGHT CARD
+========================================================= */
+
+.spotlight-card {
+
+  position: relative;
+  overflow: hidden;
+
+}
+
+.spotlight-card::before {
+
+  content: "";
+
+  position: absolute;
+
+  width: 220px;
+  height: 220px;
+
+  left: var(--x, 50%);
+  top: var(--y, 50%);
+
+  transform:
+    translate(-50%, -50%);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(37, 99, 235, 0.07) 0%,
+      rgba(37, 99, 235, 0.025) 35%,
+      transparent 70%
+    );
+
+  opacity: 0;
+
+  transition:
+    opacity 300ms var(--ease-soft);
+
+  pointer-events: none;
+
+}
+
+.spotlight-card:hover::before {
+  opacity: 1;
+}
+
+
+/* =========================================================
+   23. NAVBAR ENTRANCE
+========================================================= */
+
+.navbar-enter {
+
+  animation:
+    navbarEnter
+    700ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes navbarEnter {
+
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   24. MODAL ENTRANCE
+========================================================= */
+
+.modal-enter {
+
+  animation:
+    modalEnter
+    350ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes modalEnter {
+
+  from {
+    opacity: 0;
+    transform:
+      translateY(20px)
+      scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+}
+
+
+/* =========================================================
+   25. MODAL BACKDROP
+========================================================= */
+
+.backdrop-enter {
+
+  animation:
+    backdropEnter
+    300ms
+    var(--ease-soft)
+    both;
+
+}
+
+@keyframes backdropEnter {
+
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+
+}
+
+
+/* =========================================================
+   26. DROPDOWN
+========================================================= */
+
+.dropdown-enter {
+
+  transform-origin:
+    top center;
+
+  animation:
+    dropdownEnter
+    250ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes dropdownEnter {
+
+  from {
+    opacity: 0;
+    transform:
+      translateY(-8px)
+      scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+}
+
+
+/* =========================================================
+   27. TOOLTIP
+========================================================= */
+
+.tooltip-enter {
+
+  animation:
+    tooltipEnter
+    220ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes tooltipEnter {
+
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   28. SHIMMER
+========================================================= */
+
+.animate-shimmer {
+
+  position: relative;
+  overflow: hidden;
+
+}
+
+.animate-shimmer::after {
+
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  transform:
+    translateX(-100%);
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.48),
+      transparent
+    );
+
+  animation:
+    shimmer
+    2.4s
+    ease-in-out
+    infinite;
+
+  pointer-events: none;
+
+}
+
+@keyframes shimmer {
+
+  to {
+    transform:
+      translateX(100%);
+  }
+
+}
+
+
+/* =========================================================
+   29. TEXT REVEAL
+========================================================= */
+
+.text-reveal {
+  overflow: hidden;
+}
+
+.text-reveal > * {
+
+  animation:
+    textReveal
+    700ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes textReveal {
+
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   30. ROTATING ACCENT
+========================================================= */
+
+.animate-rotate-slow {
+
+  animation:
+    rotateSlow
+    18s
+    linear
+    infinite;
+
+}
+
+@keyframes rotateSlow {
+
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+
+}
+
+
+/* =========================================================
+   31. BREATHE EFFECT
+========================================================= */
+
+.animate-breathe {
+
+  animation:
+    breathe
+    4s
+    ease-in-out
+    infinite;
+
+}
+
+@keyframes breathe {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.015);
+  }
+
+}
+
+
+/* =========================================================
+   32. BORDER FLOW
+========================================================= */
+
+.border-flow {
+
+  position: relative;
+
+}
+
+.border-flow::before {
+
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  border-radius: inherit;
+
+  padding: 1px;
+
+  background:
+    linear-gradient(
+      120deg,
+      transparent 20%,
+      rgba(37, 99, 235, 0.30),
+      transparent 80%
+    );
+
+  background-size:
+    200% 100%;
+
+  animation:
+    borderFlow
+    4s
+    linear
+    infinite;
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+
+  -webkit-mask-composite:
+    xor;
+
+  mask-composite:
+    exclude;
+
+  pointer-events: none;
+
+}
+
+@keyframes borderFlow {
+
+  from {
+    background-position:
+      200% 0;
+  }
+
+  to {
+    background-position:
+      -200% 0;
+  }
+
+}
+
+
+/* =========================================================
+   33. SCROLL INDICATOR
+========================================================= */
+
+.scroll-indicator {
+
+  animation:
+    scrollIndicator
+    2s
+    ease-in-out
+    infinite;
+
+}
+
+@keyframes scrollIndicator {
+
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: translateY(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(6px);
+  }
+
+}
+
+
+/* =========================================================
+   34. LOADING DOT
+========================================================= */
+
+.loading-dot {
+
+  animation:
+    loadingDot
+    1.4s
+    ease-in-out
+    infinite;
+
+}
+
+.loading-dot:nth-child(2) {
+  animation-delay: 160ms;
+}
+
+.loading-dot:nth-child(3) {
+  animation-delay: 320ms;
+}
+
+@keyframes loadingDot {
+
+  0%,
+  70%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.45;
+  }
+
+  35% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+
+}
+
+
+/* =========================================================
+   35. CURSOR GLOW
+========================================================= */
+
+.cursor-glow {
+
+  transition:
+    transform 200ms var(--ease-standard),
+    opacity 200ms var(--ease-soft);
+
+  pointer-events: none;
+
+}
+
+
+/* =========================================================
+   36. ICON HOVER
+========================================================= */
+
+.icon-hover {
+
+  transition:
+    transform 250ms var(--ease-spring),
+    color 250ms var(--ease-soft);
+
+}
+
+.icon-hover:hover {
+  transform:
+    translateY(-3px)
+    scale(1.08);
+}
+
+
+/* =========================================================
+   37. TAG / CHIP HOVER
+========================================================= */
+
+.tag-hover {
+
+  transition:
+    transform 220ms var(--ease-standard),
+    background-color 220ms var(--ease-soft),
+    border-color 220ms var(--ease-soft),
+    color 220ms var(--ease-soft);
+
+}
+
+.tag-hover:hover {
+  transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   38. IMAGE REVEAL
+========================================================= */
+
+.image-reveal {
+  overflow: hidden;
+}
+
+.image-reveal img {
+
+  animation:
+    imageReveal
+    900ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes imageReveal {
+
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+}
+
+
+/* =========================================================
+   39. SECTION DIVIDER
+========================================================= */
+
+.section-divider {
+
+  transform-origin:
+    left;
+
+  animation:
+    dividerReveal
+    900ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes dividerReveal {
+
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+}
+
+
+/* =========================================================
+   40. SECTION REVEAL
+========================================================= */
+
+.section-reveal {
+
+  animation:
+    sectionReveal
+    800ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes sectionReveal {
+
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   41. SOFT BORDER GLOW
+========================================================= */
+
+.soft-border-glow {
+
+  transition:
+    border-color 350ms var(--ease-soft),
+    box-shadow 350ms var(--ease-soft);
+
+}
+
+.soft-border-glow:hover {
+
+  border-color:
+    var(--border-accent);
+
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.07),
+    0 0 0 1px rgba(37, 99, 235, 0.04);
+
+}
+
+
+/* =========================================================
+   42. CONTENT LIFT
+========================================================= */
+
+.content-lift {
+
+  transition:
+    transform 350ms var(--ease-standard),
+    opacity 350ms var(--ease-soft);
+
+}
+
+.content-lift:hover {
+  transform: translateY(-4px);
+}
+
+
+/* =========================================================
+   43. BLUE ACCENT LINE
+========================================================= */
+
+.accent-line {
+
+  position: relative;
+  overflow: hidden;
+
+}
+
+.accent-line::after {
+
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  bottom: 0;
+
+  width: 100%;
+  height: 2px;
+
+  background:
+    var(--accent);
+
+  transform:
+    scaleX(0);
+
+  transform-origin:
+    left;
+
+  transition:
+    transform 450ms var(--ease-standard);
+
+}
+
+.accent-line:hover::after {
+  transform: scaleX(1);
+}
+
+
+/* =========================================================
+   44. ICON BOUNCE
+========================================================= */
+
+.icon-bounce:hover {
+
+  animation:
+    iconBounce
+    550ms
+    var(--ease-spring);
+
+}
+
+@keyframes iconBounce {
+
+  0% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(-5px);
+  }
+
+  70% {
+    transform: translateY(1px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   45. CARD GLOW ON HOVER
+========================================================= */
+
+.card-glow {
+
+  transition:
+    box-shadow 350ms var(--ease-soft),
+    border-color 350ms var(--ease-soft);
+
+}
+
+.card-glow:hover {
+
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.08),
+    0 0 30px rgba(37, 99, 235, 0.045);
+
+}
+
+
+/* =========================================================
+   46. NUMBER REVEAL
+========================================================= */
+
+.number-reveal {
+
+  animation:
+    numberReveal
+    700ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes numberReveal {
+
+  from {
+    opacity: 0;
+    transform:
+      translateY(12px)
+      scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+}
+
+
+/* =========================================================
+   47. HORIZONTAL REVEAL
+========================================================= */
+
+.horizontal-reveal {
+  overflow: hidden;
+}
+
+.horizontal-reveal > * {
+
+  animation:
+    horizontalReveal
+    750ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes horizontalReveal {
+
+  from {
+    opacity: 0;
+    transform: translateX(-35px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+}
+
+
+/* =========================================================
+   48. VERTICAL REVEAL
+========================================================= */
+
+.vertical-reveal {
+  overflow: hidden;
+}
+
+.vertical-reveal > * {
+
+  animation:
+    verticalReveal
+    750ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes verticalReveal {
+
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   49. GRADIENT FLOW
+========================================================= */
+
+.gradient-flow {
+
+  background-size:
+    200% 200%;
+
+  animation:
+    gradientFlow
+    8s
+    ease-in-out
+    infinite;
+
+}
+
+@keyframes gradientFlow {
+
+  0%,
+  100% {
+    background-position:
+      0% 50%;
+  }
+
+  50% {
+    background-position:
+      100% 50%;
+  }
+
+}
+
+
+/* =========================================================
+   50. SUBTLE ROTATION
+========================================================= */
+
+.rotate-hover {
+
+  transition:
+    transform 350ms var(--ease-standard);
+
+}
+
+.rotate-hover:hover {
+  transform:
+    rotate(2deg)
+    scale(1.02);
+}
+
+
+/* =========================================================
+   51. SEARCH RESULT REVEAL
+========================================================= */
+
+.search-result-reveal {
+
+  animation:
+    searchResultReveal
+    400ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes searchResultReveal {
+
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   52. TIMELINE REVEAL
+========================================================= */
+
+.timeline-reveal {
+
+  animation:
+    timelineReveal
+    700ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes timelineReveal {
+
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+}
+
+
+/* =========================================================
+   53. WORKFLOW CONNECTOR
+========================================================= */
+
+.workflow-connector {
+
+  transform-origin:
+    top;
+
+  animation:
+    workflowConnector
+    900ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes workflowConnector {
+
+  from {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+
+}
+
+
+/* =========================================================
+   54. TERMINAL CURSOR
+========================================================= */
+
+.terminal-cursor::after {
+
+  content: "|";
+
+  margin-left: 3px;
+
+  color:
+    var(--accent);
+
+  animation:
+    terminalCursor
+    1s
+    steps(1)
+    infinite;
+
+}
+
+@keyframes terminalCursor {
+
+  0%,
+  45% {
+    opacity: 1;
+  }
+
+  46%,
+  100% {
+    opacity: 0;
+  }
+
+}
+
+
+/* =========================================================
+   55. PROGRESS LINE
+========================================================= */
+
+.progress-line {
+
+  position: relative;
+  overflow: hidden;
+
+}
+
+.progress-line::after {
+
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    var(--accent);
+
+  transform:
+    scaleX(0);
+
+  transform-origin:
+    left;
+
+  animation:
+    progressLine
+    1.2s
+    var(--ease-standard)
+    both;
+
+  pointer-events: none;
+
+}
+
+@keyframes progressLine {
+
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+
+}
+
+
+/* =========================================================
+   56. HERO NAME REVEAL
+========================================================= */
+
+.hero-name-reveal {
+
+  animation:
+    heroNameReveal
+    900ms
+    var(--ease-standard)
+    both;
+
+}
+
+@keyframes heroNameReveal {
+
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+    letter-spacing: 0.04em;
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: normal;
+  }
+
+}
+
+
+/* =========================================================
+   57. HERO CONTENT SEQUENCE
+========================================================= */
+
+.hero-sequence > * {
+
+  opacity: 0;
+
+  animation:
+    heroSequence
+    700ms
+    var(--ease-standard)
+    forwards;
+
+}
+
+.hero-sequence > *:nth-child(1) {
+  animation-delay: 100ms;
+}
+
+.hero-sequence > *:nth-child(2) {
+  animation-delay: 180ms;
+}
+
+.hero-sequence > *:nth-child(3) {
+  animation-delay: 260ms;
+}
+
+.hero-sequence > *:nth-child(4) {
+  animation-delay: 340ms;
+}
+
+.hero-sequence > *:nth-child(5) {
+  animation-delay: 420ms;
+}
+
+@keyframes heroSequence {
+
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   58. PROFILE IMAGE BREATHING
+========================================================= */
+
+.profile-breathe {
+
+  animation:
+    profileBreathe
+    5s
+    ease-in-out
+    infinite;
+
+}
+
+@keyframes profileBreathe {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.015);
+  }
+
+}
+
+
+/* =========================================================
+   59. HOVER BORDER SWEEP
+========================================================= */
+
+.border-sweep {
+
+  position: relative;
+  overflow: hidden;
+
+}
+
+.border-sweep::after {
+
+  content: "";
+
+  position: absolute;
+
+  left: -100%;
+  bottom: 0;
+
+  width: 100%;
+  height: 2px;
+
+  background:
+    var(--accent);
+
+  transition:
+    left 500ms var(--ease-standard);
+
+  pointer-events: none;
+
+}
+
+.border-sweep:hover::after {
+  left: 0;
+}
+
+
+/* =========================================================
+   60. FOCUS ACCESSIBILITY
+========================================================= */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+
+  outline:
+    2px solid var(--accent);
+
+  outline-offset:
+    3px;
+
+}
+
+
+/* =========================================================
+   61. REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  body {
+    animation: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+
+    animation-duration:
+      0.01ms !important;
+
+    animation-delay:
+      0ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      0.01ms !important;
+
+    scroll-behavior:
+      auto !important;
+
+  }
+
+  .stagger-children > *,
+  .hero-sequence > *,
+  .text-reveal > *,
+  .horizontal-reveal > *,
+  .vertical-reveal > * {
+
+    opacity: 1 !important;
+
+    transform:
+      none !important;
+
+  }
+
+  .animate-profile-float,
+  .animate-float,
+  .animate-accent-pulse,
+  .animate-breathe,
+  .animate-rotate-slow,
+  .scroll-indicator,
+  .gradient-flow,
+  .profile-breathe,
+  .border-flow,
+  .terminal-cursor::after {
+
+    animation:
+      none !important;
+
+  }
+
+  .professional-card:hover,
+  .animate-card-hover:hover,
+  .content-lift:hover,
+  .rotate-hover:hover,
+  .icon-hover:hover,
+  .tag-hover:hover,
+  .animate-button:hover {
+
+    transform:
+      none !important;
+
+  }
+
+}
+
+
+/* =========================================================
+   62. MOBILE OPTIMIZATION
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .professional-card:hover,
+  .animate-card-hover:hover,
+  .content-lift:hover {
+
+    transform:
+      translateY(-3px);
+
+  }
+
+  .rotate-hover:hover {
+
+    transform:
+      scale(1.01);
+
+  }
+
+  .spotlight-card::before {
+
+    width: 160px;
+    height: 160px;
+
+  }
+
+  .glass-highlight::before {
+
+    width: 90%;
+
+  }
+
+}
+
+
+/* =========================================================
+   63. DARK MODE MOTION TUNING
+========================================================= */
+
+.dark .glass-highlight::before {
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.08),
+      transparent
+    );
+
+}
+
+.dark .professional-card:hover {
+
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.28);
+
+}
+
+.dark .soft-border-glow:hover {
+
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(96, 165, 250, 0.07);
+
+}
+
+.dark .card-glow:hover {
+
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.30),
+    0 0 30px rgba(96, 165, 250, 0.07);
+
+}
+
+
+/* =========================================================
+   64. POINTER / TOUCH OPTIMIZATION
+========================================================= */
+
+@media (hover: none), (pointer: coarse) {
+
+  .professional-card:hover,
+  .animate-card-hover:hover,
+  .content-lift:hover,
+  .rotate-hover:hover,
+  .icon-hover:hover,
+  .tag-hover:hover {
+
+    transform:
+      none;
+
+  }
+
+  .animated-link::after,
+  .heading-accent::after,
+  .accent-line::after,
+  .border-sweep::after {
+
+    display:
+      none;
+
+  }
+
+  .glass-highlight::before,
+  .spotlight-card::before {
+
+    display:
+      none;
+
+  }
+
+}
+
+
+/* =========================================================
+   65. KEYBOARD INTERACTION
+========================================================= */
+
+@media (hover: hover) and (pointer: fine) {
+
+  .animated-link:focus-visible::after,
+  .heading-accent:focus-visible::after,
+  .accent-line:focus-visible::after {
+
+    transform:
+      scaleX(1);
+
+    transform-origin:
+      left;
+
+  }
+
+}
+
+
+/* =========================================================
+   66. MOTION SAFETY
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .glass-highlight::before,
+  .spotlight-card::before,
+  .border-flow::before,
+  .animate-shimmer::after,
+  .status-pulse::after {
+
+    animation:
+      none !important;
+
+    transition:
+      none !important;
+
+  }
+
+}

@@ -1,6 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+} from "framer-motion";
 
 import portfolioData from "../data/portfolioData";
 
@@ -18,7 +26,9 @@ function toText(value) {
   }
 
   if (typeof value === "object") {
-    return Object.values(value).map(toText).join(" ");
+    return Object.values(value)
+      .map(toText)
+      .join(" ");
   }
 
   return String(value);
@@ -50,16 +60,24 @@ function buildSearchItems() {
   if (portfolioData) {
     items.push({
       id: "hero",
-      title: toText(portfolioData.name) || "Archit Singh",
+      title:
+        toText(portfolioData.name) ||
+        "Archit Singh",
       category: "Profile",
       description: `${toText(
         portfolioData.title
-      )} — ${toText(portfolioData.hero?.specialization)}`,
+      )} — ${toText(
+        portfolioData.hero?.specialization
+      )}`,
       keywords: [
         toText(portfolioData.name),
         toText(portfolioData.title),
-        toText(portfolioData.hero?.specialization),
-        ...safeArray(portfolioData.hero?.coreStack).map(toText),
+        toText(
+          portfolioData.hero?.specialization
+        ),
+        ...safeArray(
+          portfolioData.hero?.coreStack
+        ).map(toText),
         "QA Automation Engineer",
         "SDET",
         "Quality Engineering",
@@ -72,25 +90,26 @@ function buildSearchItems() {
   // PROFESSIONAL HIGHLIGHTS
   // =========================================
 
-  safeArray(portfolioData?.professionalHighlights).forEach(
-    (item, index) => {
-      items.push({
-        id: `highlight-${index}`,
-        title:
-          toText(item?.title) || "Professional Highlight",
-        category: "Professional Highlight",
-        description: `${toText(item?.value)} — ${toText(
-          item?.description
-        )}`,
-        keywords: [
-          toText(item?.title),
-          toText(item?.value),
-          toText(item?.description),
-        ],
-        sectionId: "about",
-      });
-    }
-  );
+  safeArray(
+    portfolioData?.professionalHighlights
+  ).forEach((item, index) => {
+    items.push({
+      id: `highlight-${index}`,
+      title:
+        toText(item?.title) ||
+        "Professional Highlight",
+      category: "Professional Highlight",
+      description: `${toText(
+        item?.value
+      )} — ${toText(item?.description)}`,
+      keywords: [
+        toText(item?.title),
+        toText(item?.value),
+        toText(item?.description),
+      ],
+      sectionId: "about",
+    });
+  });
 
   // =========================================
   // ABOUT
@@ -100,10 +119,14 @@ function buildSearchItems() {
     id: "about",
     title: "About Me",
     category: "Profile",
-    description: toText(portfolioData?.about),
+    description: toText(
+      portfolioData?.about
+    ),
     keywords: [
       toText(portfolioData?.about),
-      toText(portfolioData?.engineeringPhilosophy),
+      toText(
+        portfolioData?.engineeringPhilosophy
+      ),
       "QA",
       "SDET",
       "Automation",
@@ -117,7 +140,9 @@ function buildSearchItems() {
   // SKILLS
   // =========================================
 
-  safeArray(portfolioData?.skills).forEach((skill, index) => {
+  safeArray(
+    portfolioData?.skills
+  ).forEach((skill, index) => {
     const skillText = toText(skill);
 
     items.push({
@@ -142,7 +167,9 @@ function buildSearchItems() {
   // SKILL CATEGORIES
   // =========================================
 
-  safeArray(portfolioData?.skillCategories).forEach(
+  safeArray(
+    portfolioData?.skillCategories
+  ).forEach(
     (category, categoryIndex) => {
       const categoryName =
         toText(category?.category) ||
@@ -156,25 +183,27 @@ function buildSearchItems() {
           category?.tools
       );
 
-      categorySkills.forEach((skill, skillIndex) => {
-        const skillText = toText(skill);
+      categorySkills.forEach(
+        (skill, skillIndex) => {
+          const skillText = toText(skill);
 
-        items.push({
-          id: `category-skill-${categoryIndex}-${skillIndex}`,
-          title: skillText,
-          category: categoryName,
-          description: `${categoryName} skill`,
-          keywords: [
-            skillText,
-            categoryName,
-            "QA",
-            "SDET",
-            "Testing",
-            "Automation",
-          ],
-          sectionId: "skills",
-        });
-      });
+          items.push({
+            id: `category-skill-${categoryIndex}-${skillIndex}`,
+            title: skillText,
+            category: categoryName,
+            description: `${categoryName} skill`,
+            keywords: [
+              skillText,
+              categoryName,
+              "QA",
+              "SDET",
+              "Testing",
+              "Automation",
+            ],
+            sectionId: "skills",
+          });
+        }
+      );
     }
   );
 
@@ -182,80 +211,122 @@ function buildSearchItems() {
   // EXPERIENCE
   // =========================================
 
-  safeArray(portfolioData?.experience).forEach(
-    (job, index) => {
-      items.push({
-        id: `experience-${index}`,
-        title: toText(job?.role) || "Experience",
-        category: "Experience",
-        description: `${toText(job?.company)} — ${toText(
-          job?.location
-        )}`,
-        keywords: [
-          toText(job?.company),
-          toText(job?.role),
-          toText(job?.location),
-          ...safeArray(job?.responsibilities).map(toText),
-          ...safeArray(job?.automation).map(toText),
-          ...safeArray(job?.impact).map(toText),
-        ],
-        sectionId: "experience",
-      });
-    }
-  );
+  safeArray(
+    portfolioData?.experience
+  ).forEach((job, index) => {
+    items.push({
+      id: `experience-${index}`,
+      title:
+        toText(job?.role) ||
+        "Experience",
+      category: "Experience",
+      description: `${toText(
+        job?.company
+      )} — ${toText(job?.location)}`,
+      keywords: [
+        toText(job?.company),
+        toText(job?.role),
+        toText(job?.location),
+        ...safeArray(
+          job?.responsibilities
+        ).map(toText),
+        ...safeArray(
+          job?.automation
+        ).map(toText),
+        ...safeArray(
+          job?.impact
+        ).map(toText),
+      ],
+      sectionId: "experience",
+    });
+  });
 
   // =========================================
   // PROJECTS
   // =========================================
 
-  safeArray(portfolioData?.projects).forEach(
-    (project, index) => {
-      items.push({
-        id: `project-${toText(project?.id) || index}`,
-        title: toText(project?.title) || "Project",
-        category: "Project",
-        description: toText(project?.description),
-        keywords: [
-          toText(project?.title),
-          toText(project?.description),
-          toText(project?.category),
-          toText(project?.role),
-          toText(project?.architecture),
-          ...safeArray(project?.technologies).map(toText),
-          ...safeArray(project?.testingScope).map(toText),
-          ...safeArray(project?.features).map(toText),
-          ...safeArray(project?.challenges).map(toText),
-          ...safeArray(project?.solutions).map(toText),
-          "QA Automation",
-          "SDET",
-        ],
-        sectionId: "projects",
-      });
-    }
-  );
+  safeArray(
+    portfolioData?.projects
+  ).forEach((project, index) => {
+    items.push({
+      id: `project-${
+        toText(project?.id) || index
+      }`,
+      title:
+        toText(project?.title) ||
+        "Project",
+      category: "Project",
+      description: toText(
+        project?.description
+      ),
+      keywords: [
+        toText(project?.title),
+        toText(project?.description),
+        toText(project?.category),
+        toText(project?.role),
+        toText(project?.architecture),
+        ...safeArray(
+          project?.technologies
+        ).map(toText),
+        ...safeArray(
+          project?.testingScope
+        ).map(toText),
+        ...safeArray(
+          project?.features
+        ).map(toText),
+        ...safeArray(
+          project?.challenges
+        ).map(toText),
+        ...safeArray(
+          project?.solutions
+        ).map(toText),
+        "QA Automation",
+        "SDET",
+      ],
+      sectionId: "projects",
+    });
+  });
 
   // =========================================
   // CERTIFICATIONS
   // =========================================
 
-  safeArray(portfolioData?.certifications).forEach(
+  safeArray(
+    portfolioData?.certifications
+  ).forEach(
     (certification, index) => {
       items.push({
         id: `certification-${
-          toText(certification?.id) || index
+          toText(certification?.id) ||
+          index
         }`,
         title:
-          toText(certification?.title) || "Certification",
+          toText(
+            certification?.title
+          ) ||
+          "Certification",
         category: "Certification",
         description: `${toText(
           certification?.provider
-        )} — ${toText(certification?.year)}`,
+        )} — ${toText(
+          certification?.year
+        )}`,
         keywords: [
-          toText(certification?.title),
-          toText(certification?.provider),
-          toText(certification?.year),
-          toText(certification?.description),
-          ...safeArray(certification?.skills).map(toText),
+          toText(
+            certification?.title
+          ),
+          toText(
+            certification?.provider
+          ),
+          toText(
+            certification?.year
+          ),
+          toText(
+            certification?.description
+          ),
+          ...safeArray(
+            certification?.skills
+          ).map(toText),
           ...safeArray(
             certification?.technologiesLearned
           ).map(toText),
@@ -272,36 +343,40 @@ function buildSearchItems() {
   // APPLICATION & DOMAIN EXPERIENCE
   // =========================================
 
-  safeArray(portfolioData?.systems).forEach(
-    (system, index) => {
-      items.push({
-        id: `system-${index}`,
-        title:
-          toText(system?.title) || "Application System",
-        category: "Application & Domain Experience",
-        description:
-          toText(system?.description) ||
-          "Application or engineering system",
-        keywords: [
-          toText(system?.title),
-          toText(system?.description),
-          ...safeArray(system?.technologies).map(toText),
-          "system",
-          "application",
-          "domain",
-          "testing",
-          "QA",
-          "Banking",
-          "ERP",
-          "CRM",
-          "HRMS",
-          "E-Commerce",
-          "REST API",
-        ],
-        sectionId: "systems",
-      });
-    }
-  );
+  safeArray(
+    portfolioData?.systems
+  ).forEach((system, index) => {
+    items.push({
+      id: `system-${index}`,
+      title:
+        toText(system?.title) ||
+        "Application System",
+      category:
+        "Application & Domain Experience",
+      description:
+        toText(system?.description) ||
+        "Application or engineering system",
+      keywords: [
+        toText(system?.title),
+        toText(system?.description),
+        ...safeArray(
+          system?.technologies
+        ).map(toText),
+        "system",
+        "application",
+        "domain",
+        "testing",
+        "QA",
+        "Banking",
+        "ERP",
+        "CRM",
+        "HRMS",
+        "E-Commerce",
+        "REST API",
+      ],
+      sectionId: "systems",
+    });
+  });
 
   // =========================================
   // QUALITY ENGINEERING PROCESS
@@ -315,14 +390,19 @@ function buildSearchItems() {
       title:
         toText(stage?.title) ||
         `QE Stage ${index + 1}`,
-      category: "Quality Engineering Process",
-      description: toText(stage?.description),
+      category:
+        "Quality Engineering Process",
+      description: toText(
+        stage?.description
+      ),
       keywords: [
         toText(stage?.title),
         toText(stage?.description),
         toText(stage?.why),
         toText(stage?.outcome),
-        ...safeArray(stage?.tools).map(toText),
+        ...safeArray(
+          stage?.tools
+        ).map(toText),
         "Quality Engineering",
         "QE",
         "SDET",
@@ -335,34 +415,39 @@ function buildSearchItems() {
   // AUTOMATION WORKFLOW
   // =========================================
 
-  safeArray(portfolioData?.automationWorkflow).forEach(
-    (stage, index) => {
-      items.push({
-        id: `workflow-${index}`,
-        title:
-          toText(stage?.title) ||
-          `Automation Stage ${index + 1}`,
-        category: "End-to-End QA Automation Workflow",
-        description: toText(stage?.description),
-        keywords: [
-          toText(stage?.title),
-          toText(stage?.description),
-          ...safeArray(stage?.tools).map(toText),
-          "Automation",
-          "Testing",
-          "SDET",
-          "Selenium",
-          "Java",
-          "TestNG",
-          "REST Assured",
-          "Postman",
-          "Jenkins",
-          "Maven",
-        ],
-        sectionId: "workflow",
-      });
-    }
-  );
+  safeArray(
+    portfolioData?.automationWorkflow
+  ).forEach((stage, index) => {
+    items.push({
+      id: `workflow-${index}`,
+      title:
+        toText(stage?.title) ||
+        `Automation Stage ${index + 1}`,
+      category:
+        "End-to-End QA Automation Workflow",
+      description: toText(
+        stage?.description
+      ),
+      keywords: [
+        toText(stage?.title),
+        toText(stage?.description),
+        ...safeArray(
+          stage?.tools
+        ).map(toText),
+        "Automation",
+        "Testing",
+        "SDET",
+        "Selenium",
+        "Java",
+        "TestNG",
+        "REST Assured",
+        "Postman",
+        "Jenkins",
+        "Maven",
+      ],
+      sectionId: "workflow",
+    });
+  });
 
   // =========================================
   // QUALITY ENGINEERING
@@ -377,11 +462,15 @@ function buildSearchItems() {
         toText(item?.title) ||
         `Quality Engineering ${index + 1}`,
       category: "Quality Engineering",
-      description: toText(item?.description),
+      description: toText(
+        item?.description
+      ),
       keywords: [
         toText(item?.title),
         toText(item?.description),
-        ...safeArray(item?.tools).map(toText),
+        ...safeArray(
+          item?.tools
+        ).map(toText),
         "Quality Engineering",
         "QE",
         "SDET",
@@ -394,37 +483,45 @@ function buildSearchItems() {
   // SDET ROADMAP
   // =========================================
 
-  safeArray(portfolioData?.sdetRoadmap).forEach(
-    (stage, index) => {
-      items.push({
-        id: `roadmap-${index}`,
-        title:
-          toText(stage?.label) ||
-          toText(stage?.title) ||
-          `Roadmap Stage ${index + 1}`,
-        category: "SDET Roadmap",
-        description: toText(stage?.description),
-        keywords: [
-          toText(stage?.stage),
-          toText(stage?.label),
-          toText(stage?.title),
-          toText(stage?.status),
-          toText(stage?.description),
-          ...safeArray(stage?.technologies).map(toText),
-          ...safeArray(stage?.practicalProjects).map(toText),
-          "SDET",
-          "Roadmap",
-        ],
-        sectionId: "goals",
-      });
-    }
-  );
+  safeArray(
+    portfolioData?.sdetRoadmap
+  ).forEach((stage, index) => {
+    items.push({
+      id: `roadmap-${index}`,
+      title:
+        toText(stage?.label) ||
+        toText(stage?.title) ||
+        `Roadmap Stage ${index + 1}`,
+      category: "SDET Roadmap",
+      description: toText(
+        stage?.description
+      ),
+      keywords: [
+        toText(stage?.stage),
+        toText(stage?.label),
+        toText(stage?.title),
+        toText(stage?.status),
+        toText(stage?.description),
+        ...safeArray(
+          stage?.technologies
+        ).map(toText),
+        ...safeArray(
+          stage?.practicalProjects
+        ).map(toText),
+        "SDET",
+        "Roadmap",
+      ],
+      sectionId: "goals",
+    });
+  });
 
   // =========================================
   // CURRENTLY BUILDING
   // =========================================
 
-  safeArray(portfolioData?.currentlyBuilding).forEach(
+  safeArray(
+    portfolioData?.currentlyBuilding
+  ).forEach(
     (technology, index) => {
       const technologyText = toText(
         technology?.title ||
@@ -475,31 +572,43 @@ function buildSearchItems() {
     sectionId: "contact",
   });
 
-  return items.filter((item) => item.title);
+  return items.filter(
+    (item) => item.title
+  );
 }
 
 // =========================================
 // SEARCH SCORING
 // =========================================
 
-function calculateSearchScore(item, query) {
-  const normalizedQuery = normalizeText(query);
+function calculateSearchScore(
+  item,
+  query
+) {
+  const normalizedQuery =
+    normalizeText(query);
 
   if (!normalizedQuery) {
     return 0;
   }
 
-  const queryWords = normalizedQuery.split(" ");
+  const queryWords =
+    normalizedQuery.split(" ");
 
-  const title = normalizeText(item?.title);
-
-  const category = normalizeText(item?.category);
-
-  const description = normalizeText(item?.description);
-
-  const keywords = safeArray(item?.keywords).map(
-    normalizeText
+  const title = normalizeText(
+    item?.title
   );
+
+  const category = normalizeText(
+    item?.category
+  );
+
+  const description =
+    normalizeText(item?.description);
+
+  const keywords = safeArray(
+    item?.keywords
+  ).map(normalizeText);
 
   const searchableText = [
     title,
@@ -510,40 +619,67 @@ function calculateSearchScore(item, query) {
 
   let score = 0;
 
-  // Exact title
+  // =========================================
+  // EXACT TITLE
+  // =========================================
+
   if (title === normalizedQuery) {
     score += 100;
   }
 
-  // Title starts with query
-  if (title.startsWith(normalizedQuery)) {
+  // =========================================
+  // TITLE STARTS WITH QUERY
+  // =========================================
+
+  if (
+    title.startsWith(normalizedQuery)
+  ) {
     score += 70;
   }
 
-  // Title contains query
-  if (title.includes(normalizedQuery)) {
+  // =========================================
+  // TITLE CONTAINS QUERY
+  // =========================================
+
+  if (
+    title.includes(normalizedQuery)
+  ) {
     score += 50;
   }
 
-  // Category
-  if (category === normalizedQuery) {
+  // =========================================
+  // CATEGORY
+  // =========================================
+
+  if (
+    category === normalizedQuery
+  ) {
     score += 45;
   }
 
-  if (category.includes(normalizedQuery)) {
+  if (
+    category.includes(normalizedQuery)
+  ) {
     score += 25;
   }
 
-  // Exact keyword
+  // =========================================
+  // EXACT KEYWORD
+  // =========================================
+
   if (
     keywords.some(
-      (keyword) => keyword === normalizedQuery
+      (keyword) =>
+        keyword === normalizedQuery
     )
   ) {
     score += 40;
   }
 
-  // Keyword contains query
+  // =========================================
+  // KEYWORD CONTAINS QUERY
+  // =========================================
+
   if (
     keywords.some((keyword) =>
       keyword.includes(normalizedQuery)
@@ -552,12 +688,22 @@ function calculateSearchScore(item, query) {
     score += 25;
   }
 
-  // Description
-  if (description.includes(normalizedQuery)) {
+  // =========================================
+  // DESCRIPTION
+  // =========================================
+
+  if (
+    description.includes(
+      normalizedQuery
+    )
+  ) {
     score += 15;
   }
 
-  // Individual words
+  // =========================================
+  // INDIVIDUAL WORDS
+  // =========================================
+
   queryWords.forEach((word) => {
     if (word.length < 2) {
       return;
@@ -584,13 +730,23 @@ function calculateSearchScore(item, query) {
     }
   });
 
-  // QA / SDET relevance
+  // =========================================
+  // QA / SDET RELEVANCE
+  // =========================================
+
   if (
-    ["qa", "sdet", "testing", "automation"].includes(
-      normalizedQuery
-    )
+    [
+      "qa",
+      "sdet",
+      "testing",
+      "automation",
+    ].includes(normalizedQuery)
   ) {
-    if (searchableText.includes(normalizedQuery)) {
+    if (
+      searchableText.includes(
+        normalizedQuery
+      )
+    ) {
       score += 10;
     }
   }
@@ -602,8 +758,18 @@ function calculateSearchScore(item, query) {
 // SEARCH COMPONENT
 // =========================================
 
-function PortfolioSearch({ onClose }) {
+function PortfolioSearch({
+  onClose,
+}) {
   const [query, setQuery] = useState("");
+  const [selectedIndex, setSelectedIndex] =
+    useState(-1);
+
+  const inputRef = useRef(null);
+
+  // =========================================
+  // BUILD SEARCH INDEX
+  // =========================================
 
   const searchItems = useMemo(() => {
     try {
@@ -618,8 +784,13 @@ function PortfolioSearch({ onClose }) {
     }
   }, []);
 
+  // =========================================
+  // CALCULATE RESULTS
+  // =========================================
+
   const results = useMemo(() => {
-    const trimmedQuery = query.trim();
+    const trimmedQuery =
+      query.trim();
 
     if (!trimmedQuery) {
       return [];
@@ -633,19 +804,92 @@ function PortfolioSearch({ onClose }) {
           trimmedQuery
         ),
       }))
-      .filter((item) => item.score > 0)
-      .sort((a, b) => b.score - a.score)
+      .filter(
+        (item) => item.score > 0
+      )
+      .sort(
+        (a, b) =>
+          b.score - a.score
+      )
       .slice(0, 8);
   }, [query, searchItems]);
 
   // =========================================
-  // ESCAPE KEY + BODY SCROLL LOCK
+  // INITIAL FOCUS
+  // ESCAPE
+  // BODY SCROLL LOCK
+  // KEYBOARD NAVIGATION
   // =========================================
 
   useEffect(() => {
+    const focusTimer =
+      window.setTimeout(() => {
+        inputRef.current?.focus();
+      }, 50);
+
     const handleKeyDown = (event) => {
+      // ---------------------------------------
+      // ESCAPE
+      // ---------------------------------------
+
       if (event.key === "Escape") {
+        event.preventDefault();
         onClose?.();
+        return;
+      }
+
+      // ---------------------------------------
+      // ARROW DOWN
+      // ---------------------------------------
+
+      if (
+        event.key === "ArrowDown" &&
+        results.length > 0
+      ) {
+        event.preventDefault();
+
+        setSelectedIndex((current) =>
+          current >= results.length - 1
+            ? 0
+            : current + 1
+        );
+
+        return;
+      }
+
+      // ---------------------------------------
+      // ARROW UP
+      // ---------------------------------------
+
+      if (
+        event.key === "ArrowUp" &&
+        results.length > 0
+      ) {
+        event.preventDefault();
+
+        setSelectedIndex((current) =>
+          current <= 0
+            ? results.length - 1
+            : current - 1
+        );
+
+        return;
+      }
+
+      // ---------------------------------------
+      // ENTER
+      // ---------------------------------------
+
+      if (
+        event.key === "Enter" &&
+        selectedIndex >= 0 &&
+        selectedIndex < results.length
+      ) {
+        event.preventDefault();
+
+        handleResultClick(
+          results[selectedIndex].sectionId
+        );
       }
     };
 
@@ -660,6 +904,10 @@ function PortfolioSearch({ onClose }) {
     document.body.style.overflow = "hidden";
 
     return () => {
+      window.clearTimeout(
+        focusTimer
+      );
+
       document.removeEventListener(
         "keydown",
         handleKeyDown
@@ -668,34 +916,76 @@ function PortfolioSearch({ onClose }) {
       document.body.style.overflow =
         originalOverflow;
     };
-  }, [onClose]);
+  }, [
+    onClose,
+    results,
+    selectedIndex,
+  ]);
 
   // =========================================
-  // RESULT CLICK
+  // RESET SELECTED RESULT
   // =========================================
 
-  const handleResultClick = (sectionId) => {
+  useEffect(() => {
+    setSelectedIndex(-1);
+  }, [query]);
+
+  // =========================================
+  // NAVIGATE TO RESULT
+  // =========================================
+
+  const handleResultClick = (
+    sectionId
+  ) => {
     onClose?.();
 
-    setTimeout(() => {
+    window.setTimeout(() => {
       const section =
-        document.getElementById(sectionId);
+        document.getElementById(
+          sectionId
+        );
 
-      if (section) {
-        const navbarOffset = 90;
-
-        const targetPosition =
-          section.getBoundingClientRect().top +
-          window.scrollY -
-          navbarOffset;
-
-        window.scrollTo({
-          top: targetPosition,
-          behavior: "smooth",
-        });
+      if (!section) {
+        return;
       }
+
+      const navbarOffset = 90;
+
+      const targetPosition =
+        section.getBoundingClientRect()
+          .top +
+        window.scrollY -
+        navbarOffset;
+
+      window.scrollTo({
+        top: Math.max(
+          targetPosition,
+          0
+        ),
+        behavior: "smooth",
+      });
     }, 150);
   };
+
+  // =========================================
+  // HANDLE SUGGESTION
+  // =========================================
+
+  const handleSuggestion = (
+    suggestion
+  ) => {
+    setQuery(suggestion);
+
+    window.requestAnimationFrame(
+      () => {
+        inputRef.current?.focus();
+      }
+    );
+  };
+
+  // =========================================
+  // RENDER
+  // =========================================
 
   return (
     <motion.div
@@ -706,15 +996,18 @@ function PortfolioSearch({ onClose }) {
         fixed
         inset-0
         z-[9999]
-        bg-slate-950/80
-        backdrop-blur-md
+        overflow-y-auto
+        bg-black/30
         px-4
         pt-24
+        backdrop-blur-md
         md:pt-28
-        overflow-y-auto
       "
       onMouseDown={(event) => {
-        if (event.target === event.currentTarget) {
+        if (
+          event.target ===
+          event.currentTarget
+        ) {
           onClose?.();
         }
       }}
@@ -730,141 +1023,291 @@ function PortfolioSearch({ onClose }) {
           y: 0,
           scale: 1,
         }}
-        transition={{ duration: 0.25 }}
+        transition={{
+          duration: 0.25,
+        }}
         className="
-          max-w-3xl
           mx-auto
-          bg-slate-900
-          border
-          border-cyan-400/20
-          rounded-3xl
-          shadow-[0_25px_80px_rgba(0,245,255,0.12)]
+          max-w-3xl
           overflow-hidden
+          rounded-3xl
+          border
+          border-[var(--border-light)]
+          bg-[var(--bg-primary)]
+          text-[var(--text-primary)]
+          shadow-[0_25px_80px_rgba(0,0,0,0.15)]
+          transition-colors
+          duration-300
         "
+        onMouseDown={(event) => {
+          event.stopPropagation();
+        }}
       >
-        {/* SEARCH HEADER */}
+        {/* =====================================
+            SEARCH HEADER
+        ====================================== */}
 
-        <div className="p-5 md:p-6 border-b border-slate-800">
+        <div
+          className="
+            border-b
+            border-[var(--border-light)]
+            p-5
+            md:p-6
+          "
+        >
           <div className="flex items-center gap-3">
-            <div className="text-cyan-400 text-xl">
+            <div
+              className="
+                text-xl
+                text-blue-600
+              "
+              aria-hidden="true"
+            >
               🔎
             </div>
 
             <input
+              ref={inputRef}
               autoFocus
               type="text"
               value={query}
               onChange={(event) =>
-                setQuery(event.target.value)
+                setQuery(
+                  event.target.value
+                )
               }
               placeholder="Search skills, projects, Selenium, API, Jenkins..."
+              aria-label="Search portfolio"
+              aria-controls="portfolio-search-results"
+              aria-autocomplete="list"
               className="
                 flex-1
                 bg-transparent
-                outline-none
-                text-white
-                placeholder:text-gray-500
                 text-base
+                text-[var(--text-primary)]
+                outline-none
+                placeholder:text-[var(--text-muted)]
                 md:text-lg
               "
             />
 
             <button
               type="button"
-              onClick={() => onClose?.()}
+              onClick={() =>
+                onClose?.()
+              }
               className="
-                text-gray-400
-                hover:text-cyan-400
-                transition
-                text-xl
                 px-2
+                text-xl
+                text-[var(--text-muted)]
+                transition
+                hover:text-blue-600
               "
               aria-label="Close search"
+              title="Close search"
             >
               ✕
             </button>
           </div>
         </div>
 
-        {/* SEARCH RESULTS */}
+        {/* =====================================
+            SEARCH RESULTS
+        ====================================== */}
 
-        <div className="max-h-[65vh] overflow-y-auto">
-          <AnimatePresence mode="popLayout">
-            {query.trim() && results.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="p-3"
-              >
-                {results.map((result) => (
-                  <motion.button
-                    key={result.id}
-                    type="button"
-                    onClick={() =>
-                      handleResultClick(
-                        result.sectionId
-                      )
+        <div
+          id="portfolio-search-results"
+          className="
+            max-h-[65vh]
+            overflow-y-auto
+          "
+          role="listbox"
+          aria-label="Portfolio search results"
+        >
+          <AnimatePresence
+            mode="popLayout"
+          >
+            {/* =================================
+                RESULTS FOUND
+            ================================== */}
+
+            {query.trim() &&
+              results.length > 0 && (
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                  }}
+                  animate={{
+                    opacity: 1,
+                  }}
+                  className="p-3"
+                >
+                  {results.map(
+                    (
+                      result,
+                      index
+                    ) => {
+                      const isSelected =
+                        index ===
+                        selectedIndex;
+
+                      return (
+                        <motion.button
+                          key={
+                            result.id
+                          }
+                          type="button"
+                          role="option"
+                          aria-selected={
+                            isSelected
+                          }
+                          onClick={() =>
+                            handleResultClick(
+                              result.sectionId
+                            )
+                          }
+                          whileHover={{
+                            x: 4,
+                          }}
+                          className={`
+                            group
+                            w-full
+                            rounded-2xl
+                            p-4
+                            text-left
+                            transition
+                            ${
+                              isSelected
+                                ? "bg-[var(--bg-card-soft)]"
+                                : "hover:bg-[var(--bg-card-soft)]"
+                            }
+                          `}
+                        >
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="min-w-0">
+                              <p
+                                className="
+                                  font-semibold
+                                  text-[var(--text-primary)]
+                                  transition
+                                  group-hover:text-blue-600
+                                "
+                              >
+                                {
+                                  result.title
+                                }
+                              </p>
+
+                              <p
+                                className="
+                                  mt-1
+                                  text-xs
+                                  uppercase
+                                  tracking-wider
+                                  text-blue-600
+                                "
+                              >
+                                {
+                                  result.category
+                                }
+                              </p>
+
+                              <p
+                                className="
+                                  mt-2
+                                  line-clamp-2
+                                  text-sm
+                                  text-[var(--text-secondary)]
+                                "
+                              >
+                                {
+                                  result.description
+                                }
+                              </p>
+                            </div>
+
+                            <span
+                              className="
+                                text-[var(--text-muted)]
+                                transition
+                                group-hover:text-blue-600
+                              "
+                              aria-hidden="true"
+                            >
+                              →
+                            </span>
+                          </div>
+                        </motion.button>
+                      );
                     }
-                    whileHover={{ x: 4 }}
+                  )}
+                </motion.div>
+              )}
+
+            {/* =================================
+                NO RESULTS
+            ================================== */}
+
+            {query.trim() &&
+              results.length === 0 && (
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                  }}
+                  animate={{
+                    opacity: 1,
+                  }}
+                  className="p-10 text-center"
+                >
+                  <p
                     className="
-                      w-full
-                      text-left
-                      p-4
-                      rounded-2xl
-                      hover:bg-slate-800
-                      transition
-                      group
+                      text-lg
+                      text-[var(--text-primary)]
                     "
                   >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="min-w-0">
-                        <p className="text-white font-semibold group-hover:text-cyan-400 transition">
-                          {result.title}
-                        </p>
+                    No matching results
+                    found.
+                  </p>
 
-                        <p className="text-xs text-cyan-400 mt-1 uppercase tracking-wider">
-                          {result.category}
-                        </p>
+                  <p
+                    className="
+                      mt-2
+                      text-sm
+                      text-[var(--text-secondary)]
+                    "
+                  >
+                    Try searching for
+                    Java, Selenium, API,
+                    Jenkins, Banking,
+                    ERP, CRM, HRMS,
+                    projects,
+                    certifications, or
+                    SDET.
+                  </p>
+                </motion.div>
+              )}
 
-                        <p className="text-sm text-gray-400 mt-2 line-clamp-2">
-                          {result.description}
-                        </p>
-                      </div>
-
-                      <span className="text-gray-500 group-hover:text-cyan-400 transition">
-                        →
-                      </span>
-                    </div>
-                  </motion.button>
-                ))}
-              </motion.div>
-            )}
-
-            {query.trim() && results.length === 0 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="p-10 text-center"
-              >
-                <p className="text-gray-300 text-lg">
-                  No matching results found.
-                </p>
-
-                <p className="text-gray-500 text-sm mt-2">
-                  Try searching for Java, Selenium, API,
-                  Jenkins, Banking, ERP, CRM, HRMS,
-                  projects, certifications, or SDET.
-                </p>
-              </motion.div>
-            )}
+            {/* =================================
+                EMPTY SEARCH STATE
+            ================================== */}
 
             {!query.trim() && (
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                initial={{
+                  opacity: 0,
+                }}
+                animate={{
+                  opacity: 1,
+                }}
                 className="p-8"
               >
-                <p className="text-gray-400 text-sm mb-4">
+                <p
+                  className="
+                    mb-4
+                    text-sm
+                    text-[var(--text-secondary)]
+                  "
+                >
                   Search your portfolio
                 </p>
 
@@ -881,30 +1324,69 @@ function PortfolioSearch({ onClose }) {
                     "Projects",
                     "Certifications",
                     "SDET",
-                  ].map((suggestion) => (
-                    <button
-                      key={suggestion}
-                      type="button"
-                      onClick={() =>
-                        setQuery(suggestion)
-                      }
-                      className="
-                        px-3
-                        py-2
-                        rounded-full
-                        bg-slate-800
-                        border
-                        border-slate-700
-                        text-gray-300
-                        text-sm
-                        hover:border-cyan-400
-                        hover:text-cyan-400
-                        transition
-                      "
-                    >
-                      {suggestion}
-                    </button>
-                  ))}
+                  ].map(
+                    (suggestion) => (
+                      <button
+                        key={
+                          suggestion
+                        }
+                        type="button"
+                        onClick={() =>
+                          handleSuggestion(
+                            suggestion
+                          )
+                        }
+                        className="
+                          rounded-full
+                          border
+                          border-[var(--border-light)]
+                          bg-[var(--bg-card-soft)]
+                          px-3
+                          py-2
+                          text-sm
+                          text-[var(--text-secondary)]
+                          transition
+                          hover:border-blue-200
+                          hover:bg-blue-50
+                          hover:text-blue-600
+                          dark:hover:bg-blue-950/30
+                        "
+                      >
+                        {
+                          suggestion
+                        }
+                      </button>
+                    )
+                  )}
+                </div>
+
+                {/* =================================
+                    KEYBOARD SHORTCUTS
+                ================================== */}
+
+                <div
+                  className="
+                    mt-6
+                    flex
+                    flex-wrap
+                    items-center
+                    gap-x-4
+                    gap-y-2
+                    text-xs
+                    text-[var(--text-muted)]
+                  "
+                >
+                  <span>
+                    ↑ ↓ Navigate
+                  </span>
+
+                  <span>
+                    Enter Select
+                  </span>
+
+                  <span>
+                    Esc Close
+                  </span>
                 </div>
               </motion.div>
             )}
